@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.json.JSON'/>
+    <inherits name="com.google.web.bindery.autobean.AutoBean"/>
+    <inherits name="uk.ac.ebi.pwp.structures.quadtree.QuadTree2D"/>
+    <inherits name="net.auroris.ColorPicker.client"/>
+
+    <inherits name="com.google.gwt.resources.Resources" />
+
+    <source path="analysis"/>
+    <source path="client"/>
+    <source path="data"/>
+    <source path="events"/>
+    <source path="exceptions"/>
+    <source path="handlers"/>
+    <source path="interfaces"/>
+    <source path="legends"/>
+    <source path="model"/>
+    <source path="profiles"/>
+    <source path="util"/>
+</module>
