@@ -12,6 +12,8 @@ import org.reactome.web.fireworks.model.Node;
  */
 public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
+    public HandlerRegistration addAnalysisResetEventHandler(AnalysisResetEventHandler handler);
+
     public HandlerRegistration addCanvasNotSupportedEventHandler(CanvasNotSupportedEventHandler handler);
 
     public HandlerRegistration addNodeHoverEventHandler(NodeHoverEventHandler handler);
