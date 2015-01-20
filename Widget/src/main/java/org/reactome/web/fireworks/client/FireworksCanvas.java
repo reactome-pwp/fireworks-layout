@@ -18,7 +18,6 @@ import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
 import org.reactome.web.fireworks.profiles.StandardFireworksProfile;
-import org.reactome.web.fireworks.util.ClickManager;
 import org.reactome.web.fireworks.util.Tooltip;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
@@ -47,8 +46,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     static final FireworksProfile PROFILE = new StandardFireworksProfile();
 
     private EventBus eventBus;
-
-    private ClickManager clickManager;
 
     private AnalysisType analysisType;
 
@@ -111,8 +108,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     private void initialiseHandlers(){
-        this.clickManager = new ClickManager(getTopCanvas());
-
         this.eventBus.addHandler(FireworksVisibleAreaChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
         this.eventBus.addHandler(NodeSelectedEvent.TYPE, this);
@@ -124,12 +119,13 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
     }
 
-    public HandlerRegistration addClickHandler(ClickHandler handler){
-        return this.clickManager.addClickHandler(handler);
-    }
 
     public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler){
-        return this.clickManager.addDoubleClickHandler(handler);
+        return getTopCanvas().addDoubleClickHandler(handler);
+    }
+
+    public HandlerRegistration addClickHandler(ClickHandler handler){
+        return getTopCanvas().addClickHandler(handler);
     }
 
     public HandlerRegistration addMouseDownHandler(MouseDownHandler handler){
@@ -420,8 +416,8 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     @Override
     public void onResize() {
-        int width = this.getParent().getOffsetWidth();
-        int height = this.getParent().getOffsetHeight();
+        int width = this.getOffsetWidth();
+        int height = this.getOffsetHeight();
         for (Canvas canvas : this.canvases) {
             this.setCanvasProperties(canvas, width, height);
         }
