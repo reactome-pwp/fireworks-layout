@@ -1,5 +1,6 @@
 package org.reactome.web.fireworks.legends;
 
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 
 
@@ -13,4 +14,8 @@ public class ControlButton extends Button {
         setStyleName(style);
     }
 
+    public ControlButton(String style, ClickHandler handler) {
+        setStyleName(style);
+        addClickHandler(handler);
+    }
 }

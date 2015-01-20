@@ -59,6 +59,8 @@ public abstract class LegendPanel extends AbsolutePanel {
 
         String enrichmentLegend();
 
+        String enrichmentControl();
+
     }
 
     protected EventBus eventBus;
