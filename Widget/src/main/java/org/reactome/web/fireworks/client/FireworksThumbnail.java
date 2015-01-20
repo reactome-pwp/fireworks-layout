@@ -27,7 +27,7 @@ import java.util.Set;
  */
 class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler,
         AnalysisPerformedEventHandler, AnalysisResetEventHandler {
-//    private static final boolean SHOW_NODES = false;
+
     private static final int HEIGHT = 75;
 
     private EventBus eventBus;
@@ -84,6 +84,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
     @Override
     public void onMouseDown(MouseDownEvent event) {
+        event.stopPropagation(); event.preventDefault();
         Element elem = event.getRelativeElement();
         Coordinate c = new Coordinate(event.getRelativeX(elem), event.getRelativeY(elem));
         if(isMouseInVisibleArea(c)){
@@ -94,6 +95,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
     @Override
     public void onMouseMove(MouseMoveEvent event) {
+        event.stopPropagation(); event.preventDefault();
         Element elem = event.getRelativeElement();
         Coordinate mouse = new Coordinate(event.getRelativeX(elem), event.getRelativeY(elem));
         if(mouseDown!=null){
@@ -114,11 +116,13 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
     @Override
     public void onMouseUp(MouseUpEvent event) {
+        event.stopPropagation(); event.preventDefault();
         this.mouseDown = null;
     }
 
     @Override
     public void onMouseOut(MouseOutEvent event) {
+        event.stopPropagation(); event.preventDefault();
         this.mouseDown = null;
     }
 
@@ -183,13 +187,6 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
                 edge.drawThumbnail(ctx, this.factor);
             }
         }
-//        if(SHOW_NODES) {
-//            ctx.setStrokeStyle("#FF0000");
-//            ctx.setFillStyle("#FF0000");
-//            for (Node node : this.graph.getNodes()) {
-//                node.drawThumbnail(ctx, this.factor);
-//            }
-//        }
     }
 
     private void drawVisibleArea(){

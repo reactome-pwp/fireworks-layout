@@ -72,6 +72,16 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
         initialize();
     }
 
+//    @Override
+//    public HandlerRegistration addAnalysisPerformedEventHandler(AnalysisPerformedEventHandler handler) {
+//        return this.eventBus.addHandler(AnalysisPerformedEvent.TYPE, handler);
+//    }
+
+    @Override
+    public HandlerRegistration addAnalysisResetEventHandler(AnalysisResetEventHandler handler) {
+        return this.eventBus.addHandler(AnalysisResetEvent.TYPE, handler);
+    }
+
     @Override
     public HandlerRegistration addCanvasNotSupportedEventHandler(CanvasNotSupportedEventHandler handler){
         return this.eventBus.addHandler(CanvasNotSupportedEvent.TYPE, handler);
@@ -136,6 +146,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
 
     @Override
     public void onClick(ClickEvent event) {
+        event.stopPropagation(); event.preventDefault();
         if(this.hovered!=null){
             if(this.hovered!=this.selected){
                 this.selectNode(hovered, false);
@@ -150,6 +161,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
 
     @Override
     public void onDoubleClick(DoubleClickEvent event) {
+        event.stopPropagation(); event.preventDefault();
         if(this.hovered!=null){
             if(this.hovered!=this.selected){
                 this.selectNode(hovered, false);
@@ -165,7 +177,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
 
     @Override
     public void onMouseDown(MouseDownEvent event) {
-        //TODO: Under test
+        event.stopPropagation(); event.preventDefault();
         Tooltip.getTooltip().setPreventShowing(true);
 
         this.fireworksMoved = false;
@@ -174,6 +186,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
 
     @Override
     public void onMouseMove(MouseMoveEvent event) {
+        event.stopPropagation(); event.preventDefault();
         if(mouseDown!=null){
             this.fireworksMoved = true;
             translateGraphObjects(event.getRelativeElement(), event);
@@ -186,6 +199,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
 
     @Override
     public void onMouseOut(MouseOutEvent event) {
+        event.stopPropagation(); event.preventDefault();
         this.fireworksMoved = false;
         mouseDown = null;
         Tooltip.getTooltip().setPreventShowing(false);
@@ -194,6 +208,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
 
     @Override
     public void onMouseUp(MouseUpEvent event) {
+        event.stopPropagation(); event.preventDefault();
         mouseDown = null;
         Tooltip.getTooltip().setPreventShowing(false);
         setMousePosition(event.getRelativeElement(), event);
@@ -305,6 +320,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
     @Override
     protected void initWidget(Widget widget) {
         super.initWidget(widget);
+//        this.getElement().getStyle().setOverflow(Style.Overflow.MjAxNTAxMTkxMDA4MjVfMg%3D%3D);
         //We need to defer the program counter to the parents in order to finish DOM tasks
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
