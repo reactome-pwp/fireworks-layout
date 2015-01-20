@@ -4,8 +4,6 @@
     border-radius: 15px;
     position: absolute;
 
-    overflow: scroll;
-
     -webkit-box-shadow: 3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
     -moz-box-shadow:    3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Firefox 3.5 - 3.6 */
     box-shadow:         3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
@@ -14,22 +12,16 @@
 .analysisControl{
     border-radius: 5px;
     bottom: 10px;
-
-    height: 36px;
-    /*centers in the middle*/
-    width: 400px;
-    margin-left:-200px; /* width and margin-left are related, please change both if needed */
-    left:50%;
+    height: 28px;
 }
 
 @sprite .close {
     gwt-image:'closeNormal';
     background-repeat:no-repeat;
-
     border: 0;
     cursor: pointer;
     float: right;
-    margin: 2px;
+    margin: 2px 8px;
 }
 
 @sprite .close:hover {
@@ -37,17 +29,29 @@
 }
 
 @sprite .close:active:hover {
-    margin: 3px 1px 1px 3px;
+    margin: 3px 7px;
     gwt-image: 'closeClicked';
 }
 
 .enrichmentLegend {
     bottom: 30%;
     right: 10px;
-
     width: 50px;
     /*centers in the middle*/
     height: 250px;
     margin-top: -125px; /* height and margin-top are related, please change both if needed */
     top: 50%;
+}
+
+.enrichmentControl {
+    /*centers in the middle*/
+    width: 220px;
+    margin-left:-110px; /* width and margin-left are related, please change both if needed */
+    left:50%;
+}
+
+.enrichmentControl span {
+    margin: 6px 0 0 20px;
+    float: left;
+    font-size: 12px;
 }
