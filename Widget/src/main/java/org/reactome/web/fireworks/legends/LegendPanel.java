@@ -39,6 +39,66 @@ public abstract class LegendPanel extends AbsolutePanel {
 
         @Source("images/close_normal.png")
         ImageResource closeNormal();
+
+        @Source("images/forward_clicked.png")
+        ImageResource forwardClicked();
+
+        @Source("images/forward_disabled.png")
+        ImageResource forwardDisabled();
+
+        @Source("images/forward_hovered.png")
+        ImageResource forwardHovered();
+
+        @Source("images/forward_normal.png")
+        ImageResource forwardNormal();
+
+        @Source("images/play_clicked.png")
+        ImageResource playClicked();
+
+        @Source("images/play_disabled.png")
+        ImageResource playDisabled();
+
+        @Source("images/play_hovered.png")
+        ImageResource playHovered();
+
+        @Source("images/play_normal.png")
+        ImageResource playNormal();
+
+        @Source("images/pause_clicked.png")
+        ImageResource pauseClicked();
+
+        @Source("images/pause_disabled.png")
+        ImageResource pauseDisabled();
+
+        @Source("images/pause_hovered.png")
+        ImageResource pauseHovered();
+
+        @Source("images/pause_normal.png")
+        ImageResource pauseNormal();
+
+        @Source("images/rewind_clicked.png")
+        ImageResource rewindClicked();
+
+        @Source("images/rewind_disabled.png")
+        ImageResource rewindDisabled();
+
+        @Source("images/rewind_hovered.png")
+        ImageResource rewindHovered();
+
+        @Source("images/rewind_normal.png")
+        ImageResource rewindNormal();
+
+        @Source("images/speed_clicked.png")
+        ImageResource speedClicked();
+
+        @Source("images/speed_disabled.png")
+        ImageResource speedDisabled();
+
+        @Source("images/speed_hovered.png")
+        ImageResource speedHovered();
+
+        @Source("images/speed_normal.png")
+        ImageResource speedNormal();
     }
 
     /**
@@ -61,6 +121,21 @@ public abstract class LegendPanel extends AbsolutePanel {
 
         String enrichmentControl();
 
+        String expressionLegend();
+
+        String expressionControl();
+
+        String forward();
+
+        String pause();
+
+        String play();
+
+        String rewind();
+
+        String slide();
+
+        String speed();
     }
 
     protected EventBus eventBus;
