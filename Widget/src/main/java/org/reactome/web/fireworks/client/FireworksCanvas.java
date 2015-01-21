@@ -11,8 +11,10 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
-import org.reactome.web.fireworks.legends.AnalysisControl;
+import org.reactome.web.fireworks.legends.EnrichmentControl;
 import org.reactome.web.fireworks.legends.EnrichmentLegend;
+import org.reactome.web.fireworks.legends.ExpressionControl;
+import org.reactome.web.fireworks.legends.ExpressionLegend;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -101,7 +103,10 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         //TODO: Under TEST vv
         this.add(new EnrichmentLegend(eventBus, PROFILE));
-        this.add(new AnalysisControl(eventBus));
+        this.add(new EnrichmentControl(eventBus));
+
+        this.add(new ExpressionLegend(eventBus, PROFILE));
+        this.add(new ExpressionControl(eventBus));
         //TODO: Under TEST ^^
 
         this.initialiseHandlers();
