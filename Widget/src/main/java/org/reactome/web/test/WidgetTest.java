@@ -77,7 +77,7 @@ public class WidgetTest implements EntryPoint {
 //            public void run() {
 //                fireworks.setAnalysisToken("MjAxNTAxMTQxNDQ4NDBfMg%3D%3D", "TOTAL"); //
 //            }
-//        }).schedule(1500);
+//        }).schedule(1000);
 //
 //        (new Timer() {
 //            @Override
@@ -86,12 +86,21 @@ public class WidgetTest implements EntryPoint {
 //            }
 //        }).schedule(3000);
 //
+//        (new Timer() {
+//            @Override
+//            public void run() {
+//                fireworks.setAnalysisToken("MjAxNTAxMTIxNjI3MDFfMg%3D%3D", "TOTAL");
+//            }
+//        }).schedule(1000);
+
+
         (new Timer() {
             @Override
             public void run() {
-                fireworks.setAnalysisToken("MjAxNTAxMTIxNjI3MDFfMg%3D%3D", "TOTAL");
+                fireworks.setAnalysisToken("MjAxNTAxMjAxMTQ5MjJfNA%3D%3D", "TOTAL");
             }
-        }).schedule(5000);
+        }).schedule(2000);
+
 
         VerticalPanel vp = new VerticalPanel();
         vp.add(new TestButton("TRP", "REACT_169333", fireworks));
