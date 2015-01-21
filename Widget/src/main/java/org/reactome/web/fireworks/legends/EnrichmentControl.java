@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.InlineLabel;
+import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.events.AnalysisPerformedEvent;
 import org.reactome.web.fireworks.events.AnalysisResetEvent;
 import org.reactome.web.fireworks.handlers.AnalysisPerformedEventHandler;
@@ -12,13 +13,13 @@ import org.reactome.web.fireworks.handlers.AnalysisResetEventHandler;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class AnalysisControl extends LegendPanel implements ClickHandler,
+public class EnrichmentControl extends LegendPanel implements ClickHandler,
         AnalysisPerformedEventHandler, AnalysisResetEventHandler {
 
     private InlineLabel message;
     private ControlButton closeBtn;
 
-    public AnalysisControl(final EventBus eventBus) {
+    public EnrichmentControl(final EventBus eventBus) {
         super(eventBus);
 
         LegendPanelCSS css = RESOURCES.getCSS();
@@ -38,19 +39,20 @@ public class AnalysisControl extends LegendPanel implements ClickHandler,
 
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e){
-        this.message.setText(e.getAnalysisType().name().toUpperCase());
-        this.setVisible(true);
+        if(e.getAnalysisType().equals(AnalysisType.OVERREPRESENTATION)) {
+            this.message.setText(e.getAnalysisType().name().toUpperCase());
+            this.setVisible(true);
+        }else{
+            this.setVisible(false);
+        }
     }
 
     @Override
     public void onAnalysisReset() {
-        this.message.setText("");
-        this.setVisible(false);
-    }
-
-    private void initHandlers() {
-        this.eventBus.addHandler(AnalysisPerformedEvent.TYPE, this);
-        this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
+        if(this.isVisible()) {
+            this.message.setText("");
+            this.setVisible(false);
+        }
     }
 
     @Override
@@ -59,4 +61,10 @@ public class AnalysisControl extends LegendPanel implements ClickHandler,
             eventBus.fireEventFromSource(new AnalysisResetEvent(), this);
         }
     }
+
+    private void initHandlers() {
+        this.eventBus.addHandler(AnalysisPerformedEvent.TYPE, this);
+        this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
+    }
+
 }
