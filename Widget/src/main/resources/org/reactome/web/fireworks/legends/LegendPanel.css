@@ -33,6 +33,100 @@
     gwt-image: 'closeClicked';
 }
 
+@sprite .forward {
+    gwt-image:'forwardNormal';
+    background-repeat:no-repeat;
+    border: 0;
+    cursor: pointer;
+    float: left;
+    margin: 2px;
+}
+
+@sprite .forward:hover {
+    gwt-image:'forwardHovered';
+}
+
+@sprite .forward:disabled, .forward:disabled:hover, .forward:disabled:active {
+    gwt-image:'forwardDisabled';
+    cursor: auto;
+}
+
+@sprite .forward:enabled:active:hover {
+    margin-left: 3px;
+    margin-right: 1px;
+    gwt-image: 'forwardClicked';
+}
+
+@sprite .play {
+    gwt-image:'playNormal';
+    background-repeat:no-repeat;
+    border: 0;
+    cursor: pointer;
+    float: left;
+    margin: 2px;
+}
+
+@sprite .play:hover {
+    gwt-image:'playHovered';
+}
+
+@sprite .play:enabled:active:hover {
+    margin-left: 3px;
+    margin-right: 1px;
+    gwt-image: 'playClicked';
+}
+
+@sprite .pause {
+    gwt-image:'pauseNormal';
+    background-repeat:no-repeat;
+    border: 0;
+    cursor: pointer;
+    float: left;
+    margin: 2px;
+}
+
+@sprite .pause:hover {
+    gwt-image:'pauseHovered';
+}
+
+@sprite .pause:enabled:active:hover {
+    margin-left: 3px;
+    margin-right: 1px;
+    gwt-image: 'pauseClicked';
+}
+
+@sprite .rewind {
+    gwt-image:'rewindNormal';
+    background-repeat:no-repeat;
+    border: 0;
+    cursor: pointer;
+    float: left;
+    margin: 2px;
+}
+
+@sprite .rewind:hover {
+    gwt-image:'rewindHovered';
+}
+
+@sprite .rewind:disabled, .rewind:disabled:hover, .rewind:disabled:active  {
+    gwt-image:'rewindDisabled';
+    cursor: auto;
+}
+
+@sprite .rewind:enabled:active:hover {
+    margin-left: 3px;
+    margin-right: 1px;
+    gwt-image: 'rewindClicked';
+}
+
+.speed {
+    border: 0;
+    color: transparent;
+    cursor: pointer;
+    float: left;
+    margin: 2px;
+}
+
 .enrichmentLegend {
     bottom: 30%;
     right: 10px;
@@ -54,4 +148,41 @@
     margin: 6px 0 0 20px;
     float: left;
     font-size: 12px;
+}
+
+.expressionLegend {
+    bottom: 30%;
+    right: 10px;
+    width: 50px;
+    /*centers in the middle*/
+    height: 250px;
+    margin-top: -125px; /* height and margin-top are related, please change both if needed */
+    top: 50%;
+}
+
+.expressionControl {
+    /*centers in the middle*/
+    width: 400px;
+    margin-left:-200px; /* width and margin-left are related, please change both if needed */
+    left:50%;
+}
+
+.expressionControl span {
+    margin: 10px 0 0 20px;
+    float: left;
+    font-size: 12px;
+}
+
+.slide {
+    border: 0 none; /* solid lightgray;*/
+    color: transparent;
+    margin-top: 2px;
+    position: absolute;
+    left: 116px;
+    background-color: #E6E6E6;
+    border-radius: 5px;
+}
+
+.slide canvas {
+    padding: 0 2px 0 2px;
 }
