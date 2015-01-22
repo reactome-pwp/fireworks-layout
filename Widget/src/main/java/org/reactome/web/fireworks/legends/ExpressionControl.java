@@ -11,15 +11,16 @@ import org.reactome.web.fireworks.events.AnalysisPerformedEvent;
 import org.reactome.web.fireworks.events.AnalysisResetEvent;
 import org.reactome.web.fireworks.handlers.AnalysisPerformedEventHandler;
 import org.reactome.web.fireworks.handlers.AnalysisResetEventHandler;
-import org.reactome.web.fireworks.legends.slider.Slider;
-import org.reactome.web.fireworks.legends.slider.SliderValueChangedEvent;
-import org.reactome.web.fireworks.legends.slider.SliderValueChangedHandler;
+import org.reactome.web.fireworks.util.slider.Slider;
+import org.reactome.web.fireworks.util.slider.SliderValueChangedEvent;
+import org.reactome.web.fireworks.util.slider.SliderValueChangedHandler;
+
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class ExpressionControl extends LegendPanel implements ClickHandler, SliderValueChangedHandler,
-        AnalysisPerformedEventHandler, AnalysisResetEventHandler, ValueChangeHandler {
+        AnalysisPerformedEventHandler, AnalysisResetEventHandler, ValueChangeHandler<Boolean> {
 
     private InlineLabel message;
 
@@ -34,8 +35,8 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
     public ExpressionControl(EventBus eventBus) {
         super(eventBus);
 
-        LegendPanelCSS css = RESOURCES.getCSS();
         //Setting the legend style
+        LegendPanelCSS css = RESOURCES.getCSS();
         addStyleName(css.analysisControl());
         addStyleName(css.expressionControl());
 
@@ -54,7 +55,6 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
 
         this.speedBtn = new SpeedButton(RESOURCES);
         this.speedBtn.setStyleName(css.speed());
-        //noinspection unchecked
         this.speedBtn.addValueChangeHandler(this);
         this.speedBtn.disable();
         this.add(this.speedBtn);
@@ -131,7 +131,7 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
     }
 
     @Override
-    public void onValueChange(ValueChangeEvent event) {
+    public void onValueChange(ValueChangeEvent<Boolean> event) {
         SpeedButton source = (SpeedButton) event.getSource();
         if(source.equals(this.speedBtn)){
             this.slider.setVisible(source.isDown());

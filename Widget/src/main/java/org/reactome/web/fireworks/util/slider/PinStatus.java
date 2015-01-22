@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.legends.slider;
+package org.reactome.web.fireworks.util.slider;
 
 /**
 * @author Antonio Fabregat <fabregat@ebi.ac.uk>
