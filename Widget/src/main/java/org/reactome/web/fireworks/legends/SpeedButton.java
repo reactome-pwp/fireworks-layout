@@ -1,5 +1,6 @@
 package org.reactome.web.fireworks.legends;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -28,11 +29,13 @@ public class SpeedButton extends ToggleButton implements MouseOutHandler, MouseO
     }
 
     public void enable(){
+        getElement().getStyle().setCursor(Style.Cursor.POINTER);
         setEnabled(true);
         this.setButtonStandardImages();
     }
 
     public void disable(){
+        getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
         getDownFace().setImage(new Image(this.resources.speedDisabled()));
         getUpFace().setImage(new Image(this.resources.speedDisabled()));
         setEnabled(false);
