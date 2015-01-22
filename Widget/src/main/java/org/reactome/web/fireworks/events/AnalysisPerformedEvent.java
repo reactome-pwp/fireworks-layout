@@ -2,6 +2,7 @@ package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.fireworks.analysis.AnalysisType;
+import org.reactome.web.fireworks.analysis.ExpressionSummary;
 import org.reactome.web.fireworks.analysis.PathwayBase;
 import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
@@ -14,12 +15,10 @@ import java.util.List;
 public class AnalysisPerformedEvent extends GwtEvent<AnalysisPerformedHandler> {
     public static Type<AnalysisPerformedHandler> TYPE = new Type<AnalysisPerformedHandler>();
 
-    private String analysisType;
-    private List<PathwayBase> pathways;
+    private SpeciesFilteredResult result;
 
     public AnalysisPerformedEvent(SpeciesFilteredResult result) {
-        this.analysisType = result.getType();
-        this.pathways = result.getPathways();
+        this.result = result;
     }
 
     @Override
@@ -28,11 +27,15 @@ public class AnalysisPerformedEvent extends GwtEvent<AnalysisPerformedHandler> {
     }
 
     public AnalysisType getAnalysisType() {
-        return AnalysisType.getType(analysisType);
+        return AnalysisType.getType(this.result.getType());
     }
 
     public List<PathwayBase> getPathways() {
-        return pathways;
+        return this.result.getPathways();
+    }
+
+    public ExpressionSummary getExpressionSummary(){
+        return this.result.getExpressionSummary();
     }
 
     @Override
@@ -43,8 +46,8 @@ public class AnalysisPerformedEvent extends GwtEvent<AnalysisPerformedHandler> {
     @Override
     public String toString() {
         return "AnalysisPerformedEvent{" +
-                "analysisType='" + analysisType + '\'' +
-                ", pathwaysHit=" + pathways.size() +
+                "analysisType='" + getAnalysisType() + '\'' +
+                ", pathwaysHit=" + getPathways().size() +
                 '}';
     }
 }

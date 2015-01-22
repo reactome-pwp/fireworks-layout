@@ -9,9 +9,19 @@ import org.reactome.web.fireworks.handlers.ExpressionColumnChangedHandler;
 public class ExpressionColumnChangedEvent extends GwtEvent<ExpressionColumnChangedHandler> {
     public static Type<ExpressionColumnChangedHandler> TYPE = new Type<ExpressionColumnChangedHandler>();
 
+    private Integer column;
+
+    public ExpressionColumnChangedEvent(Integer column) {
+        this.column = column;
+    }
+
     @Override
     public Type<ExpressionColumnChangedHandler> getAssociatedType() {
         return TYPE;
+    }
+
+    public Integer getColumn() {
+        return column;
     }
 
     @Override
@@ -19,4 +29,10 @@ public class ExpressionColumnChangedEvent extends GwtEvent<ExpressionColumnChang
         handler.onExpressionColumnChanged(this);
     }
 
+    @Override
+    public String toString() {
+        return "ExpressionColumnChangedEvent{" +
+                "column=" + column +
+                '}';
+    }
 }

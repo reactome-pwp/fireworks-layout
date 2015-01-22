@@ -5,10 +5,13 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.InlineLabel;
 import org.reactome.web.fireworks.analysis.AnalysisType;
+import org.reactome.web.fireworks.analysis.ExpressionSummary;
 import org.reactome.web.fireworks.events.AnalysisPerformedEvent;
 import org.reactome.web.fireworks.events.AnalysisResetEvent;
+import org.reactome.web.fireworks.events.ExpressionColumnChangedEvent;
 import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
 import org.reactome.web.fireworks.handlers.AnalysisResetHandler;
 import org.reactome.web.fireworks.util.slider.Slider;
@@ -22,7 +25,14 @@ import org.reactome.web.fireworks.util.slider.SliderValueChangedHandler;
 public class ExpressionControl extends LegendPanel implements ClickHandler, SliderValueChangedHandler,
         AnalysisPerformedHandler, AnalysisResetHandler, ValueChangeHandler<Boolean> {
 
+    private static Integer MIN_SPEED = 3000;
+    private static Integer MAX_SPEED = 500;
+    private Integer speed = MIN_SPEED / 2 + MAX_SPEED;
+
     private InlineLabel message;
+    private ExpressionSummary expressionSummary;
+    private int currentCol = 0;
+    private Timer timer;
 
     private ControlButton rewindBtn;
     private ControlButton playBtn;
@@ -59,7 +69,7 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
         this.speedBtn.disable();
         this.add(this.speedBtn);
 
-        this.slider = new Slider(100, 24);
+        this.slider = new Slider(100, 24, 0.5);
         this.slider.addSliderValueChangedHandler(this);
         this.slider.setVisible(false);
         this.slider.setStyleName(css.slide());
@@ -72,13 +82,16 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
         this.add(this.closeBtn);
 
         this.initHandlers();
+        this.initTimer();
         this.setVisible(false);
     }
 
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e) {
         if(e.getAnalysisType().equals(AnalysisType.EXPRESSION)) {
-            this.message.setText(e.getAnalysisType().name().toUpperCase());
+            this.expressionSummary = e.getExpressionSummary();
+            String colName = this.expressionSummary.getColumnNames().get(this.currentCol);
+            this.message.setText(colName);
             this.setVisible(true);
         }else{
             this.setVisible(false);
@@ -89,6 +102,7 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
     public void onAnalysisReset() {
         if(this.isVisible()) {
             this.message.setText("");
+            this.expressionSummary = null;
             this.setVisible(false);
         }
     }
@@ -96,33 +110,17 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
     @Override
     public void onClick(ClickEvent event) {
         Object source = event.getSource();
-        if(source.equals(this.closeBtn)){
+
+        if(source.equals(this.closeBtn))
             eventBus.fireEventFromSource(new AnalysisResetEvent(), this);
-        }else if(source.equals(this.rewindBtn)){
-            System.out.println("Rewind");
-        }else if(source.equals(this.playBtn)){
-            this.rewindBtn.setEnabled(false);
-            this.forwardBtn.setEnabled(false);
-            this.speedBtn.enable();
-
-            this.playBtn.setVisible(false);
-            this.pauseBtn.setVisible(true);
-            System.out.println("Play");
-        }else if(source.equals(this.pauseBtn)){
-            this.rewindBtn.setEnabled(true);
-            this.forwardBtn.setEnabled(true);
-            this.speedBtn.setDown(false);
-            this.speedBtn.disable();
-            this.slider.setVisible(false);
-
-            this.pauseBtn.setVisible(false);
-            this.playBtn.setVisible(true);
-            System.out.println("Pause");
-        }else if(source.equals(this.forwardBtn)){
-            System.out.println("Forward");
-        }else if(source.equals(this.speedBtn)){
-            this.slider.setVisible(true);
-        }
+        else if(source.equals(this.rewindBtn))
+            this.moveBackward();
+        else if(source.equals(this.playBtn))
+            this.play();
+        else if(source.equals(this.pauseBtn))
+            this.pause();
+        else if(source.equals(this.forwardBtn))
+            this.moveForward();
     }
 
     private void initHandlers() {
@@ -140,6 +138,66 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
 
     @Override
     public void onSliderValueChanged(SliderValueChangedEvent event) {
-        System.out.println(event.getPercentage());
+        this.speed = (int) ((MAX_SPEED - MIN_SPEED) * event.getPercentage()) + MIN_SPEED;
+        if(this.timer.isRunning()) {
+            this.timer.cancel();
+            this.timer.scheduleRepeating(this.speed);
+        }
+    }
+
+    private void initTimer() {
+        this.timer = new Timer() {
+            @Override
+            public void run() {
+                moveForward();
+            }
+        };
+    }
+
+    private void moveBackward(){
+        if(this.currentCol == 0){
+            this.currentCol = this.expressionSummary.getColumnNames().size() - 1;
+        }else{
+            this.currentCol -= 1;
+        }
+        this.message.setText(this.expressionSummary.getColumnNames().get(this.currentCol));
+        eventBus.fireEventFromSource(new ExpressionColumnChangedEvent(this.currentCol), this);
+    }
+
+    private void moveForward(){
+        if(this.currentCol == this.expressionSummary.getColumnNames().size() - 1){
+            this.currentCol = 0;
+        }else{
+            this.currentCol += 1;
+        }
+        this.message.setText(this.expressionSummary.getColumnNames().get(this.currentCol));
+        eventBus.fireEventFromSource(new ExpressionColumnChangedEvent(this.currentCol), this);
+    }
+
+    private void pause(){
+        this.rewindBtn.setEnabled(true);
+        this.forwardBtn.setEnabled(true);
+        this.speedBtn.setDown(false);
+        this.speedBtn.disable();
+        this.slider.setVisible(false);
+
+        this.pauseBtn.setVisible(false);
+        this.playBtn.setVisible(true);
+
+        if(this.timer.isRunning()) {
+            this.timer.cancel();
+        }
+    }
+
+    private void play(){
+        this.rewindBtn.setEnabled(false);
+        this.forwardBtn.setEnabled(false);
+        this.speedBtn.enable();
+
+        this.playBtn.setVisible(false);
+        this.pauseBtn.setVisible(true);
+
+        this.moveForward();
+        this.timer.scheduleRepeating(this.speed);
     }
 }
