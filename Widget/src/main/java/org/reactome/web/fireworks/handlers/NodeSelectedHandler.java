@@ -6,7 +6,7 @@ import org.reactome.web.fireworks.events.NodeSelectedEvent;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface NodeSelectedEventHandler extends EventHandler {
+public interface NodeSelectedHandler extends EventHandler {
 
     void onNodeSelected(NodeSelectedEvent event);
 

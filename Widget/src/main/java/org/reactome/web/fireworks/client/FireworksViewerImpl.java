@@ -26,9 +26,9 @@ import org.reactome.web.fireworks.util.Tooltip;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, AnalysisResetEventHandler,
+class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, AnalysisResetHandler,
         MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler, MouseWheelHandler,
-        FireworksVisibleAreaChangedEventHandler, FireworksZoomEventHandler, ClickHandler, DoubleClickHandler {
+        FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, DoubleClickHandler {
 
     EventBus eventBus = new FireworksEventBus();
 
@@ -78,32 +78,32 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
 //    }
 
     @Override
-    public HandlerRegistration addAnalysisResetEventHandler(AnalysisResetEventHandler handler) {
+    public HandlerRegistration addAnalysisResetEventHandler(AnalysisResetHandler handler) {
         return this.eventBus.addHandler(AnalysisResetEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addCanvasNotSupportedEventHandler(CanvasNotSupportedEventHandler handler){
+    public HandlerRegistration addCanvasNotSupportedEventHandler(CanvasNotSupportedHandler handler){
         return this.eventBus.addHandler(CanvasNotSupportedEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addNodeHoverEventHandler(NodeHoverEventHandler handler){
+    public HandlerRegistration addNodeHoverEventHandler(NodeHoverHandler handler){
         return this.eventBus.addHandler(NodeHoverEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addNodeHoverResetEventHandler(NodeHoverResetEventHandler handler) {
+    public HandlerRegistration addNodeHoverResetEventHandler(NodeHoverResetHandler handler) {
         return this.eventBus.addHandler(NodeHoverResetEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addNodeSelectedEventHandler(NodeSelectedEventHandler handler) {
+    public HandlerRegistration addNodeSelectedEventHandler(NodeSelectedHandler handler) {
         return this.eventBus.addHandler(NodeSelectedEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addNodeSelectedResetEventHandler(NodeSelectedResetEventHandler handler) {
+    public HandlerRegistration addNodeSelectedResetEventHandler(NodeSelectedResetHandler handler) {
         return this.eventBus.addHandler(NodeSelectedResetEvent.TYPE, handler);
     }
 

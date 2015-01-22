@@ -5,6 +5,8 @@ import com.google.gwt.event.shared.EventHandler;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface AnalysisResetEventHandler extends EventHandler {
-    void onAnalysisReset();
+public interface NodeHoverResetHandler extends EventHandler {
+
+    void onNodeHoverReset();
+
 }

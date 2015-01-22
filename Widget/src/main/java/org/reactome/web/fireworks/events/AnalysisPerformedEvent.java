@@ -4,15 +4,15 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.analysis.PathwayBase;
 import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
-import org.reactome.web.fireworks.handlers.AnalysisPerformedEventHandler;
+import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
 
 import java.util.List;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class AnalysisPerformedEvent extends GwtEvent<AnalysisPerformedEventHandler> {
-    public static Type<AnalysisPerformedEventHandler> TYPE = new Type<AnalysisPerformedEventHandler>();
+public class AnalysisPerformedEvent extends GwtEvent<AnalysisPerformedHandler> {
+    public static Type<AnalysisPerformedHandler> TYPE = new Type<AnalysisPerformedHandler>();
 
     private String analysisType;
     private List<PathwayBase> pathways;
@@ -23,7 +23,7 @@ public class AnalysisPerformedEvent extends GwtEvent<AnalysisPerformedEventHandl
     }
 
     @Override
-    public Type<AnalysisPerformedEventHandler> getAssociatedType() {
+    public Type<AnalysisPerformedHandler> getAssociatedType() {
         return TYPE;
     }
 
@@ -36,7 +36,7 @@ public class AnalysisPerformedEvent extends GwtEvent<AnalysisPerformedEventHandl
     }
 
     @Override
-    protected void dispatch(AnalysisPerformedEventHandler handler) {
+    protected void dispatch(AnalysisPerformedHandler handler) {
         handler.onAnalysisPerformed(this);
     }
 

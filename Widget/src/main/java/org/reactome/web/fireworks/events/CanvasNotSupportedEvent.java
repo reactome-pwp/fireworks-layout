@@ -1,18 +1,18 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.handlers.CanvasNotSupportedEventHandler;
+import org.reactome.web.fireworks.handlers.CanvasNotSupportedHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class CanvasNotSupportedEvent extends GwtEvent<CanvasNotSupportedEventHandler> {
-    public static Type<CanvasNotSupportedEventHandler> TYPE = new Type<CanvasNotSupportedEventHandler>();
+public class CanvasNotSupportedEvent extends GwtEvent<CanvasNotSupportedHandler> {
+    public static Type<CanvasNotSupportedHandler> TYPE = new Type<CanvasNotSupportedHandler>();
 
     final String message = "Your browser does not support the HTML5 Canvas. Please upgrade your browser.";
 
     @Override
-    public Type<CanvasNotSupportedEventHandler> getAssociatedType() {
+    public Type<CanvasNotSupportedHandler> getAssociatedType() {
         return TYPE;
     }
 
@@ -21,8 +21,8 @@ public class CanvasNotSupportedEvent extends GwtEvent<CanvasNotSupportedEventHan
     }
 
     @Override
-    protected void dispatch(CanvasNotSupportedEventHandler canvasNotSupportedEventHandler) {
-        canvasNotSupportedEventHandler.onCanvasNotSupported(this);
+    protected void dispatch(CanvasNotSupportedHandler canvasNotSupportedHandler) {
+        canvasNotSupportedHandler.onCanvasNotSupported(this);
     }
 
     @Override

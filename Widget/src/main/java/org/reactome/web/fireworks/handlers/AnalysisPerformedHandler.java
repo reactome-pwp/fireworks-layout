@@ -6,7 +6,7 @@ import org.reactome.web.fireworks.events.AnalysisPerformedEvent;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface AnalysisPerformedEventHandler extends EventHandler {
+public interface AnalysisPerformedHandler extends EventHandler {
 
     void onAnalysisPerformed(AnalysisPerformedEvent e);
 

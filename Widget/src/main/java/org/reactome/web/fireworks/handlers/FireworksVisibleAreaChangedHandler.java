@@ -6,7 +6,7 @@ import org.reactome.web.fireworks.events.FireworksVisibleAreaChangedEvent;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface FireworksVisibleAreaChangedEventHandler extends EventHandler {
+public interface FireworksVisibleAreaChangedHandler extends EventHandler {
 
     void onFireworksVisibleAreaChanged(FireworksVisibleAreaChangedEvent event);
 

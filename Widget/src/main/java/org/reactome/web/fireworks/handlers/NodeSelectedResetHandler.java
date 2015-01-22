@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.EventHandler;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface NodeSelectedResetEventHandler extends EventHandler {
+public interface NodeSelectedResetHandler extends EventHandler {
 
     void onNodeSelectionReset();
 

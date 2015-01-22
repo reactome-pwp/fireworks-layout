@@ -1,15 +1,15 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.handlers.FireworksZoomEventHandler;
+import org.reactome.web.fireworks.handlers.FireworksZoomHandler;
 import org.reactome.web.fireworks.model.FireworksStatus;
 import org.reactome.web.fireworks.util.Coordinate;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class FireworksZoomEvent extends GwtEvent<FireworksZoomEventHandler> {
-    public static Type<FireworksZoomEventHandler> TYPE = new Type<FireworksZoomEventHandler>();
+public class FireworksZoomEvent extends GwtEvent<FireworksZoomHandler> {
+    public static Type<FireworksZoomHandler> TYPE = new Type<FireworksZoomHandler>();
 
     private FireworksStatus status;
     private double width;
@@ -24,12 +24,12 @@ public class FireworksZoomEvent extends GwtEvent<FireworksZoomEventHandler> {
     }
 
     @Override
-    public Type<FireworksZoomEventHandler> getAssociatedType() {
+    public Type<FireworksZoomHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(FireworksZoomEventHandler handler) {
+    protected void dispatch(FireworksZoomHandler handler) {
         handler.onFireworksZoomChanged(this);
     }
 

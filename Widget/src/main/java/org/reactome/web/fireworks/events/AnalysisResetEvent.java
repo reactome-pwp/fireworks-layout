@@ -1,21 +1,21 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.handlers.AnalysisResetEventHandler;
+import org.reactome.web.fireworks.handlers.AnalysisResetHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class AnalysisResetEvent extends GwtEvent<AnalysisResetEventHandler> {
-    public static Type<AnalysisResetEventHandler> TYPE = new Type<AnalysisResetEventHandler>();
+public class AnalysisResetEvent extends GwtEvent<AnalysisResetHandler> {
+    public static Type<AnalysisResetHandler> TYPE = new Type<AnalysisResetHandler>();
 
     @Override
-    public Type<AnalysisResetEventHandler> getAssociatedType() {
+    public Type<AnalysisResetHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(AnalysisResetEventHandler handler) {
+    protected void dispatch(AnalysisResetHandler handler) {
         handler.onAnalysisReset();
     }
 

@@ -6,7 +6,7 @@ import org.reactome.web.fireworks.events.FireworksResizedEvent;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface FireworksResizeEventHandler extends EventHandler {
+public interface FireworksResizeHandler extends EventHandler {
 
     void onFireworksResized(FireworksResizedEvent event);
 

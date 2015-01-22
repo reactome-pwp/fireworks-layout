@@ -9,8 +9,8 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.events.AnalysisPerformedEvent;
 import org.reactome.web.fireworks.events.AnalysisResetEvent;
-import org.reactome.web.fireworks.handlers.AnalysisPerformedEventHandler;
-import org.reactome.web.fireworks.handlers.AnalysisResetEventHandler;
+import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
+import org.reactome.web.fireworks.handlers.AnalysisResetHandler;
 import org.reactome.web.fireworks.util.slider.Slider;
 import org.reactome.web.fireworks.util.slider.SliderValueChangedEvent;
 import org.reactome.web.fireworks.util.slider.SliderValueChangedHandler;
@@ -20,7 +20,7 @@ import org.reactome.web.fireworks.util.slider.SliderValueChangedHandler;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class ExpressionControl extends LegendPanel implements ClickHandler, SliderValueChangedHandler,
-        AnalysisPerformedEventHandler, AnalysisResetEventHandler, ValueChangeHandler<Boolean> {
+        AnalysisPerformedHandler, AnalysisResetHandler, ValueChangeHandler<Boolean> {
 
     private InlineLabel message;
 

@@ -6,7 +6,7 @@ import org.reactome.web.fireworks.events.FireworksZoomEvent;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface FireworksZoomEventHandler extends EventHandler {
+public interface FireworksZoomHandler extends EventHandler {
 
     void onFireworksZoomChanged(FireworksZoomEvent event);
 

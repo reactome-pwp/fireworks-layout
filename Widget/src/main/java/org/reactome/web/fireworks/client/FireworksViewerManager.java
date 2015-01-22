@@ -5,9 +5,9 @@ import org.reactome.web.fireworks.events.FireworksResizedEvent;
 import org.reactome.web.fireworks.events.FireworksVisibleAreaChangedEvent;
 import org.reactome.web.fireworks.events.FireworksZoomEvent;
 import org.reactome.web.fireworks.events.ThumbnailAreaMovedEvent;
-import org.reactome.web.fireworks.handlers.FireworksResizeEventHandler;
-import org.reactome.web.fireworks.handlers.FireworksZoomEventHandler;
-import org.reactome.web.fireworks.handlers.ThumbnailAreaMovedEventHandler;
+import org.reactome.web.fireworks.handlers.FireworksResizeHandler;
+import org.reactome.web.fireworks.handlers.FireworksZoomHandler;
+import org.reactome.web.fireworks.handlers.ThumbnailAreaMovedHandler;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.FireworksStatus;
 import org.reactome.web.fireworks.model.Graph;
@@ -25,7 +25,7 @@ import java.util.Set;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimationHandler, FocusingAnimation.FocusingAnimationHandler,
-        FireworksZoomEventHandler, FireworksResizeEventHandler, ThumbnailAreaMovedEventHandler {
+        FireworksZoomHandler, FireworksResizeHandler, ThumbnailAreaMovedHandler {
     static final int ZOOM_MIN = 1;
     static final int ZOOM_MAX = 100;
     static final double ZOOM_FACTOR = 0.25; //0.50;

@@ -1,13 +1,13 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.handlers.FireworksResizeEventHandler;
+import org.reactome.web.fireworks.handlers.FireworksResizeHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class FireworksResizedEvent extends GwtEvent<FireworksResizeEventHandler> {
-    public static Type<FireworksResizeEventHandler> TYPE = new Type<FireworksResizeEventHandler>();
+public class FireworksResizedEvent extends GwtEvent<FireworksResizeHandler> {
+    public static Type<FireworksResizeHandler> TYPE = new Type<FireworksResizeHandler>();
 
     private double width;
     private double height;
@@ -19,12 +19,12 @@ public class FireworksResizedEvent extends GwtEvent<FireworksResizeEventHandler>
     }
 
     @Override
-    public Type<FireworksResizeEventHandler> getAssociatedType() {
+    public Type<FireworksResizeHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(FireworksResizeEventHandler handler) {
+    protected void dispatch(FireworksResizeHandler handler) {
         handler.onFireworksResized(this);
     }
 

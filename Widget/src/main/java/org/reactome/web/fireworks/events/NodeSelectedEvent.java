@@ -1,14 +1,14 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.handlers.NodeSelectedEventHandler;
+import org.reactome.web.fireworks.handlers.NodeSelectedHandler;
 import org.reactome.web.fireworks.model.Node;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class NodeSelectedEvent extends GwtEvent<NodeSelectedEventHandler> {
-    public static Type<NodeSelectedEventHandler> TYPE = new Type<NodeSelectedEventHandler>();
+public class NodeSelectedEvent extends GwtEvent<NodeSelectedHandler> {
+    public static Type<NodeSelectedHandler> TYPE = new Type<NodeSelectedHandler>();
 
     private Node node;
 
@@ -17,12 +17,12 @@ public class NodeSelectedEvent extends GwtEvent<NodeSelectedEventHandler> {
     }
 
     @Override
-    public Type<NodeSelectedEventHandler> getAssociatedType() {
+    public Type<NodeSelectedHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(NodeSelectedEventHandler handler) {
+    protected void dispatch(NodeSelectedHandler handler) {
         handler.onNodeSelected(this);
     }
 

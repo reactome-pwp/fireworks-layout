@@ -32,10 +32,10 @@ import java.util.Set;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResize,
-        FireworksVisibleAreaChangedEventHandler, FireworksZoomEventHandler,
-        NodeSelectedEventHandler, NodeSelectedResetEventHandler,
-        NodeHoverEventHandler, NodeHoverResetEventHandler,
-        AnalysisPerformedEventHandler, AnalysisResetEventHandler {
+        FireworksVisibleAreaChangedHandler, FireworksZoomHandler,
+        NodeSelectedHandler, NodeSelectedResetHandler,
+        NodeHoverHandler, NodeHoverResetHandler,
+        AnalysisPerformedHandler, AnalysisResetHandler {
 
     class CanvasNotSupportedException extends Exception {}
 

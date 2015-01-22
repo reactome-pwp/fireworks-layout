@@ -1,21 +1,21 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.handlers.NodeHoverResetEventHandler;
+import org.reactome.web.fireworks.handlers.NodeHoverResetHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class NodeHoverResetEvent extends GwtEvent<NodeHoverResetEventHandler> {
-    public static Type<NodeHoverResetEventHandler> TYPE = new Type<NodeHoverResetEventHandler>();
+public class NodeHoverResetEvent extends GwtEvent<NodeHoverResetHandler> {
+    public static Type<NodeHoverResetHandler> TYPE = new Type<NodeHoverResetHandler>();
 
     @Override
-    public Type<NodeHoverResetEventHandler> getAssociatedType() {
+    public Type<NodeHoverResetHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(NodeHoverResetEventHandler handler) {
+    protected void dispatch(NodeHoverResetHandler handler) {
         handler.onNodeHoverReset();
     }
 

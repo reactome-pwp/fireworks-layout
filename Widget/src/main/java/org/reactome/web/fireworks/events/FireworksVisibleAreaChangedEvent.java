@@ -1,14 +1,14 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.handlers.FireworksVisibleAreaChangedEventHandler;
+import org.reactome.web.fireworks.handlers.FireworksVisibleAreaChangedHandler;
 import org.reactome.web.fireworks.util.Coordinate;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class FireworksVisibleAreaChangedEvent extends GwtEvent<FireworksVisibleAreaChangedEventHandler> {
-    public static Type<FireworksVisibleAreaChangedEventHandler> TYPE = new Type<FireworksVisibleAreaChangedEventHandler>();
+public class FireworksVisibleAreaChangedEvent extends GwtEvent<FireworksVisibleAreaChangedHandler> {
+    public static Type<FireworksVisibleAreaChangedHandler> TYPE = new Type<FireworksVisibleAreaChangedHandler>();
 
     private Coordinate translation;
     private double width;
@@ -21,12 +21,12 @@ public class FireworksVisibleAreaChangedEvent extends GwtEvent<FireworksVisibleA
     }
 
     @Override
-    public Type<FireworksVisibleAreaChangedEventHandler> getAssociatedType() {
+    public Type<FireworksVisibleAreaChangedHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(FireworksVisibleAreaChangedEventHandler handler) {
+    protected void dispatch(FireworksVisibleAreaChangedHandler handler) {
         handler.onFireworksVisibleAreaChanged(this);
     }
 

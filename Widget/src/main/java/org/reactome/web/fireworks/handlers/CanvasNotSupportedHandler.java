@@ -6,7 +6,7 @@ import org.reactome.web.fireworks.events.CanvasNotSupportedEvent;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface CanvasNotSupportedEventHandler extends EventHandler {
+public interface CanvasNotSupportedHandler extends EventHandler {
 
     void onCanvasNotSupported(CanvasNotSupportedEvent event);
 

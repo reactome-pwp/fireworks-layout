@@ -12,8 +12,8 @@ import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.events.AnalysisPerformedEvent;
 import org.reactome.web.fireworks.events.AnalysisResetEvent;
 import org.reactome.web.fireworks.events.ThumbnailAreaMovedEvent;
-import org.reactome.web.fireworks.handlers.AnalysisPerformedEventHandler;
-import org.reactome.web.fireworks.handlers.AnalysisResetEventHandler;
+import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
+import org.reactome.web.fireworks.handlers.AnalysisResetHandler;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -26,7 +26,7 @@ import java.util.Set;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler,
-        AnalysisPerformedEventHandler, AnalysisResetEventHandler {
+        AnalysisPerformedHandler, AnalysisResetHandler {
 
     private static final int HEIGHT = 75;
 

@@ -15,9 +15,9 @@ import org.reactome.web.fireworks.profiles.FireworksProfile;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class EnrichmentLegend extends LegendPanel implements AnalysisPerformedEventHandler, AnalysisResetEventHandler,
-        NodeHoverEventHandler, NodeHoverResetEventHandler,
-        NodeSelectedEventHandler, NodeSelectedResetEventHandler{
+public class EnrichmentLegend extends LegendPanel implements AnalysisPerformedHandler, AnalysisResetHandler,
+        NodeHoverHandler, NodeHoverResetHandler,
+        NodeSelectedHandler, NodeSelectedResetHandler {
 
     private Canvas flag;
     private Node hovered;

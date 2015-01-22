@@ -1,14 +1,14 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.handlers.ThumbnailAreaMovedEventHandler;
+import org.reactome.web.fireworks.handlers.ThumbnailAreaMovedHandler;
 import org.reactome.web.fireworks.util.Coordinate;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class ThumbnailAreaMovedEvent extends GwtEvent<ThumbnailAreaMovedEventHandler> {
-    public static Type<ThumbnailAreaMovedEventHandler> TYPE = new Type<ThumbnailAreaMovedEventHandler>();
+public class ThumbnailAreaMovedEvent extends GwtEvent<ThumbnailAreaMovedHandler> {
+    public static Type<ThumbnailAreaMovedHandler> TYPE = new Type<ThumbnailAreaMovedHandler>();
 
     private Coordinate coordinate;
 
@@ -17,12 +17,12 @@ public class ThumbnailAreaMovedEvent extends GwtEvent<ThumbnailAreaMovedEventHan
     }
 
     @Override
-    public Type<ThumbnailAreaMovedEventHandler> getAssociatedType() {
+    public Type<ThumbnailAreaMovedHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(ThumbnailAreaMovedEventHandler handler) {
+    protected void dispatch(ThumbnailAreaMovedHandler handler) {
         handler.onThumbnailAreaMoved(this);
     }
 
