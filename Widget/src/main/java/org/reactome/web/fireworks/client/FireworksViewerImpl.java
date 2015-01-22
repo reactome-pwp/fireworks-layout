@@ -72,38 +72,38 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
         initialize();
     }
 
-//    @Override
-//    public HandlerRegistration addAnalysisPerformedEventHandler(AnalysisPerformedEventHandler handler) {
-//        return this.eventBus.addHandler(AnalysisPerformedEvent.TYPE, handler);
-//    }
-
     @Override
-    public HandlerRegistration addAnalysisResetEventHandler(AnalysisResetHandler handler) {
+    public HandlerRegistration addAnalysisResetHandler(AnalysisResetHandler handler) {
         return this.eventBus.addHandler(AnalysisResetEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addCanvasNotSupportedEventHandler(CanvasNotSupportedHandler handler){
+    public HandlerRegistration addCanvasNotSupportedHandler(CanvasNotSupportedHandler handler){
         return this.eventBus.addHandler(CanvasNotSupportedEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addNodeHoverEventHandler(NodeHoverHandler handler){
+    public HandlerRegistration addExpressionColumnChangedHandler(ExpressionColumnChangedHandler handler) {
+        return this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, handler);
+    }
+
+    @Override
+    public HandlerRegistration addNodeHoverHandler(NodeHoverHandler handler){
         return this.eventBus.addHandler(NodeHoverEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addNodeHoverResetEventHandler(NodeHoverResetHandler handler) {
+    public HandlerRegistration addNodeHoverResetHandler(NodeHoverResetHandler handler) {
         return this.eventBus.addHandler(NodeHoverResetEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addNodeSelectedEventHandler(NodeSelectedHandler handler) {
+    public HandlerRegistration addNodeSelectedHandler(NodeSelectedHandler handler) {
         return this.eventBus.addHandler(NodeSelectedEvent.TYPE, handler);
     }
 
     @Override
-    public HandlerRegistration addNodeSelectedResetEventHandler(NodeSelectedResetHandler handler) {
+    public HandlerRegistration addNodeSelectedResetHandler(NodeSelectedResetHandler handler) {
         return this.eventBus.addHandler(NodeSelectedResetEvent.TYPE, handler);
     }
 
@@ -212,16 +212,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
         mouseDown = null;
         Tooltip.getTooltip().setPreventShowing(false);
         setMousePosition(event.getRelativeElement(), event);
-//        if(this.hovered!=null){
-//            if(this.hovered!=this.selected){
-//                this.selectNode(hovered, false);
-//            }
-//        }else{
-//            if(!this.fireworksMoved && this.selected!=null){
-//                this.selectNode(null, false);
-//            }
-//        }
-//        this.fireworksMoved = false;
     }
 
     @Override
@@ -320,7 +310,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
     @Override
     protected void initWidget(Widget widget) {
         super.initWidget(widget);
-//        this.getElement().getStyle().setOverflow(Style.Overflow.MjAxNTAxMTkxMDA4MjVfMg%3D%3D);
         //We need to defer the program counter to the parents in order to finish DOM tasks
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override

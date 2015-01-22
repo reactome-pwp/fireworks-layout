@@ -12,19 +12,21 @@ import org.reactome.web.fireworks.model.Node;
  */
 public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
-    public HandlerRegistration addAnalysisResetEventHandler(AnalysisResetHandler handler);
+    public HandlerRegistration addAnalysisResetHandler(AnalysisResetHandler handler);
 
-    public HandlerRegistration addCanvasNotSupportedEventHandler(CanvasNotSupportedHandler handler);
+    public HandlerRegistration addCanvasNotSupportedHandler(CanvasNotSupportedHandler handler);
 
-    public HandlerRegistration addNodeHoverEventHandler(NodeHoverHandler handler);
+    public HandlerRegistration addExpressionColumnChangedHandler(ExpressionColumnChangedHandler handler);
 
-    public HandlerRegistration addNodeHoverResetEventHandler(NodeHoverResetHandler handler);
+    public HandlerRegistration addNodeHoverHandler(NodeHoverHandler handler);
 
-    public HandlerRegistration addNodeSelectedEventHandler(NodeSelectedHandler handler);
+    public HandlerRegistration addNodeHoverResetHandler(NodeHoverResetHandler handler);
 
-    public HandlerRegistration addNodeSelectedResetEventHandler(NodeSelectedResetHandler handler);
+    public HandlerRegistration addNodeSelectedHandler(NodeSelectedHandler handler);
 
-//    public HandlerRegistration addFireworksZoomEventHandler(FireworksZoomEventHandler handler);
+    public HandlerRegistration addNodeSelectedResetHandler(NodeSelectedResetHandler handler);
+
+//    public HandlerRegistration addFireworksZoomHandler(FireworksZoomEventHandler handler);
 
     public Node getSelected();
 
