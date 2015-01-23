@@ -101,6 +101,7 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
     @Override
     public void onAnalysisReset() {
         if(this.isVisible()) {
+            if(this.timer.isRunning()) pause();
             this.message.setText("");
             this.expressionSummary = null;
             this.setVisible(false);
