@@ -10,6 +10,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.Widget;
+import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 import org.reactome.web.fireworks.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.fireworks.events.*;
@@ -26,9 +27,10 @@ import org.reactome.web.fireworks.util.Tooltip;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, AnalysisResetHandler,
+class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler, MouseWheelHandler,
-        FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, DoubleClickHandler {
+        FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, DoubleClickHandler,
+        AnalysisResetHandler, ExpressionColumnChangedHandler {
 
     EventBus eventBus = new FireworksEventBus();
 
@@ -145,6 +147,18 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
     }
 
     @Override
+    public void onAnalysisReset() {
+        this.data.resetPathwaysAnalysisResult();
+        this.forceFireworksDraw = true;
+    }
+
+    @Override
+    public void onExpressionColumnChanged(ExpressionColumnChangedEvent e) {
+        this.canvases.setColumn(e.getColumn()); //First the column needs to be set in the canvases
+        this.forceFireworksDraw = true;
+    }
+
+    @Override
     public void onClick(ClickEvent event) {
         event.stopPropagation(); event.preventDefault();
         if(this.hovered!=null){
@@ -223,7 +237,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
         this.manager.onMouseScrolled(event.getDeltaY(), mouse);
     }
 
-
     @Override
     public void resetHighlight() {
         this.setHoveredNode(null);
@@ -252,7 +265,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
         AnalysisModelFactory.retrievePathwayBaseList(token, this.data.getSpeciesId(), resource, new AnalysisModelFactory.AnalysisModelFactoryHandler() {
             @Override
             public void onPathwaysBaseListRetrieved(SpeciesFilteredResult result) {
-                data.setPathwaysAnalysisResult(result.getPathways()); //Data has to be set in the first instance
+                result.setAnalysisType(AnalysisType.getType(result.getType())); //TODO: Under test
+                data.setPathwaysAnalysisResult(result); //Data has to be set in the first instance
                 eventBus.fireEventFromSource(new AnalysisPerformedEvent(result), _this);
                 forceFireworksDraw = true;
             }
@@ -342,6 +356,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
         this.canvases.addMouseWheelHandler(this);
 
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
+        this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksVisibleAreaChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
     }
@@ -392,11 +407,5 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, An
                 this.eventBus.fireEventFromSource(new NodeHoverResetEvent(), this);
             }
         }
-    }
-
-    @Override
-    public void onAnalysisReset() {
-        this.data.resetPathwaysAnalysisResult();
-        this.forceFireworksDraw = true;
     }
 }
