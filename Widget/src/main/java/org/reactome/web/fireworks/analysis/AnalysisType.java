@@ -5,6 +5,7 @@ package org.reactome.web.fireworks.analysis;
  */
 public enum AnalysisType {
 
+    NONE,
     SPECIES_COMPARISON,
     OVERREPRESENTATION,
     EXPRESSION;
@@ -16,6 +17,6 @@ public enum AnalysisType {
                 return t;
             }
         }
-        return null;
+        return NONE;
     }
 }
