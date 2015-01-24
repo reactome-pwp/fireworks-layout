@@ -265,7 +265,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         AnalysisModelFactory.retrievePathwayBaseList(token, this.data.getSpeciesId(), resource, new AnalysisModelFactory.AnalysisModelFactoryHandler() {
             @Override
             public void onPathwaysBaseListRetrieved(SpeciesFilteredResult result) {
-                result.setAnalysisType(AnalysisType.getType(result.getType())); //TODO: Under test
+                result.setAnalysisType(AnalysisType.getType(result.getType()));
                 data.setPathwaysAnalysisResult(result); //Data has to be set in the first instance
                 eventBus.fireEventFromSource(new AnalysisPerformedEvent(result), _this);
                 forceFireworksDraw = true;
