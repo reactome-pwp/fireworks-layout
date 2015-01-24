@@ -30,7 +30,17 @@ public class ColorGradient {
         return "#" + rtn.getHex();
     }
 
-    private int getValue(int v1, int v2, double p){
-        return (int) Math.round (v1 * p + v2 * (1 - p));
+    public String getColor(double point, double min, double max){
+        return getColor(getPercentage(point, min, max));
+    }
+
+    public static double getPercentage(double point, double min, double max){
+        double length = Math.abs(max - min);
+        double delta = Math.abs(point - max);
+        return delta / length;
+    }
+
+    public static int getValue(int min, int max, double p){
+        return (int) Math.round (min * p + max * (1 - p));
     }
 }
