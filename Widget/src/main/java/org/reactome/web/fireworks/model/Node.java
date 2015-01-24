@@ -2,20 +2,22 @@ package org.reactome.web.fireworks.model;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import org.reactome.web.fireworks.analysis.EntityStatistics;
+import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 import org.reactome.web.fireworks.data.RawNode;
 import org.reactome.web.fireworks.interfaces.Drawable;
+import org.reactome.web.fireworks.profiles.FireworksProfile;
+import org.reactome.web.fireworks.profiles.StandardFireworksProfile;
 import org.reactome.web.fireworks.util.Coordinate;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class Node extends FireworkObject implements Drawable, QuadTreeBox {
+
+    private static FireworksProfile PROFILE = new StandardFireworksProfile();
 
     private Long dbId;
     private String stId;
@@ -27,6 +29,9 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
     private double angle;
     private double currentSize;
     double originalSize;
+
+    String colour;
+    List<String> expColours;
 
     private Coordinate currentPosition;
     Coordinate originalPosition;
@@ -45,6 +50,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
         this.angle = raw.getAngle();
         this.currentSize = this.originalSize = (raw.getRatio() + 0.01) * 15;
         this.currentPosition = this.originalPosition = new Coordinate(raw.getX(), raw.getY());
+        initStatistics(); //Colour is set in initStatistics method
     }
 
     public Edge addChild(Node node){
@@ -165,6 +171,16 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
         return children;
     }
 
+    /**
+     * Can be used either for normal visualisation, overrepresentation analysis or species comparison.
+     *
+     * @return the color associated with this node for normal visualisation, overrepresentation
+     *         analysis or species comparison.
+     */
+    public String getColour() {
+        return this.colour;
+    }
+
     @Override
     public Long getDbId() {
         return dbId;
@@ -218,8 +234,60 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
         return currentPosition;
     }
 
-    public void setStatistics(EntityStatistics statistics) {
+    public String getExpressionColor(int column){
+        if(this.expColours!=null){
+            if( column >= 0 && column < this.expColours.size()) {
+                return this.expColours.get(column);
+            }
+        }
+        return PROFILE.getNodeFadeoutColour();
+    }
+
+    public void initStatistics(){
+        this.statistics = null;
+        this.expColours = null;
+        this.colour = PROFILE.getNodeStandardColour();
+        for (Edge edge : this.edgesTo) {
+            edge.setColour(PROFILE.getEdgeStandardColour());
+            edge.setExpColours(null);
+        }
+    }
+
+    public void setAnalysisResultData(SpeciesFilteredResult result, EntityStatistics statistics) {
         this.statistics = statistics;
+        switch (result.getAnalysisType()){
+            case SPECIES_COMPARISON:
+            case OVERREPRESENTATION:
+                this.colour = PROFILE.getNodeEnrichmentColour(statistics.getpValue());
+                String edgeColour = PROFILE.getEdgeEnrichmentColour(statistics.getpValue());
+                for (Edge edge : this.edgesTo) {
+                    edge.setColour(edgeColour);
+                }
+                break;
+            case EXPRESSION:
+                List<Double> exp = this.statistics.getExp();
+                if(exp!=null){
+                    double min = result.getExpressionSummary().getMin();
+                    double max = result.getExpressionSummary().getMax();
+                    this.expColours = new ArrayList<String>();
+                    List<String> edgeExpColours = new ArrayList<String>();
+                    for (Double v : exp) {
+                        this.expColours.add(PROFILE.getNodeExpressionColour(v, min, max));
+                        edgeExpColours.add(PROFILE.getEdgeExpressionColour(v, min, max));
+                    }
+                    for (Edge edge : this.edgesTo) {
+                        edge.setExpColours(edgeExpColours);
+                    }
+                }
+                break;
+            case NONE:
+            default:
+                //Nothing here
+        }
+    }
+
+    public void setFadoutColour(){
+        this.colour = PROFILE.getNodeFadeoutColour();
     }
 
     // ####################################

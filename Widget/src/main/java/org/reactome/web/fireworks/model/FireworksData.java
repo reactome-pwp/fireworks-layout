@@ -1,9 +1,9 @@
 package org.reactome.web.fireworks.model;
 
 import org.reactome.web.fireworks.analysis.PathwayBase;
+import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,15 +41,21 @@ public class FireworksData {
 
     public void resetPathwaysAnalysisResult(){
         for (Node node : this.graph.getNodes()) {
-            node.setStatistics(null);
+            node.initStatistics();
         }
     }
 
-    public void setPathwaysAnalysisResult(List<PathwayBase> pathways) {
-        for (PathwayBase pathway : pathways) {
+    public void setPathwaysAnalysisResult(SpeciesFilteredResult result) {
+        for (Node node : this.graph.getNodes()) {
+            node.setFadoutColour();
+        }
+        for (Edge edge : this.graph.edges) {
+            edge.setFadeoutColour();
+        }
+        for (PathwayBase pathway : result.getPathways()) {
             Node node = id2Node.get(pathway.getDbId());
             if(node!=null){
-                node.setStatistics(pathway.getEntities());
+                node.setAnalysisResultData(result, pathway.getEntities());
             }
         }
     }
