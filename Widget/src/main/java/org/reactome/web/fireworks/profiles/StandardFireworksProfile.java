@@ -10,10 +10,16 @@ public class StandardFireworksProfile extends FireworksProfile {
     ColorGradient nodeEnrichmentGradient;
     ColorGradient edgeEnrichmentGradient;
 
+    ColorGradient nodeExpressionGradient;
+    ColorGradient edgeExpressionGradient;
+
     public StandardFireworksProfile() {
         try {
             this.nodeEnrichmentGradient = new ColorGradient("#934A00", "#FFAD33");
             this.edgeEnrichmentGradient = new ColorGradient("#A96E33", "#FFB547");
+
+            this.nodeExpressionGradient = new ColorGradient("#934A00", "#FFAD33");
+            this.edgeExpressionGradient = new ColorGradient("#A96E33", "#FFB547");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,6 +51,16 @@ public class StandardFireworksProfile extends FireworksProfile {
     @Override
     public String getEdgeEnrichmentColour() {
         return "#FFBABA";
+    }
+
+    @Override
+    public String getNodeExpressionColour(double expression, double min, double max) {
+        return this.nodeExpressionGradient.getColor(expression, min, max);
+    }
+
+    @Override
+    public String getEdgeExpressionColour(double expression, double min, double max) {
+        return this.edgeExpressionGradient.getColor(expression, min, max);
     }
 
     @Override
