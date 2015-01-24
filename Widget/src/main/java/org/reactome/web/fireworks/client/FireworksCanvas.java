@@ -8,13 +8,13 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.RequiresResize;
-import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.legends.EnrichmentControl;
 import org.reactome.web.fireworks.legends.EnrichmentLegend;
 import org.reactome.web.fireworks.legends.ExpressionControl;
 import org.reactome.web.fireworks.legends.ExpressionLegend;
+import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -33,8 +33,7 @@ import java.util.Set;
  */
 class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResize,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler,
-        NodeSelectedHandler, NodeSelectedResetHandler,
-        NodeHoverHandler, NodeHoverResetHandler,
+        NodeSelectedHandler, NodeSelectedResetHandler, NodeHoverHandler, NodeHoverResetHandler,
         AnalysisPerformedHandler, AnalysisResetHandler {
 
     class CanvasNotSupportedException extends Exception {}
@@ -49,7 +48,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     private EventBus eventBus;
 
-    private AnalysisType analysisType;
+    private final AnalysisInfo analysisInfo = new AnalysisInfo();
 
     private Node selected;
     private double fontSize;
@@ -101,13 +100,13 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         }
         this.add(thumbnail);
 
-        //TODO: Under TEST vv
+        //Enrichment legend and control panels
         this.add(new EnrichmentLegend(eventBus, PROFILE));
         this.add(new EnrichmentControl(eventBus));
 
+        //Expression legend and control panels
         this.add(new ExpressionLegend(eventBus, PROFILE));
         this.add(new ExpressionControl(eventBus));
-        //TODO: Under TEST ^^
 
         this.initialiseHandlers();
     }
@@ -154,43 +153,53 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     void drawElements(Set<QuadTreeBox> items) {
-        this.clearMain();
+        this.cleanMainCanvas();
 
+        int column = this.analysisInfo.getColumn();
         Context2d ctx = this.edges.getContext2d();
-        String edgeColor = analysisType==null ? PROFILE.getEdgeStandardColour() : PROFILE.getEdgeFadeoutColour();
-        ctx.setStrokeStyle(edgeColor);
+        ctx.setStrokeStyle(PROFILE.getEdgeStandardColour());
         for (QuadTreeBox item : items) {
             if (item instanceof Edge) {
                 Edge edge = (Edge) item;
-                Node node = edge.getTo();
-                if(node.getStatistics()!=null) {
-                    ctx.save();
-                    ctx.setStrokeStyle(PROFILE.getEdgeEnrichmentColour(node.getStatistics().getpValue()));
-                    edge.draw(ctx);
-                    ctx.restore();
-                }else{
-                    edge.draw(ctx);
+                switch (this.analysisInfo.getType()){
+                    case SPECIES_COMPARISON:
+                    case OVERREPRESENTATION:
+                        ctx.setStrokeStyle(edge.getColour());
+                        edge.draw(ctx);
+                        break;
+                    case EXPRESSION:
+                        ctx.setStrokeStyle(edge.getExpressionColor(column));
+                        edge.draw(ctx);
+                        break;
+                    case NONE:
+                    default:
+                        edge.draw(ctx);
                 }
             }
         }
 
         this.drawnNodes = new HashSet<Node>();
         ctx = this.nodes.getContext2d();
-        String nodeColor = analysisType==null ? PROFILE.getNodeStandardColour() : PROFILE.getNodeFadeoutColour();
-        ctx.setFillStyle(nodeColor);
-        ctx.setStrokeStyle(nodeColor);
+        String colour = PROFILE.getNodeStandardColour();
+        ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
         for (QuadTreeBox item : items) {
             if (item instanceof Node) {
                 Node node = (Node) item;
-                if(node.getStatistics()!=null){
-                    double pValue = node.getStatistics().getpValue();
-                    ctx.save();
-                    String c = PROFILE.getNodeEnrichmentColour(pValue);
-                    ctx.setFillStyle(c); ctx.setStrokeStyle(c);
-                    node.draw(ctx);
-                    ctx.restore();
-                }else {
-                    node.draw(ctx);
+                switch (this.analysisInfo.getType()){
+                    case SPECIES_COMPARISON:
+                    case OVERREPRESENTATION:
+                        colour = node.getColour();
+                        ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
+                        node.draw(ctx);
+                        break;
+                    case EXPRESSION:
+                        colour = node.getExpressionColor(column);
+                        ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
+                        node.draw(ctx);
+                        break;
+                    case NONE:
+                    default:
+                        node.draw(ctx);
                 }
                 this.drawnNodes.add((node));
             }
@@ -202,7 +211,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     void drawText(Node node){
-        clearText();
+        cleanTextCanvas();
 
         boolean textForAll = this.factor > FACTOR_TEXT_THRESHOLD;
         Set<Node> aux = getNodeAndAncestorsWithText(node, textForAll);
@@ -256,31 +265,31 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         }
     }
 
-    void clearCanvas(Canvas canvas){
+    void cleanCanvas(Canvas canvas){
         canvas.getContext2d().clearRect(0, 0, canvas.getOffsetWidth(), canvas.getOffsetHeight());
     }
 
-    void clearHighlight(){
-        this.clearCanvas(this.nodesHighlight);
-        this.clearCanvas(this.edgesHighlight);
+    void cleanHighlightCanvas(){
+        this.cleanCanvas(this.nodesHighlight);
+        this.cleanCanvas(this.edgesHighlight);
         this.thumbnail.clearHighlights();
     }
 
-    void clearMain(){
-        this.clearCanvas(this.nodes);
-        this.clearCanvas(this.edges);
+    void cleanMainCanvas(){
+        this.cleanCanvas(this.nodes);
+        this.cleanCanvas(this.edges);
     }
 
-    void clearSelection(){
-        this.clearCanvas(this.nodesSelection);
-        this.clearCanvas(this.edgesSelection);
+    void cleanSelectionCanvas(){
+        this.cleanCanvas(this.nodesSelection);
+        this.cleanCanvas(this.edgesSelection);
         this.thumbnail.clearSelection();
     }
 
-    void clearText(){
-        this.clearCanvas(this.textAllNodes);
-        this.clearCanvas(this.textSelection);
-        this.clearCanvas(this.textTLP);
+    void cleanTextCanvas(){
+        this.cleanCanvas(this.textAllNodes);
+        this.cleanCanvas(this.textSelection);
+        this.cleanCanvas(this.textTLP);
     }
 
     Canvas getTopCanvas(){
@@ -288,7 +297,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     public void highlightNode(Node node){
-        clearHighlight();
+        cleanHighlightCanvas();
         if(node==null) return;
 
         Context2d ctx = this.nodesHighlight.getContext2d();
@@ -337,8 +346,8 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     public void selectNode(Node node){
         this.selected = node;
-        clearHighlight(); //This one is needed in case the user clicks and does not move the mouse :)
-        clearSelection();
+        cleanHighlightCanvas(); //This one is needed in case the user clicks and does not move the mouse :)
+        cleanSelectionCanvas();
         if(node==null) return;
 
         String color = PROFILE.getNodeSelectionColour(); // "#BBBBFF";
@@ -369,12 +378,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e) {
-        this.analysisType = e.getAnalysisType();
+        this.analysisInfo.setInfo(e.getAnalysisType(), e.getExpressionSummary());
     }
 
     @Override
     public void onAnalysisReset() {
-        this.analysisType = null;
+        this.analysisInfo.reset();
     }
 
 
@@ -403,7 +412,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     public void onNodeHoverReset() {
         Tooltip.getTooltip().hide();
         drawText(this.selected);
-        this.clearHighlight();
+        this.cleanHighlightCanvas();
         this.thumbnail.clearHighlights();
     }
 
@@ -428,6 +437,10 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         }
         this.setFontParameters();
         this.eventBus.fireEventFromSource(new FireworksResizedEvent(width, height), this);
+    }
+
+    public void setColumn(int column){
+        this.analysisInfo.setColumn(column);
     }
 
     private Canvas createCanvas(int width, int height) {
@@ -458,7 +471,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         canvas.setCoordinateSpaceWidth(width);
         canvas.setCoordinateSpaceHeight(height);
         canvas.setPixelSize(width, height);
-        clearCanvas(canvas);
+        cleanCanvas(canvas);
     }
 
     private void setFontParameters(){

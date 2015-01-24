@@ -8,12 +8,14 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.events.AnalysisPerformedEvent;
 import org.reactome.web.fireworks.events.AnalysisResetEvent;
+import org.reactome.web.fireworks.events.ExpressionColumnChangedEvent;
 import org.reactome.web.fireworks.events.ThumbnailAreaMovedEvent;
 import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
 import org.reactome.web.fireworks.handlers.AnalysisResetHandler;
+import org.reactome.web.fireworks.handlers.ExpressionColumnChangedHandler;
+import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -26,12 +28,14 @@ import java.util.Set;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler,
-        AnalysisPerformedHandler, AnalysisResetHandler {
+        AnalysisPerformedHandler, AnalysisResetHandler, ExpressionColumnChangedHandler {
 
     private static final int HEIGHT = 75;
 
+
     private EventBus eventBus;
     private Graph graph;
+    private final AnalysisInfo analysisInfo = new AnalysisInfo();
     private FireworksProfile profile;
 
     private double factor;
@@ -61,7 +65,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
         this.setStyle(width, HEIGHT);
         this.addHandlers();
-        this.drawThumbnail(null);
+        this.drawThumbnail();
     }
 
     public void clearHighlights(){
@@ -74,12 +78,20 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e) {
-        this.drawThumbnail(e.getAnalysisType());
+        this.analysisInfo.setInfo(e.getAnalysisType(), e.getExpressionSummary());
+        this.drawThumbnail();
     }
 
     @Override
     public void onAnalysisReset() {
-        this.drawThumbnail(null);
+        this.analysisInfo.reset();
+        this.drawThumbnail();
+    }
+
+    @Override
+    public void onExpressionColumnChanged(ExpressionColumnChangedEvent e) {
+        this.analysisInfo.setColumn(e.getColumn());
+        this.drawThumbnail();
     }
 
     @Override
@@ -167,24 +179,30 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         this.frame.addMouseOutHandler(this);
         this.eventBus.addHandler(AnalysisPerformedEvent.TYPE, this);
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
+        this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
     }
 
-    private void drawThumbnail(AnalysisType analysisType){
+    private void drawThumbnail(){
         cleanCanvas(this.thumbnail);
-        Context2d ctx = this.thumbnail.getContext2d();
-        String color = analysisType==null ? profile.getThumbnailStandardColour() : profile.getThumbnailFadeoutColour();
-        ctx.setStrokeStyle(color);
 
+        int column = this.analysisInfo.getColumn();
+        Context2d ctx = this.thumbnail.getContext2d();
+        String color = profile.getThumbnailStandardColour();
+        ctx.setStrokeStyle(color);
         for (Edge edge : this.graph.getEdges()) {
-            Node node = edge.getTo();
-            if(analysisType!=null && node.getStatistics()!=null){
-                ctx.save();
-                String analysisColor = profile.getThumbnailEnrichmentColour(node.getStatistics().getpValue());
-                ctx.setStrokeStyle(analysisColor);
-                edge.drawThumbnail(ctx, this.factor);
-                ctx.restore();
-            }else {
-                edge.drawThumbnail(ctx, this.factor);
+            switch (this.analysisInfo.getType()) {
+                case SPECIES_COMPARISON:
+                case OVERREPRESENTATION:
+                    ctx.setStrokeStyle(edge.getColour());
+                    edge.drawThumbnail(ctx, this.factor);
+                    break;
+                case EXPRESSION:
+                    ctx.setStrokeStyle(edge.getExpressionColor(column));
+                    edge.drawThumbnail(ctx, this.factor);
+                    break;
+                case NONE:
+                default:
+                    edge.drawThumbnail(ctx, this.factor);
             }
         }
     }
@@ -230,5 +248,4 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         style.setPosition(Style.Position.ABSOLUTE);
         style.setBottom(0, Style.Unit.PX);
     }
-
 }
