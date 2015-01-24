@@ -134,7 +134,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
     }
 
     @Override
-    public void highlitght(Context2d ctx, double auraSize) {
+    public void highlight(Context2d ctx, double auraSize) {
         ctx.beginPath();
         ctx.arc(this.getX(), this.getY(), this.getSize() + auraSize, 0, 2 * Math.PI, true);
         ctx.closePath();

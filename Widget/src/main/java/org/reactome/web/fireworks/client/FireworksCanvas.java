@@ -311,12 +311,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         for (Node ancestor : node.getAncestors()) {
             if(ancestor.isTopLevel()){
                 if(this.selected!=null && this.selected.getTopLevelPathways().contains(ancestor)) {
-                    ancestor.highlitght(ctx, aura);
+                    ancestor.highlight(ctx, aura);
                 }else {
-                    ancestor.highlitght(ctx, expandedAura);
+                    ancestor.highlight(ctx, expandedAura);
                 }
             }else {
-                ancestor.highlitght(ctx, aura);
+                ancestor.highlight(ctx, aura);
             }
             edges.addAll(ancestor.getEdgesTo());
         }
@@ -326,7 +326,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         ctx.setStrokeStyle(color);
         ctx.setLineWidth(aura);
         for (Edge edge : edges) {
-            edge.highlitght(ctx, aura);
+            edge.highlight(ctx, aura);
         }
 
         this.thumbnail.highlightEdges(node, edges);
@@ -354,11 +354,11 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         Context2d ctx = this.nodesSelection.getContext2d();
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);
-        node.highlitght(ctx, aura);
+        node.highlight(ctx, aura);
 
         Set<Edge> edges = node.getEdgesTo();
         for (Node ancestor : node.getAncestors()) {
-            ancestor.highlitght(ctx, aura);
+            ancestor.highlight(ctx, aura);
             edges.addAll(ancestor.getEdgesTo());
         }
 
@@ -368,7 +368,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         ctx.setStrokeStyle(color);
         ctx.setLineWidth(aura);
         for (Edge edge : edges) {
-            edge.highlitght(ctx, aura);
+            edge.highlight(ctx, aura);
         }
 
         drawText(node);

@@ -58,7 +58,7 @@ public class Edge implements Drawable, QuadTreeBox {
     }
 
     @Override
-    public void highlitght(Context2d ctx, double auraSize) {
+    public void highlight(Context2d ctx, double auraSize) {
         this.draw(ctx); //For the time being is the same
     }
 

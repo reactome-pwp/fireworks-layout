@@ -13,5 +13,5 @@ public interface Drawable {
 
     public void drawThumbnail(Context2d ctx, double factor);
 
-    public void highlitght(Context2d ctx, double auraSize);
+    public void highlight(Context2d ctx, double auraSize);
 }
