@@ -120,10 +120,12 @@
 }
 
 .speed {
-    border: 0;
+    border: 0 none;
     color: transparent;
     float: left;
     margin: 2px;
+    height: 24px;
+    width: 24px;
 }
 
 .enrichmentLegend {
@@ -167,9 +169,14 @@
 }
 
 .expressionControl span {
-    margin: 10px 0 0 20px;
+    margin: 5px 0 0 20px;
     float: left;
-    font-size: 12px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+    max-width: 225px;
 }
 
 .slide {
@@ -180,8 +187,4 @@
     left: 116px;
     background-color: #E6E6E6;
     border-radius: 5px;
-}
-
-.slide canvas {
-    padding: 0 2px 0 2px;
 }
