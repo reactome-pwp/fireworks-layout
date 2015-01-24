@@ -4,24 +4,34 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.CanvasGradient;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.InlineLabel;
 import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.analysis.EntityStatistics;
+import org.reactome.web.fireworks.analysis.ExpressionSummary;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
+import org.reactome.web.fireworks.util.ColorGradient;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHandler, AnalysisResetHandler,
-        NodeHoverHandler, NodeHoverResetHandler,
-        NodeSelectedHandler, NodeSelectedResetHandler {
+        NodeHoverHandler, NodeHoverResetHandler, NodeSelectedHandler, NodeSelectedResetHandler,
+        ExpressionColumnChangedHandler {
 
     private Canvas flag;
     private Node hovered;
     private Node selected;
+
+    private double min;
+    private double max;
+    private int column = 0;
+
+    private InlineLabel topLabel;
+    private InlineLabel bottomLabel;
 
     public ExpressionLegend(EventBus eventBus, FireworksProfile profile) {
         super(eventBus);
@@ -30,10 +40,14 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         //Setting the legend style
         addStyleName(RESOURCES.getCSS().expressionLegend());
 
-        this.add(new InlineLabel("****"), 20, 5);
+        this.topLabel = new InlineLabel("");
+        this.add(this.topLabel, 5, 5);
+
         this.add(createGradient(profile), 10, 25);
         this.add(flag, 0, 20);
-        this.add(new InlineLabel("****"), 12, 230);
+
+        this.bottomLabel = new InlineLabel("");
+        this.add(this.bottomLabel, 5, 230);
 
         initHandlers();
 
@@ -59,12 +73,25 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
 
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e) {
+        ExpressionSummary es = e.getExpressionSummary();
+        if(es!=null){
+            this.min = es.getMin();
+            this.max = es.getMax();
+            this.topLabel.setText( NumberFormat.getFormat("#.##E0").format(max) );
+            this.bottomLabel.setText( NumberFormat.getFormat("#.##E0").format(min) );
+        }
         this.setVisible( e.getAnalysisType().equals(AnalysisType.EXPRESSION) );
     }
 
     @Override
     public void onAnalysisReset() {
         this.setVisible(false);
+    }
+
+    @Override
+    public void onExpressionColumnChanged(ExpressionColumnChangedEvent e) {
+        this.column = e.getColumn();
+        draw();
     }
 
     @Override
@@ -116,9 +143,10 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         if(this.hovered!=null){
             EntityStatistics statistics = this.hovered.getStatistics();
             if(statistics!=null){
-                double pValue = statistics.getpValue();
-                if(pValue<=0.05) {
-                    int y = (int) Math.round(200 * pValue / 0.05) + 5;
+                if(statistics.getExp()!=null) {
+                    double expression = statistics.getExp().get(this.column);
+                    double p = ColorGradient.getPercentage(expression, this.min, this.max);
+                    int y = (int) Math.round(200 * p) + 5;
                     ctx.setFillStyle("yellow");
                     ctx.setStrokeStyle("yellow");
                     ctx.beginPath();
@@ -143,9 +171,10 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         if(this.selected!=null){
             EntityStatistics statistics = this.selected.getStatistics();
             if(statistics!=null){
-                double pValue = statistics.getpValue();
-                if(pValue<=0.05) {
-                    int y = (int) Math.round(200 * pValue / 0.05) + 5;
+                if(statistics.getExp()!=null) {
+                    double expression = statistics.getExp().get(this.column);
+                    double p = ColorGradient.getPercentage(expression, this.min, this.max);
+                    int y = (int) Math.round(200 * p) + 5;
                     ctx.setFillStyle("blue");
                     ctx.setStrokeStyle("blue");
                     ctx.beginPath();
@@ -174,6 +203,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         this.eventBus.addHandler(NodeHoverResetEvent.TYPE, this);
         this.eventBus.addHandler(NodeSelectedEvent.TYPE, this);
         this.eventBus.addHandler(NodeSelectedResetEvent.TYPE, this);
+        this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
     }
 
 }

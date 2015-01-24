@@ -18,6 +18,8 @@ import org.reactome.web.fireworks.util.slider.Slider;
 import org.reactome.web.fireworks.util.slider.SliderValueChangedEvent;
 import org.reactome.web.fireworks.util.slider.SliderValueChangedHandler;
 
+import java.util.List;
+
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -89,9 +91,10 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e) {
         if(e.getAnalysisType().equals(AnalysisType.EXPRESSION)) {
+            this.currentCol = 0;
+            this.eventBus.fireEventFromSource(new ExpressionColumnChangedEvent(this.currentCol), this);
             this.expressionSummary = e.getExpressionSummary();
-            String colName = this.expressionSummary.getColumnNames().get(this.currentCol);
-            this.message.setText(colName);
+            this.setName();
             this.setVisible(true);
         }else{
             this.setVisible(false);
@@ -161,8 +164,8 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
         }else{
             this.currentCol -= 1;
         }
-        this.message.setText(this.expressionSummary.getColumnNames().get(this.currentCol));
-        eventBus.fireEventFromSource(new ExpressionColumnChangedEvent(this.currentCol), this);
+        this.setName();
+        this.eventBus.fireEventFromSource(new ExpressionColumnChangedEvent(this.currentCol), this);
     }
 
     private void moveForward(){
@@ -171,8 +174,8 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
         }else{
             this.currentCol += 1;
         }
-        this.message.setText(this.expressionSummary.getColumnNames().get(this.currentCol));
-        eventBus.fireEventFromSource(new ExpressionColumnChangedEvent(this.currentCol), this);
+        this.setName();
+        this.eventBus.fireEventFromSource(new ExpressionColumnChangedEvent(this.currentCol), this);
     }
 
     private void pause(){
@@ -200,5 +203,12 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
 
         this.moveForward();
         this.timer.scheduleRepeating(this.speed);
+    }
+
+    private void setName(){
+        List<String> cols = this.expressionSummary.getColumnNames();
+        String pos = (this.currentCol + 1) + "/" + cols.size();
+        String name = cols.get(this.currentCol);
+        this.message.setText(pos + " :: " + name);
     }
 }
