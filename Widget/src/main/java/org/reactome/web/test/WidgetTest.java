@@ -5,7 +5,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.http.client.*;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.client.FireworksViewer;
@@ -70,37 +69,6 @@ public class WidgetTest implements EntryPoint {
 
     public void initialise(String json){
         final FireworksViewer fireworks = FireworksFactory.createFireworksViewer(json);
-//                fireworks.setDrawNodesOnMove(false);
-
-//        (new Timer() {
-//            @Override
-//            public void run() {
-//                fireworks.setAnalysisToken("MjAxNTAxMTQxNDQ4NDBfMg%3D%3D", "TOTAL"); //
-//            }
-//        }).schedule(1000);
-//
-//        (new Timer() {
-//            @Override
-//            public void run() {
-//                fireworks.resetAnalysis();
-//            }
-//        }).schedule(3000);
-//
-//        (new Timer() {
-//            @Override
-//            public void run() {
-//                fireworks.setAnalysisToken("MjAxNTAxMTIxNjI3MDFfMg%3D%3D", "TOTAL");
-//            }
-//        }).schedule(1000);
-
-
-        (new Timer() {
-            @Override
-            public void run() {
-                fireworks.setAnalysisToken("MjAxNTAxMjAxMTQ5MjJfNA%3D%3D", "TOTAL");
-            }
-        }).schedule(2000);
-
 
         VerticalPanel vp = new VerticalPanel();
         vp.add(new TestButton("TRP", "REACT_169333", fireworks));
@@ -111,9 +79,36 @@ public class WidgetTest implements EntryPoint {
         vp.add(new TestButton("Repro..", "REACT_163848", fireworks));
         vp.add(new TestButton("Striated", "REACT_16969", fireworks));
 
+        FlowPanel fp = new FlowPanel();
+        fp.add(new Button("OVERREPRESENTATION", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                fireworks.setAnalysisToken("MjAxNTAxMTIxNjI3MDFfMg%3D%3D", "TOTAL");
+            }
+        }));
+        fp.add(new Button("EXPRESSION", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                fireworks.setAnalysisToken("MjAxNTAxMjAxMTQ5MjJfNA%3D%3D", "TOTAL");
+            }
+        }));
+        fp.add(new Button("EXPRESSION 2", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                fireworks.setAnalysisToken("MjAxNTAxMjMwOTQzMDBfMg%3D%3D", "TOTAL");
+            }
+        }));
+        fp.add(new Button("SPECIES COMPARISON", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                fireworks.setAnalysisToken("MjAxNTAxMjQxMDMxMjBfMQ%3D%3D", "TOTAL");
+            }
+        }));
+
+
         SplitLayoutPanel slp = new SplitLayoutPanel(10);
         slp.addWest(vp, 80);
-        slp.addSouth(new Label("South"), 50);
+        slp.addSouth(fp, 50);
         slp.add(fireworks);
 
         RootLayoutPanel.get().add(slp);
