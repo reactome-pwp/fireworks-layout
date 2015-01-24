@@ -13,4 +13,8 @@ public interface SpeciesFilteredResult {
 
     List<PathwayBase> getPathways();
 
+    AnalysisType getAnalysisType();
+
+    void setAnalysisType(AnalysisType analysisType);
+
 }
