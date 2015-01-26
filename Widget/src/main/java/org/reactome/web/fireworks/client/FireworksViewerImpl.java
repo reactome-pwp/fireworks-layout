@@ -100,6 +100,11 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public HandlerRegistration addNodeOpenedHandler(NodeOpenedHandler handler) {
+        return this.eventBus.addHandler(NodeOpenedEvent.TYPE, handler);
+    }
+
+    @Override
     public HandlerRegistration addNodeSelectedHandler(NodeSelectedHandler handler) {
         return this.eventBus.addHandler(NodeSelectedEvent.TYPE, handler);
     }
@@ -181,7 +186,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 this.selectNode(hovered, false);
             }
             this.manager.focusNode(this.hovered);
-            System.out.println("Open diagram for " + this.hovered.getName());
+            this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.hovered), this);
         }else {
             Element element = event.getRelativeElement();
             Coordinate mouse = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
