@@ -5,7 +5,6 @@ import com.google.gwt.canvas.dom.client.CanvasGradient;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.InlineLabel;
-import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.analysis.EntityStatistics;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
@@ -59,7 +58,14 @@ public class EnrichmentLegend extends LegendPanel implements AnalysisPerformedHa
 
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e) {
-        this.setVisible( e.getAnalysisType().equals(AnalysisType.OVERREPRESENTATION) );
+        switch (e.getAnalysisType()){
+            case OVERREPRESENTATION:
+            case SPECIES_COMPARISON:
+                setVisible(true);
+                break;
+            default:
+                setVisible(false);
+        }
     }
 
     @Override

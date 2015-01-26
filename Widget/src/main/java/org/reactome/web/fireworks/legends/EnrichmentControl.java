@@ -4,7 +4,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.InlineLabel;
-import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.events.AnalysisPerformedEvent;
 import org.reactome.web.fireworks.events.AnalysisResetEvent;
 import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
@@ -39,11 +38,15 @@ public class EnrichmentControl extends LegendPanel implements ClickHandler,
 
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e){
-        if(e.getAnalysisType().equals(AnalysisType.OVERREPRESENTATION)) {
-            this.message.setText(e.getAnalysisType().name().toUpperCase());
-            this.setVisible(true);
-        }else{
-            this.setVisible(false);
+        switch (e.getAnalysisType()){
+            case OVERREPRESENTATION:
+            case SPECIES_COMPARISON:
+                String message = e.getAnalysisType().name().replaceAll("_", " ");
+                this.message.setText(message.toUpperCase());
+                this.setVisible(true);
+                break;
+            default:
+                this.setVisible(false);
         }
     }
 
