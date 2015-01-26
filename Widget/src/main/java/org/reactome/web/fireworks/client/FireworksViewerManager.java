@@ -1,10 +1,7 @@
 package org.reactome.web.fireworks.client;
 
 import com.google.gwt.event.shared.EventBus;
-import org.reactome.web.fireworks.events.FireworksResizedEvent;
-import org.reactome.web.fireworks.events.FireworksVisibleAreaChangedEvent;
-import org.reactome.web.fireworks.events.FireworksZoomEvent;
-import org.reactome.web.fireworks.events.ThumbnailAreaMovedEvent;
+import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.FireworksResizeHandler;
 import org.reactome.web.fireworks.handlers.FireworksZoomHandler;
 import org.reactome.web.fireworks.handlers.ThumbnailAreaMovedHandler;
@@ -43,6 +40,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
     private double height;
 
     private FireworksStatus currentStatus;
+    private Node nodeToOpen = null;
 
     MovementAnimation movementAnimation;
 
@@ -160,6 +158,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
 
     //TODO: UNDER TEST!!
     public void focusNode(Node node){
+        this.nodeToOpen = node;
         double minX = node.getMinX(); double maxX = node.getMaxX();
         double minY = node.getMinY(); double maxY = node.getMaxY();
 
@@ -231,6 +230,14 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
 
         Coordinate model = this.currentStatus. getModelCoordinate(mouse);
         this.zoomToCoordinate(model, mouse, factor);
+    }
+
+    @Override
+    public void focusFinished() {
+        if(this.nodeToOpen !=null) {
+            this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.nodeToOpen), this);
+            this.nodeToOpen = null;
+        }
     }
 
     protected void setGraph(Graph graph){

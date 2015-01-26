@@ -12,6 +12,7 @@ public class FocusingAnimation extends Animation {
     public interface FocusingAnimationHandler {
         public void translate(double dX, double dY);
         public void focusZoom(double factor, Coordinate mouse);
+        public void focusFinished();
     }
 
     /**
@@ -62,6 +63,7 @@ public class FocusingAnimation extends Animation {
     protected void onComplete() {
         if(!canceled){
             super.onComplete(); //By avoiding the call to "super" if cancelled, a composition of movement is created
+            this.handler.focusFinished();
         }
     }
 
