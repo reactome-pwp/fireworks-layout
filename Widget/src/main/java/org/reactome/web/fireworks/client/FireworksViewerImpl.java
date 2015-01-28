@@ -136,6 +136,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void onResize() {
+        if(!isVisible()) return;
         super.onResize();
         this.forceFireworksDraw = true;
     }
@@ -185,7 +186,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             if(this.hovered!=this.selected){
                 this.selectNode(hovered, false);
             }
-            this.manager.focusNode(this.hovered);
+            this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.hovered), this);
+//            this.manager.expandNode(this.hovered);
         }else {
             Element element = event.getRelativeElement();
             Coordinate mouse = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));

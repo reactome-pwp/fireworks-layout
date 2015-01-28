@@ -6,7 +6,10 @@ import com.google.gwt.animation.client.Animation;
  * First centers the node and then apply the zoom until it fits the visible area
  *
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
+ *
+ * @deprecated because a way keep the context while zooming completely in is needed
  */
+@Deprecated
 public class FocusingAnimation extends Animation {
 
     public interface FocusingAnimationHandler {
