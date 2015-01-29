@@ -6,15 +6,12 @@ import com.google.gwt.animation.client.Animation;
  * First centers the node and then apply the zoom until it fits the visible area
  *
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
- *
- * @deprecated because a way keep the context while zooming completely in is needed
  */
-@Deprecated
 public class FocusingAnimation extends Animation {
 
     public interface FocusingAnimationHandler {
         public void translate(double dX, double dY);
-        public void focusZoom(double factor, Coordinate mouse);
+        public void focusZoom(double factor, Coordinate point);
         public void focusFinished();
     }
 
@@ -29,16 +26,14 @@ public class FocusingAnimation extends Animation {
     private double currentFactor;
 
     private Coordinate targetCanvasPoint;
-    private boolean targetPositionReached;
     private double targetFactor;
 
-    private boolean canceled;
+    private boolean isZooming = false;
 
     public FocusingAnimation(FocusingAnimationHandler handler, Coordinate canvasPoint, double factor) {
         this.handler = handler;
         this.currentCanvasPoint = canvasPoint;
         this.currentFactor = factor;
-        this.canceled = false;
     }
 
     public void moveTo(Coordinate targetCanvasPoint, double factor){
@@ -47,7 +42,6 @@ public class FocusingAnimation extends Animation {
     }
 
     public void moveTo(Coordinate targetCanvasPoint, double factor, int time){
-        this.canceled = false;
         this.targetCanvasPoint = targetCanvasPoint;
         this.targetFactor = factor;
 
@@ -57,35 +51,36 @@ public class FocusingAnimation extends Animation {
     }
 
     @Override
-    protected void onCancel() {
-        this.canceled = true;
-        super.onCancel();
-    }
-
-    @Override
     protected void onComplete() {
-        if(!canceled){
+        if(!isZooming) {
+            move(1.0);
+            this.isZooming = true;
+            run(1000);
+        }else{
             super.onComplete(); //By avoiding the call to "super" if cancelled, a composition of movement is created
+            zoom(1.0);
             this.handler.focusFinished();
         }
     }
 
     @Override
     protected void onUpdate(double progress) {
-        if(!targetPositionReached) {
-            Coordinate delta = this.targetCanvasPoint.minus(this.currentCanvasPoint).multiply(progress);
-            this.currentCanvasPoint = this.currentCanvasPoint.add(delta);
-            handler.translate(delta.getX(), delta.getY());
-            targetPositionReached = this.targetCanvasPoint.equals(this.currentCanvasPoint);
-            if(targetPositionReached){
-                cancel();
-                this.canceled = false;
-                run(1000);
-            }
+        if(!this.isZooming) {
+            move(progress);
         }else{
-            double deltaFactor = this.targetFactor - this.currentFactor;
-            handler.focusZoom(this.currentFactor + deltaFactor * progress, targetCanvasPoint);
+            zoom(progress);
         }
+    }
+
+    protected void move(double progress){
+        Coordinate delta = this.targetCanvasPoint.minus(this.currentCanvasPoint).multiply(progress);
+        this.currentCanvasPoint = this.currentCanvasPoint.add(delta);
+        handler.translate(delta.getX(), delta.getY());
+    }
+
+    protected void zoom(double progress){
+        double deltaFactor = this.targetFactor - this.currentFactor;
+        handler.focusZoom(this.currentFactor + deltaFactor * progress, targetCanvasPoint);
     }
 
     private int time(double distance){

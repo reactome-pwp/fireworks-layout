@@ -1,10 +1,7 @@
 package org.reactome.web.fireworks.client;
 
 import com.google.gwt.event.shared.EventBus;
-import org.reactome.web.fireworks.events.FireworksResizedEvent;
-import org.reactome.web.fireworks.events.FireworksVisibleAreaChangedEvent;
-import org.reactome.web.fireworks.events.FireworksZoomEvent;
-import org.reactome.web.fireworks.events.ThumbnailAreaMovedEvent;
+import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.FireworksResizeHandler;
 import org.reactome.web.fireworks.handlers.ThumbnailAreaMovedHandler;
 import org.reactome.web.fireworks.model.Edge;
@@ -12,6 +9,7 @@ import org.reactome.web.fireworks.model.FireworksStatus;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.util.Coordinate;
+import org.reactome.web.fireworks.util.FocusingAnimation;
 import org.reactome.web.fireworks.util.MovementAnimation;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 import uk.ac.ebi.pwp.structures.quadtree.model.Box;
@@ -23,7 +21,7 @@ import java.util.Set;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimationHandler,
-        FireworksResizeHandler, ThumbnailAreaMovedHandler { //FocusingAnimation.FocusingAnimationHandler
+        FireworksResizeHandler, ThumbnailAreaMovedHandler, FocusingAnimation.FocusingAnimationHandler {
     static final int ZOOM_MIN = 1;
     static final int ZOOM_MAX = 100;
     static final double ZOOM_FACTOR = 0.25; //0.50;
@@ -41,7 +39,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
     private double height;
 
     private FireworksStatus currentStatus;
-//    private Node nodeToOpen = null;
+    private Node nodeToOpen = null;
 
     MovementAnimation movementAnimation;
 
@@ -70,7 +68,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         this.setZoom(factor, coordinate);
     }
 
-//    @Override
+    @Override
     public void translate(double dX, double dY){
         //IMPORTANT: trick to avoid recalculating every time drawing happens
         //           is to move the model in the normal way
@@ -152,25 +150,25 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         this.movementAnimation.moveTo(centre, canvasCentre, factor);
     }
 
-//    public void expandNode(Node node){
-//        this.nodeToOpen = node;
-//        double minX = node.getMinX(); double maxX = node.getMaxX();
-//        double minY = node.getMinY(); double maxY = node.getMaxY();
-//
-//        //3- Calculate the
-//        double width = (maxX - minX);
-//        double height = (maxY - minY);
-//
-//        //4- Calculating proportions (and corrections for positioning)
-//        double factor = (width > height) ? (this.width / width) : (this.height / height) ;
-//
-//        //6- Current and new positions are based in the centre of the box containing the selected element
-//        Coordinate canvasCentre = new Coordinate(this.width/2.0, this.height/2.0);
-//
-//        //7- Animates the movement
-//        FocusingAnimation animation = new FocusingAnimation(this, node.getCurrentPosition(), this.currentStatus.getFactor());
-//        animation.moveTo(canvasCentre, factor);
-//    }
+    public void expandNode(Node node){
+        this.nodeToOpen = node;
+        double minX = node.getMinX(); double maxX = node.getMaxX();
+        double minY = node.getMinY(); double maxY = node.getMaxY();
+
+        //3- Calculate the
+        double width = (maxX - minX);
+        double height = (maxY - minY);
+
+        //4- Calculating proportions (and corrections for positioning)
+        double factor = (width > height) ? (this.width / width) : (this.height / height) ;
+
+        //6- Current and new positions are based in the centre of the box containing the selected element
+        Coordinate canvasCentre = new Coordinate(this.width/2.0, this.height/2.0);
+
+        //7- Animates the movement
+        FocusingAnimation animation = new FocusingAnimation(this, node.getCurrentPosition(), this.currentStatus.getFactor());
+        animation.moveTo(canvasCentre, factor);
+    }
 
     protected Node getHoveredNode(Coordinate mouse){
         Coordinate c = this.currentStatus.getModelCoordinate(mouse);
@@ -204,21 +202,21 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         return false;
     }
 
-//    @Override
-//    public void focusZoom(double factor, Coordinate mouse) {
-//        if(factor==this.currentStatus.getFactor()) return;
-//
-//        Coordinate model = this.currentStatus.getModelCoordinate(mouse);
-//        this.zoomToCoordinate(model, mouse, factor);
-//    }
-//
-//    @Override
-//    public void focusFinished() {
-//        if(this.nodeToOpen !=null) {
-//            this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.nodeToOpen), this);
-//            this.nodeToOpen = null;
-//        }
-//    }
+    @Override
+    public void focusZoom(double factor, Coordinate point) {
+        if(factor==this.currentStatus.getFactor()) return;
+
+        Coordinate model = this.currentStatus.getModelCoordinate(point);
+        this.zoomToCoordinate(model, point, factor);
+    }
+
+    @Override
+    public void focusFinished() {
+        if(this.nodeToOpen !=null) {
+            this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.nodeToOpen), this);
+            this.nodeToOpen = null;
+        }
+    }
 
     protected void setGraph(Graph graph){
         this.graph = graph;

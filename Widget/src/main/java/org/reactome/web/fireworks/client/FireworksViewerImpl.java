@@ -186,8 +186,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             if(this.hovered!=this.selected){
                 this.selectNode(hovered, false);
             }
-            this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.hovered), this);
-//            this.manager.expandNode(this.hovered);
+            this.manager.expandNode(this.hovered);
         }else {
             Element element = event.getRelativeElement();
             Coordinate mouse = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
