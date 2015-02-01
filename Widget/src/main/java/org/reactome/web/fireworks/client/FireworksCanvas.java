@@ -307,6 +307,8 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         String  color = PROFILE.getNodeHighlightColour(); // "#E1ED55";
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);
+        node.highlight(ctx, aura);
+
         Set<Edge> edges = node.getEdgesTo();
         for (Node ancestor : node.getAncestors()) {
             if(ancestor.isTopLevel()){
