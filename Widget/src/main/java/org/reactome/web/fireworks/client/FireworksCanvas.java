@@ -404,7 +404,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     @Override
     public void onNodeHover(NodeHoverEvent event) {
-        Tooltip.getTooltip().setPreventShowing(false);
         this.highlightNode(event.getNode());
     }
 
