@@ -37,6 +37,8 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
     public void highlightNodeByDbIdentifier(Long dbIdentifier);
 
+    public void resetAnalysis();
+
     public void resetHighlight();
 
     public void resetSelection();
@@ -47,5 +49,4 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
     public void setAnalysisToken(String token, String resource);
 
-    public void resetAnalysis();
 }

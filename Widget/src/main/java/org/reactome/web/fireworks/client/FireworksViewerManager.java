@@ -8,9 +8,7 @@ import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.FireworksStatus;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
-import org.reactome.web.fireworks.util.Coordinate;
-import org.reactome.web.fireworks.util.FocusingAnimation;
-import org.reactome.web.fireworks.util.MovementAnimation;
+import org.reactome.web.fireworks.util.*;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 import uk.ac.ebi.pwp.structures.quadtree.model.Box;
 import uk.ac.ebi.pwp.structures.quadtree.model.QuadTree2D;
@@ -21,7 +19,7 @@ import java.util.Set;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimationHandler,
-        FireworksResizeHandler, ThumbnailAreaMovedHandler, FocusingAnimation.FocusingAnimationHandler {
+        FireworksResizeHandler, ThumbnailAreaMovedHandler, FocusAnimationHandler {
     static final int ZOOM_MIN = 1;
     static final int ZOOM_MAX = 100;
     static final double ZOOM_FACTOR = 0.25; //0.50;
@@ -65,6 +63,12 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
 
     public void onMouseScrolled(int delta, Coordinate coordinate) {
         double factor = this.currentStatus.getFactor() - delta * ZOOM_FACTOR;
+        //Check boundaries only when the user scrolls
+        if (factor < ZOOM_MIN) {
+            factor = ZOOM_MIN;
+        } else if (factor > ZOOM_MAX) {
+            factor = ZOOM_MAX;
+        }
         this.setZoom(factor, coordinate);
     }
 
@@ -102,6 +106,14 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
     }
 
     protected void displayNodeAndParents(Node node){
+        if(this.currentStatus.getFactor() > ZOOM_MAX){
+            reduceNode(node);
+        }else{
+            displayAction(node);
+        }
+    }
+
+    private void displayAction(Node node){
         //1- Calculate the outer box containing the node and all its parents
         double minX = node.getMinX(); double maxX = node.getMaxX();
         double minY = node.getMinY(); double maxY = node.getMaxY();
@@ -166,8 +178,13 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         Coordinate canvasCentre = new Coordinate(this.width/2.0, this.height/2.0);
 
         //7- Animates the movement
-        FocusingAnimation animation = new FocusingAnimation(this, node.getCurrentPosition(), this.currentStatus.getFactor());
+        FocusInAnimation animation = new FocusInAnimation(this, node.getCurrentPosition(), this.currentStatus.getFactor());
         animation.moveTo(canvasCentre, factor);
+    }
+
+    public void reduceNode(Node node){
+        FocusOutAnimation animation = new FocusOutAnimation(this, this.nodeToOpen.getCurrentPosition(), this.currentStatus.getFactor());
+        animation.zoomOut(node, ZOOM_MAX / 2);
     }
 
     protected Node getHoveredNode(Coordinate mouse){
@@ -203,7 +220,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
     }
 
     @Override
-    public void focusZoom(double factor, Coordinate point) {
+    public void setZoom(double factor, Coordinate point) {
         if(factor==this.currentStatus.getFactor()) return;
 
         Coordinate model = this.currentStatus.getModelCoordinate(point);
@@ -211,10 +228,12 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
     }
 
     @Override
-    public void focusFinished() {
-        if(this.nodeToOpen !=null) {
-            this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.nodeToOpen), this);
+    public void focusFinished(Node node) {
+        if(node!=null) {
+            displayAction(node);
             this.nodeToOpen = null;
+        }else{
+            this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.nodeToOpen), this);
         }
     }
 
@@ -227,19 +246,6 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         for (Edge edge : this.graph.getEdges()) {
             this.quadTree.add(edge);
         }
-    }
-
-    protected void setZoom(double factor, Coordinate mouse) {
-        if (factor < ZOOM_MIN) {
-            factor = ZOOM_MIN;
-        } else if (factor > ZOOM_MAX) {
-            factor = ZOOM_MAX;
-        }
-
-        if(factor==this.currentStatus.getFactor()) return;
-
-        Coordinate model = this.currentStatus.getModelCoordinate(mouse);
-        this.zoomToCoordinate(model, mouse, factor);
     }
 
     private void fireFireworksVisibleAreaChangedEvent(){

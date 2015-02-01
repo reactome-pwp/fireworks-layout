@@ -7,20 +7,13 @@ import com.google.gwt.animation.client.Animation;
  *
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class FocusingAnimation extends Animation {
-
-    public interface FocusingAnimationHandler {
-        public void translate(double dX, double dY);
-        public void focusZoom(double factor, Coordinate point);
-        public void focusFinished();
-    }
-
+public class FocusInAnimation extends Animation {
     /**
      * The maximum duration of the animation.
      */
     private static final int MAX_ANIMATION_DURATION = 2000;
 
-    private FocusingAnimationHandler handler;
+    private FocusAnimationHandler handler;
 
     private Coordinate currentCanvasPoint;
     private double currentFactor;
@@ -30,7 +23,7 @@ public class FocusingAnimation extends Animation {
 
     private boolean isZooming = false;
 
-    public FocusingAnimation(FocusingAnimationHandler handler, Coordinate canvasPoint, double factor) {
+    public FocusInAnimation(FocusAnimationHandler handler, Coordinate canvasPoint, double factor) {
         this.handler = handler;
         this.currentCanvasPoint = canvasPoint;
         this.currentFactor = factor;
@@ -59,7 +52,7 @@ public class FocusingAnimation extends Animation {
         }else{
             super.onComplete(); //By avoiding the call to "super" if cancelled, a composition of movement is created
             zoom(1.0);
-            this.handler.focusFinished();
+            this.handler.focusFinished(null);
         }
     }
 
@@ -80,7 +73,7 @@ public class FocusingAnimation extends Animation {
 
     protected void zoom(double progress){
         double deltaFactor = this.targetFactor - this.currentFactor;
-        handler.focusZoom(this.currentFactor + deltaFactor * progress, targetCanvasPoint);
+        handler.setZoom(this.currentFactor + deltaFactor * progress, targetCanvasPoint);
     }
 
     private int time(double distance){
