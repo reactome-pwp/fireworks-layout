@@ -1,5 +1,7 @@
 package org.reactome.web.fireworks.model;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Set;
 
 /**
@@ -10,10 +12,14 @@ public class Graph {
     Set<Node> nodes;
     Set<Edge> edges;
 
+    double minX; double maxX;
+    double minY; double maxY;
+
     public Graph(Long speciesId, Set<Node> nodes, Set<Edge> edges) {
         this.speciesId = speciesId;
         this.nodes = nodes;
         this.edges = edges;
+        this.initialise();
     }
 
     public Long getSpeciesId() {
@@ -28,26 +34,62 @@ public class Graph {
         return edges;
     }
 
+    public double getMinX() {
+        return this.minX;
+    }
+
+    public double getMinY() {
+        return this.minY;
+    }
+
     public double getMaxX(){
-        double max = 0;
-        for (Node node : nodes) {
-            max = Math.max(max, node.getMaxX());
-        }
-        for (Edge edge : edges) {
-            max = Math.max(max, edge.getMaxX());
-        }
-        return max;
+        return this.maxX;
     }
 
     public double getMaxY(){
-        double max = 0;
-        for (Node node : nodes) {
-            max = Math.max(max, node.getMaxY());
-        }
-        for (Edge edge : edges) {
-            max = Math.max(max, edge.getMaxY());
-        }
-        return max;
+        return this.maxY;
     }
 
+    private void initialise(){
+        this.setMinX();
+        this.setMaxX();
+        this.setMinY();
+        this.setMaxY();
+    }
+
+    private void setMinX() {
+        this.minX = (Collections.min(this.nodes, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return Double.compare(o1.getMinX(), o2.getMinX());
+            }
+        })).getMinX();
+    }
+
+    private void setMaxX() {
+        this.maxX = (Collections.max(this.nodes, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return Double.compare(o1.getMaxX(), o2.getMaxX());
+            }
+        })).getMaxX();
+    }
+
+    private void setMinY() {
+        this.minY = (Collections.min(this.nodes, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return Double.compare(o1.getMinY(), o2.getMinY());
+            }
+        })).getMinY();
+    }
+
+    private void setMaxY() {
+        this.maxY = (Collections.max(this.nodes, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return Double.compare(o1.getMaxY(), o2.getMaxY());
+            }
+        })).getMaxY();
+    }
 }

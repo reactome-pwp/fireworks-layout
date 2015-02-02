@@ -7,7 +7,7 @@
     <groupId>org.reactome.web</groupId>
     <artifactId>fireworks</artifactId>
     <packaging>jar</packaging>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.2.3-SNAPSHOT</version>
     <name>Reactome Fireworks Viewer</name>
 
     <properties>

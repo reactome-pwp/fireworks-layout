@@ -109,11 +109,20 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         if(this.currentStatus.getFactor() > ZOOM_MAX){
             reduceNode(node);
         }else{
-            displayAction(node);
+            displayNode(node);
         }
     }
 
-    private void displayAction(Node node){
+    protected void displayAllNodes(){
+        //1- Calculate the outer box containing the node and all its parents
+        double minX = this.graph.getMinX(); double maxX = this.graph.getMaxX();
+        double minY = this.graph.getMinY(); double maxY = this.graph.getMaxY();
+
+        //2- Display action
+        this.displayAction(minX, minY, maxX, maxY);
+    }
+
+    private void displayNode(Node node){
         //1- Calculate the outer box containing the node and all its parents
         double minX = node.getMinX(); double maxX = node.getMaxX();
         double minY = node.getMinY(); double maxY = node.getMaxY();
@@ -123,16 +132,30 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
             minY = Math.min(minY, ancestor.getMinY());
             maxY = Math.max(maxY, ancestor.getMaxY());
         }
-        //2- Growing the box a "space" bigger as the view offset
+
+        //2 - Display action
+        this.displayAction(minX, minY, maxX, maxY);
+    }
+
+    private void displayAction(double minX, double minY, double maxX, double maxY){
+        //1- Growing the box a "space" bigger as the view offset
         double space = 20;
         minX -= space; minY -= space; maxX += space; maxY += space;
 
-        //3- Calculate the
+        //2- Calculate the
         double width = (maxX - minX);
         double height = (maxY - minY);
         double p = this.height / this.width;
 
-        //4- Calculating proportions (and corrections for positioning)
+        //3- Calculate the factor
+        double fW = this.width / width;
+        double fH = this.height / height;
+        double factor = fW < fH ? fW : fH;
+        if(factor > 3.0){
+            factor = 3.0; //Never deeper than 3 (the view result is a little bit useless)
+        }
+
+        //3- Calculating proportions (and corrections for positioning)
         if(width > height){
             double aux = height;
             height = width * p;
@@ -143,19 +166,11 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
             minX -= (width - aux)/2.0; //if higher then width and minX corrected
         }
 
-        //5- Factor calculation and correction
-        double factor = (this.width / width);
-        if(factor<ZOOM_MIN){
-            factor = ZOOM_MIN;
-        }else if(factor > 3.0){
-            factor = 3.0; //Never deeper than 3 (the view result is a little bit useless)
-        }
-
-        //6- Current and new positions are based in the centre of the box containing the selected element
+        //4- Current and new positions are based in the centre of the box containing the selected element
         Coordinate centre = new Coordinate(minX + width/2.0, minY + height/2.0);
         Coordinate canvasCentre = new Coordinate(this.width/2.0, this.height/2.0);
 
-        //7- Animates the movement
+        //5- Animates the movement
         if(this.movementAnimation!=null) this.movementAnimation.cancel();
         Coordinate currentCentre = this.currentStatus.getModelCoordinate(canvasCentre);
         this.movementAnimation = new MovementAnimation(this, currentCentre, canvasCentre, this.currentStatus.getFactor());
@@ -230,7 +245,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
     @Override
     public void focusFinished(Node node) {
         if(node!=null) {
-            displayAction(node);
+            displayNode(node);
             this.nodeToOpen = null;
         }else{
             this.eventBus.fireEventFromSource(new NodeOpenedEvent(this.nodeToOpen), this);

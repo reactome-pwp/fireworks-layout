@@ -122,14 +122,14 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void highlightNodeByStableIdentifier(String stableIdentifier) {
-        Node node = this.data.getNode(stableIdentifier);
+        Node node = this.data.getNode(stableIdentifier); if(node==null) return;
         Tooltip.getTooltip().setPreventShowing(node.equals(this.selected) || !this.manager.isNodeVisible(node));
         this.setHoveredNode(node);
     }
 
     @Override
     public void highlightNodeByDbIdentifier(Long dbIdentifier) {
-        Node node = this.data.getNode(dbIdentifier);
+        Node node = this.data.getNode(dbIdentifier); if(node==null) return;
         Tooltip.getTooltip().setPreventShowing(node.equals(this.selected) || !this.manager.isNodeVisible(node));
         this.setHoveredNode(node);
     }
@@ -342,6 +342,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.onResize(); // Adjusts size before rendering the Fireworks for the first time
         this.initHandlers();
         this.forceFireworksDraw = true; //IMPORTANT! Do NOT place it inside the scheduler class
+        this.manager.displayAllNodes();
         AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
             @Override
             public void execute(double timestamp) {
