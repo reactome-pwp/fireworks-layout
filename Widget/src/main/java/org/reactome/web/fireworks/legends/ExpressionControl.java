@@ -52,17 +52,17 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
         addStyleName(css.analysisControl());
         addStyleName(css.expressionControl());
 
-        this.rewindBtn = new ControlButton(css.rewind(), this);
+        this.rewindBtn = new ControlButton("Show previous", css.rewind(), this);
         this.add(this.rewindBtn);
 
-        this.playBtn = new ControlButton(css.play(), this);
+        this.playBtn = new ControlButton("Play", css.play(), this);
         this.add(this.playBtn);
 
-        this.pauseBtn = new ControlButton(css.pause(), this);
+        this.pauseBtn = new ControlButton("Pause", css.pause(), this);
         this.pauseBtn.setVisible(false);
         this.add(this.pauseBtn);
 
-        this.forwardBtn = new ControlButton(css.forward(), this);
+        this.forwardBtn = new ControlButton("Show next", css.forward(), this);
         this.add(this.forwardBtn);
 
         this.speedBtn = new SpeedButton(RESOURCES);
@@ -80,7 +80,7 @@ public class ExpressionControl extends LegendPanel implements ClickHandler, Slid
         this.message = new InlineLabel();
         this.add(this.message);
 
-        this.closeBtn = new ControlButton(css.close(), this);
+        this.closeBtn = new ControlButton("Close", css.close(), this);
         this.add(this.closeBtn);
 
         this.initHandlers();

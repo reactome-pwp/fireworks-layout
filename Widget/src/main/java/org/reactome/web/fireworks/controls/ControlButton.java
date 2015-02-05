@@ -8,12 +8,9 @@ import com.google.gwt.user.client.ui.Button;
  */
 public class ControlButton extends Button {
 
-    public ControlButton(String style) {
-        setStyleName(style);
-    }
-
-    public ControlButton(String style, ClickHandler handler) {
+    public ControlButton(String title, String style, ClickHandler handler) {
         setStyleName(style);
         addClickHandler(handler);
+        setTitle(title);
     }
 }

@@ -175,24 +175,24 @@ public class ControlPanel extends AbsolutePanel implements ClickHandler, NodeSel
 
         ControlPanelCSS css = RESOURCES.getCSS();
 
-        this.zoomIn = new ControlButton(css.zoomIn(), this);
+        this.zoomIn = new ControlButton("Zoom in", css.zoomIn(), this);
         this.add(this.zoomIn);
-        this.zoomOut = new ControlButton(css.zoomOut(), this);
+        this.zoomOut = new ControlButton("Zoom out", css.zoomOut(), this);
         this.add(this.zoomOut);
 
-        this.fitAll = new ControlButton(css.fitall(), this);
+        this.fitAll = new ControlButton("Show all", css.fitall(), this);
         this.add(this.fitAll);
 
-        this.up = new ControlButton(css.up(), this);
+        this.up = new ControlButton("Move up", css.up(), this);
         this.add(this.up);
-        this.right = new ControlButton(css.right(), this);
+        this.right = new ControlButton("Move right", css.right(), this);
         this.add(this.right);
-        this.down = new ControlButton(css.down(), this);
+        this.down = new ControlButton("Move down", css.down(), this);
         this.add(this.down);
-        this.left = new ControlButton(css.left(), this);
+        this.left = new ControlButton("Move left", css.left(), this);
         this.add(this.left);
 
-        this.open = new ControlButton(css.open(), this);
+        this.open = new ControlButton("Open selected pathway", css.open(), this);
         this.open.setEnabled(false);
         this.add(this.open);
 

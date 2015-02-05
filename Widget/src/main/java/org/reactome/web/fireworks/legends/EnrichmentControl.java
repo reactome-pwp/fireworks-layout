@@ -29,7 +29,7 @@ public class EnrichmentControl extends LegendPanel implements ClickHandler,
         this.message = new InlineLabel();
         this.add(this.message);
 
-        this.closeBtn = new ControlButton(css.close(), this);
+        this.closeBtn = new ControlButton("Close", css.close(), this);
         this.add(this.closeBtn );
 
         this.initHandlers();
