@@ -11,8 +11,8 @@ public abstract class FireworksProfile {
     public abstract String getEdgeEnrichmentColour(double p);
     public abstract String getEdgeEnrichmentColour();
 
-    public abstract String getNodeExpressionColour(double expression, double min, double max);
-    public abstract String getEdgeExpressionColour(double expression, double min, double max);
+    public abstract String getNodeExpressionColour(double p, double expression, double min, double max);
+    public abstract String getEdgeExpressionColour(double p, double expression, double min, double max);
 
     public abstract String getNodeHighlightColour();
     public abstract String getEdgeHighlightColour();
@@ -27,8 +27,6 @@ public abstract class FireworksProfile {
     public abstract String getNodeFadeoutColour();
     public abstract String getEdgeFadeoutColour();
 
-    public abstract String getThumbnailEnrichmentColour(double p);
-    public abstract String getThumbnailFadeoutColour();
     public abstract String getThumbnailHighlightColour();
     public abstract String getThumbnailSelectionColour();
     public abstract String getThumbnailStandardColour();

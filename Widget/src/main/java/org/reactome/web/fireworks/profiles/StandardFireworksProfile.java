@@ -7,6 +7,8 @@ import org.reactome.web.fireworks.util.ColorGradient;
  */
 public class StandardFireworksProfile extends FireworksProfile {
 
+    private static final Double THRESHOLD = 0.05;
+
     ColorGradient nodeEnrichmentGradient;
     ColorGradient edgeEnrichmentGradient;
 
@@ -27,7 +29,7 @@ public class StandardFireworksProfile extends FireworksProfile {
 
     @Override
     public String getNodeEnrichmentColour(double p) {
-        if(p<=0.05) {
+        if(p<=THRESHOLD) {
             return this.nodeEnrichmentGradient.getColor(p/0.05);
         }else{
             return this.getNodeEnrichmentColour();
@@ -41,7 +43,7 @@ public class StandardFireworksProfile extends FireworksProfile {
 
     @Override
     public String getEdgeEnrichmentColour(double p) {
-        if(p<=0.05) {
+        if(p<=THRESHOLD) {
             return this.edgeEnrichmentGradient.getColor(p/0.05);
         }else{
             return getEdgeEnrichmentColour();
@@ -54,13 +56,21 @@ public class StandardFireworksProfile extends FireworksProfile {
     }
 
     @Override
-    public String getNodeExpressionColour(double expression, double min, double max) {
-        return this.nodeExpressionGradient.getColor(expression, min, max);
+    public String getNodeExpressionColour(double p, double expression, double min, double max) {
+        if(p<=THRESHOLD) {
+            return this.nodeExpressionGradient.getColor(expression, min, max);
+        }else{
+            return this.getNodeEnrichmentColour();
+        }
     }
 
     @Override
-    public String getEdgeExpressionColour(double expression, double min, double max) {
-        return this.edgeExpressionGradient.getColor(expression, min, max);
+    public String getEdgeExpressionColour(double p, double expression, double min, double max) {
+        if(p<=THRESHOLD) {
+            return this.edgeExpressionGradient.getColor(expression, min, max);
+        }else{
+            return getEdgeEnrichmentColour();
+        }
     }
 
     @Override
@@ -100,20 +110,6 @@ public class StandardFireworksProfile extends FireworksProfile {
 
     @Override
     public String getEdgeFadeoutColour() {
-        return "#FFECEC";
-    }
-
-    @Override
-    public String getThumbnailEnrichmentColour(double p) {
-        if(p<=0.05) {
-            return this.edgeEnrichmentGradient.getColor(p/0.05);
-        }else{
-            return "#F0D4D1";
-        }
-    }
-
-    @Override
-    public String getThumbnailFadeoutColour() {
         return "#FFECEC";
     }
 

@@ -272,8 +272,8 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
                     this.expColours = new ArrayList<String>();
                     List<String> edgeExpColours = new ArrayList<String>();
                     for (Double v : exp) {
-                        this.expColours.add(PROFILE.getNodeExpressionColour(v, min, max));
-                        edgeExpColours.add(PROFILE.getEdgeExpressionColour(v, min, max));
+                        this.expColours.add(PROFILE.getNodeExpressionColour(statistics.getpValue(), v, min, max));
+                        edgeExpColours.add(PROFILE.getEdgeExpressionColour(statistics.getpValue(), v, min, max));
                     }
                     for (Edge edge : this.edgesTo) {
                         edge.setExpColours(edgeExpColours);
