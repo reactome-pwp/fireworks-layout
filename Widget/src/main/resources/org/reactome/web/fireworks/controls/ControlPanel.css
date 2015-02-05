@@ -22,7 +22,6 @@
 }
 
 @sprite .down:active:hover {
-    /*margin: 3px 7px;*/
     gwt-image: 'downClicked';
 }
 
