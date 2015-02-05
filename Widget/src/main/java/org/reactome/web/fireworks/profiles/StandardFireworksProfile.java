@@ -1,6 +1,6 @@
 package org.reactome.web.fireworks.profiles;
 
-import org.reactome.web.fireworks.util.ColorGradient;
+import org.reactome.web.fireworks.util.gradient.TwoColorGradient;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -9,19 +9,19 @@ public class StandardFireworksProfile extends FireworksProfile {
 
     private static final Double THRESHOLD = 0.05;
 
-    ColorGradient nodeEnrichmentGradient;
-    ColorGradient edgeEnrichmentGradient;
+    TwoColorGradient nodeEnrichmentGradient;
+    TwoColorGradient edgeEnrichmentGradient;
 
-    ColorGradient nodeExpressionGradient;
-    ColorGradient edgeExpressionGradient;
+    TwoColorGradient nodeExpressionGradient;
+    TwoColorGradient edgeExpressionGradient;
 
     public StandardFireworksProfile() {
         try {
-            this.nodeEnrichmentGradient = new ColorGradient("#934A00", "#FFAD33");
-            this.edgeEnrichmentGradient = new ColorGradient("#A96E33", "#FFB547");
+            this.nodeEnrichmentGradient = new TwoColorGradient("#934A00", "#FFAD33");
+            this.edgeEnrichmentGradient = new TwoColorGradient("#A96E33", "#FFB547");
 
-            this.nodeExpressionGradient = new ColorGradient("#934A00", "#FFAD33");
-            this.edgeExpressionGradient = new ColorGradient("#A96E33", "#FFB547");
+            this.nodeExpressionGradient = new TwoColorGradient("#934A00", "#FFAD33");
+            this.edgeExpressionGradient = new TwoColorGradient("#A96E33", "#FFB547");
         } catch (Exception e) {
             e.printStackTrace();
         }

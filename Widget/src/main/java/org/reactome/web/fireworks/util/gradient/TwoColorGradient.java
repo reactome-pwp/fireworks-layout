@@ -1,16 +1,16 @@
-package org.reactome.web.fireworks.util;
+package org.reactome.web.fireworks.util.gradient;
 
 import net.auroris.ColorPicker.client.Color;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class ColorGradient {
+public class TwoColorGradient {
 
     private Color from;
     private Color to;
 
-    public ColorGradient(String hexFrom, String hexTo) throws Exception {
+    public TwoColorGradient(String hexFrom, String hexTo) throws Exception {
         this.from = new Color();
         this.from.setHex(hexFrom.replace("#", ""));
         this.to = new Color();

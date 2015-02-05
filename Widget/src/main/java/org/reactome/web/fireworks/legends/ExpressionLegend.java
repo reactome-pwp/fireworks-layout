@@ -13,7 +13,7 @@ import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
-import org.reactome.web.fireworks.util.ColorGradient;
+import org.reactome.web.fireworks.util.gradient.TwoColorGradient;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -145,7 +145,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
             if(statistics!=null){
                 if(statistics.getExp()!=null) {
                     double expression = statistics.getExp().get(this.column);
-                    double p = ColorGradient.getPercentage(expression, this.min, this.max);
+                    double p = TwoColorGradient.getPercentage(expression, this.min, this.max);
                     int y = (int) Math.round(200 * p) + 5;
                     ctx.setFillStyle("yellow");
                     ctx.setStrokeStyle("yellow");
@@ -173,7 +173,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
             if(statistics!=null){
                 if(statistics.getExp()!=null) {
                     double expression = statistics.getExp().get(this.column);
-                    double p = ColorGradient.getPercentage(expression, this.min, this.max);
+                    double p = TwoColorGradient.getPercentage(expression, this.min, this.max);
                     int y = (int) Math.round(200 * p) + 5;
                     ctx.setFillStyle("blue");
                     ctx.setStrokeStyle("blue");
