@@ -242,6 +242,18 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         this.zoomToCoordinate(model, point, factor);
     }
 
+    public void zoom(double factor){
+        factor = this.currentStatus.getFactor() + factor;
+        if(factor < ZOOM_MIN){
+            factor = ZOOM_MIN;
+        }else if(factor > ZOOM_MAX){
+            factor = ZOOM_MAX;
+        }
+        Coordinate point = new Coordinate(width/2, height/2);
+        Coordinate model = this.currentStatus.getModelCoordinate(point);
+        this.zoomToCoordinate(model, point, factor);
+    }
+
     @Override
     public void focusFinished(Node node) {
         if(node!=null) {

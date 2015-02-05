@@ -8,6 +8,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.RequiresResize;
+import org.reactome.web.fireworks.controls.ControlPanel;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.legends.EnrichmentControl;
@@ -99,6 +100,9 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
             this.add(this.info);
         }
         this.add(thumbnail);
+
+        //Control panel
+        this.add(new ControlPanel(eventBus));
 
         //Enrichment legend and control panels
         this.add(new EnrichmentLegend(eventBus, PROFILE));

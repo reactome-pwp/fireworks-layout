@@ -17,6 +17,7 @@
 
 @sprite .close {
     gwt-image:'closeNormal';
+    outline: none;
     background-repeat:no-repeat;
     border: 0;
     cursor: pointer;
@@ -35,6 +36,7 @@
 
 @sprite .forward {
     gwt-image:'forwardNormal';
+    outline: none;
     background-repeat:no-repeat;
     border: 0;
     cursor: pointer;
@@ -59,6 +61,7 @@
 
 @sprite .play {
     gwt-image:'playNormal';
+    outline: none;
     background-repeat:no-repeat;
     border: 0;
     cursor: pointer;
@@ -78,6 +81,7 @@
 
 @sprite .pause {
     gwt-image:'pauseNormal';
+    outline: none;
     background-repeat:no-repeat;
     border: 0;
     cursor: pointer;
@@ -97,6 +101,7 @@
 
 @sprite .rewind {
     gwt-image:'rewindNormal';
+    outline: none;
     background-repeat:no-repeat;
     border: 0;
     cursor: pointer;
@@ -187,4 +192,5 @@
     left: 116px;
     background-color: #E6E6E6;
     border-radius: 5px;
+    outline: none;
 }

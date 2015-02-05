@@ -10,6 +10,7 @@
 
     <source path="analysis"/>
     <source path="client"/>
+    <source path="controls"/>
     <source path="data"/>
     <source path="events"/>
     <source path="exceptions"/>

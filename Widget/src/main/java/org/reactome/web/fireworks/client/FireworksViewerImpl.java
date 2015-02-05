@@ -30,7 +30,8 @@ import org.reactome.web.fireworks.util.Tooltip;
 class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler, MouseWheelHandler,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, DoubleClickHandler,
-        AnalysisResetHandler, ExpressionColumnChangedHandler {
+        AnalysisResetHandler, ExpressionColumnChangedHandler,
+        ControlActionHandler {
 
     EventBus eventBus = new FireworksEventBus();
 
@@ -162,6 +163,20 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onExpressionColumnChanged(ExpressionColumnChangedEvent e) {
         this.canvases.setColumn(e.getColumn()); //First the column needs to be set in the canvases
         this.forceFireworksDraw = true;
+    }
+
+    @Override
+    public void onControlAction(ControlActionEvent event) {
+        switch (event.getAction()){
+            case FIT_ALL:   this.manager.displayAllNodes(); break;
+            case ZOOM_IN:   this.manager.zoom(0.25);        break;
+            case ZOOM_OUT:  this.manager.zoom(-0.25);       break;
+            case UP:        this.manager.translate(0, 10);  break;
+            case RIGHT:     this.manager.translate(-10, 0); break;
+            case DOWN:      this.manager.translate(0, -10); break;
+            case LEFT:      this.manager.translate(10, 0);  break;
+            case OPEN:      this.openNode(this.selected);   break;
+        }
     }
 
     @Override
@@ -361,10 +376,17 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.canvases.addMouseUpHandler(this);
         this.canvases.addMouseWheelHandler(this);
 
+        this.eventBus.addHandler(ControlActionEvent.TYPE, this);
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
         this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksVisibleAreaChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
+    }
+
+    protected void openNode(Node node){
+        if(node!=null){
+            this.manager.expandNode(node);
+        }
     }
 
     protected void setMouseDownPosition(Element element, MouseEvent event){
