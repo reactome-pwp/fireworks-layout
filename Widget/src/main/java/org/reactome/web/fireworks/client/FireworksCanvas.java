@@ -20,7 +20,6 @@ import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
-import org.reactome.web.fireworks.profiles.StandardFireworksProfile;
 import org.reactome.web.fireworks.util.Tooltip;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
@@ -45,7 +44,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     static final double TRANSPARENCY_THRESHOLD = 4;
 
     static final int FACTOR_TEXT_THRESHOLD = 3;
-    static final FireworksProfile PROFILE = new StandardFireworksProfile();
+    static final FireworksProfile PROFILE = FireworksProfile.getCurrentProfile();
 
     private EventBus eventBus;
 

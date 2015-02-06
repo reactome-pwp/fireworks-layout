@@ -3,7 +3,6 @@ package org.reactome.web.fireworks.model;
 import com.google.gwt.canvas.dom.client.Context2d;
 import org.reactome.web.fireworks.interfaces.Drawable;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
-import org.reactome.web.fireworks.profiles.StandardFireworksProfile;
 import org.reactome.web.fireworks.util.Coordinate;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class Edge implements Drawable, QuadTreeBox {
 
-    private static FireworksProfile PROFILE = new StandardFireworksProfile();
+    private static FireworksProfile PROFILE = FireworksProfile.getCurrentProfile();
 
     private Node from;
     private Node to;

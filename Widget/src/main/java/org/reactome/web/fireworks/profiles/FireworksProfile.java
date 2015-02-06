@@ -1,17 +1,18 @@
 package org.reactome.web.fireworks.profiles;
 
-import net.auroris.ColorPicker.client.Color;
-
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
+@SuppressWarnings("UnusedDeclaration")
 public abstract class FireworksProfile {
     public abstract String getNodeEnrichmentColour(double p);
     public abstract String getNodeEnrichmentColour();
+
     public abstract String getEdgeEnrichmentColour(double p);
     public abstract String getEdgeEnrichmentColour();
 
     public abstract String getNodeExpressionColour(double p, double expression, double min, double max);
+    public abstract String getNodeExpressionColour(double p);
     public abstract String getEdgeExpressionColour(double p, double expression, double min, double max);
 
     public abstract String getNodeHighlightColour();
@@ -31,22 +32,13 @@ public abstract class FireworksProfile {
     public abstract String getThumbnailSelectionColour();
     public abstract String getThumbnailStandardColour();
 
-    @Deprecated
-    String getColor(String color, double p){
-        Color rtn = new Color();
-        try {
-            rtn.setHex(color.replace("#", ""));
-        } catch (Exception e) {
-            return color;
+
+    private static FireworksProfile PROFILE;
+    public static FireworksProfile getCurrentProfile(){
+        if(PROFILE==null){
+            PROFILE = new FireworksProfile01();
+//            PROFILE = new StandardFireworksProfile();
         }
-        try {
-            int s = (int) Math.round( (0.5 + p) * 100 );
-            int v = (int) Math.round( (0.75 + p) * 100 );
-//            rtn.setHSV(rtn.getHue(), s, v);
-            rtn.setHSV(rtn.getHue(), s, rtn.getValue());
-        } catch (Exception e) {
-            return color;
-        }
-        return "#" + rtn.getHex();
+        return PROFILE;
     }
 }

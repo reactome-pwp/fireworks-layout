@@ -12,13 +12,13 @@ public class ThreeColorGradient {
 
     public ThreeColorGradient(String hexFrom, String hexStop, String hexTo) {
         try {
-            this.first = new TwoColorGradient(hexFrom, hexStop);
+            this.first = new TwoColorGradient(hexStop, hexFrom);
         } catch (Exception e) {
             GWT.log(e.getMessage());
         }
 
         try {
-            this.second = new TwoColorGradient(hexStop, hexTo);
+            this.second = new TwoColorGradient(hexTo, hexStop);
         } catch (Exception e) {
             GWT.log(e.getMessage());
         }

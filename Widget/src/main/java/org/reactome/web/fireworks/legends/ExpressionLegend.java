@@ -6,7 +6,6 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.InlineLabel;
-import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.analysis.EntityStatistics;
 import org.reactome.web.fireworks.analysis.ExpressionSummary;
 import org.reactome.web.fireworks.events.*;
@@ -73,14 +72,20 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
 
     @Override
     public void onAnalysisPerformed(AnalysisPerformedEvent e) {
-        ExpressionSummary es = e.getExpressionSummary();
-        if(es!=null){
-            this.min = es.getMin();
-            this.max = es.getMax();
-            this.topLabel.setText( NumberFormat.getFormat("#.##E0").format(max) );
-            this.bottomLabel.setText( NumberFormat.getFormat("#.##E0").format(min) );
+        switch (e.getAnalysisType()){
+            case EXPRESSION:
+                ExpressionSummary es = e.getExpressionSummary();
+                if(es!=null){
+                    this.min = es.getMin();
+                    this.max = es.getMax();
+                    this.topLabel.setText( NumberFormat.getFormat("#.##E0").format(max) );
+                    this.bottomLabel.setText( NumberFormat.getFormat("#.##E0").format(min) );
+                }
+                setVisible(true);
+                break;
+            default:
+                setVisible(false);
         }
-        this.setVisible( e.getAnalysisType().equals(AnalysisType.EXPRESSION) );
     }
 
     @Override
@@ -123,8 +128,10 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         Canvas gradient = createCanvas(30, 200);
         Context2d ctx = gradient.getContext2d();
         CanvasGradient grd = ctx.createLinearGradient(0, 0, 30, 200);
-        grd.addColorStop(0, profile.getNodeEnrichmentColour(0));
-        grd.addColorStop(1, profile.getNodeEnrichmentColour(0.05));
+
+        grd.addColorStop(0, profile.getNodeExpressionColour(0));
+        grd.addColorStop(0.5,profile.getNodeExpressionColour(0.5));
+        grd.addColorStop(1, profile.getNodeExpressionColour(1));
 
         ctx.setFillStyle(grd);
         ctx.beginPath();
@@ -142,7 +149,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
 
         if(this.hovered!=null){
             EntityStatistics statistics = this.hovered.getStatistics();
-            if(statistics!=null){
+            if(statistics!=null && statistics.getpValue()<0.05){
                 if(statistics.getExp()!=null) {
                     double expression = statistics.getExp().get(this.column);
                     double p = TwoColorGradient.getPercentage(expression, this.min, this.max);
@@ -170,7 +177,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
 
         if(this.selected!=null){
             EntityStatistics statistics = this.selected.getStatistics();
-            if(statistics!=null){
+            if(statistics!=null && statistics.getpValue()<0.05){
                 if(statistics.getExp()!=null) {
                     double expression = statistics.getExp().get(this.column);
                     double p = TwoColorGradient.getPercentage(expression, this.min, this.max);

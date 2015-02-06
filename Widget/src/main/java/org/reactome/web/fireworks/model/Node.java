@@ -6,7 +6,6 @@ import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 import org.reactome.web.fireworks.data.RawNode;
 import org.reactome.web.fireworks.interfaces.Drawable;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
-import org.reactome.web.fireworks.profiles.StandardFireworksProfile;
 import org.reactome.web.fireworks.util.Coordinate;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
@@ -17,7 +16,7 @@ import java.util.*;
  */
 public class Node extends FireworkObject implements Drawable, QuadTreeBox {
 
-    private static FireworksProfile PROFILE = new StandardFireworksProfile();
+    private static FireworksProfile PROFILE = FireworksProfile.getCurrentProfile();
 
     private Long dbId;
     private String stId;
