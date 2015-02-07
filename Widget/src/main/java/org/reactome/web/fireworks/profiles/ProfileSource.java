@@ -12,12 +12,12 @@ public interface ProfileSource extends ClientBundle {
 
     public static final ProfileSource SOURCE = GWT.create(ProfileSource.class);
 
-    @Source("standard.json")
-    TextResource standard();
-
     @Source("profile_01.json")
     TextResource profile01();
 
     @Source("profile_02.json")
     TextResource profile02();
+
+    @Source("profile_03.json")
+    TextResource profile03();
 }

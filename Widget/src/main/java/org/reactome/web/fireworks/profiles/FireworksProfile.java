@@ -14,7 +14,7 @@ import org.reactome.web.fireworks.util.gradient.ThreeColorGradient;
 public final class FireworksProfile {
     private static final Double THRESHOLD = 0.05;
 
-    private static final TextResource initialProfile = ProfileSource.SOURCE.standard();
+    private static final TextResource initialProfile = ProfileSource.SOURCE.profile01();
     protected final Profile profile;
 
     public static FireworksProfile PROFILE;

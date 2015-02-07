@@ -1,9 +1,9 @@
 {
     "name" : "Standard",
     "node" : {
-        "initial"   : "#FF0000",
+        "initial"   : "#0000FF",
         "highlight" : "#E1ED55",
-        "selection" : "#BBBBFF",
+        "selection" : "#BBFFBB",
         "fadeout"   : "#F8F8F8",
         "hit"       : "#E0E0E0",
         "enrichment": {
@@ -18,9 +18,9 @@
         }
     },
     "edge" : {
-        "initial"   : "#FFCCCC",
+        "initial"   : "#CCCCFF",
         "highlight" : "#E1ED55",
-        "selection" : "#EEEEFF",
+        "selection" : "#CCFFCC",
         "fadeout"   : "#F8F8F8",
         "hit"       : "#E0E0E0",
         "enrichment": {
@@ -35,9 +35,9 @@
         }
     },
     "thumbnail" : {
-        "initial"   : "#FFCCCC",
+        "initial"   : "#CCCCFF",
         "highlight" : "#0A0A0A",
-        "selection" : "#0000FF",
+        "selection" : "#00FF00",
         "fadeout"   : "#F8F8F8"
     }
 }

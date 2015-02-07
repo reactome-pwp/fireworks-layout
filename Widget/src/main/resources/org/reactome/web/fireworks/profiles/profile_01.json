@@ -4,40 +4,40 @@
         "initial"   : "#FF0000",
         "highlight" : "#E1ED55",
         "selection" : "#BBBBFF",
-        "fadeout"   : "#F8F8F8",
-        "hit"       : "#E0E0E0",
+        "fadeout"   : "#FFE4E1",
+        "hit"       : "#FFB2B2",
         "enrichment": {
-            "min"  : "#A0A0A0",
+            "min"  : "#934A00",
             "stop" : null,
-            "max"  : "#000000"
+            "max"  : "#FFAD33"
         },
         "expression": {
-            "min"  : "#00FF00",
-            "stop" : "#000000",
-            "max"  : "#FF0000"
+            "min"  : "#934A00",
+            "stop" : null,
+            "max"  : "#FFAD33"
         }
     },
     "edge" : {
         "initial"   : "#FFCCCC",
         "highlight" : "#E1ED55",
         "selection" : "#EEEEFF",
-        "fadeout"   : "#F8F8F8",
-        "hit"       : "#E0E0E0",
+        "fadeout"   : "#FFECEC",
+        "hit"       : "#FFBABA",
         "enrichment": {
-            "min"  : "#B0B0B0",
+            "min"  : "#A96E33",
             "stop" : null,
-            "max"  : "#303030"
+            "max"  : "#FFB547"
         },
         "expression": {
-            "min"  : "#6FFF6F",
-            "stop" : "#6F6F6F",
-            "max"  : "#FF6F6F"
+            "min"  : "#A96E33",
+            "stop" : null,
+            "max"  : "#FFB547"
         }
     },
     "thumbnail" : {
         "initial"   : "#FFCCCC",
         "highlight" : "#0A0A0A",
         "selection" : "#0000FF",
-        "fadeout"   : "#F8F8F8"
+        "fadeout"   : "#FFECEC"
     }
 }
