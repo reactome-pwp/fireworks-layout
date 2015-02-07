@@ -44,7 +44,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     static final double TRANSPARENCY_THRESHOLD = 4;
 
     static final int FACTOR_TEXT_THRESHOLD = 3;
-    static final FireworksProfile PROFILE = FireworksProfile.getCurrentProfile();
 
     private EventBus eventBus;
 
@@ -77,7 +76,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     FireworksCanvas(EventBus eventBus, Graph graph) throws CanvasNotSupportedException {
         this.eventBus = eventBus;
-        this.thumbnail = new FireworksThumbnail(eventBus, graph, PROFILE);
+        this.thumbnail = new FireworksThumbnail(eventBus, graph);
 
         int width = (int) Math.ceil(graph.getMaxX());
         int height = (int) Math.ceil(graph.getMaxY());
@@ -104,11 +103,11 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.add(new ControlPanel(eventBus));
 
         //Enrichment legend and control panels
-        this.add(new EnrichmentLegend(eventBus, PROFILE));
+        this.add(new EnrichmentLegend(eventBus));
         this.add(new EnrichmentControl(eventBus));
 
         //Expression legend and control panels
-        this.add(new ExpressionLegend(eventBus, PROFILE));
+        this.add(new ExpressionLegend(eventBus));
         this.add(new ExpressionControl(eventBus));
 
         this.initialiseHandlers();
@@ -160,7 +159,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         int column = this.analysisInfo.getColumn();
         Context2d ctx = this.edges.getContext2d();
-        ctx.setStrokeStyle(PROFILE.getEdgeStandardColour());
+        ctx.setStrokeStyle(FireworksProfile.PROFILE.getEdgeInitialColour());
         for (QuadTreeBox item : items) {
             if (item instanceof Edge) {
                 Edge edge = (Edge) item;
@@ -183,7 +182,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         this.drawnNodes = new HashSet<Node>();
         ctx = this.nodes.getContext2d();
-        String colour = PROFILE.getNodeStandardColour();
+        String colour = FireworksProfile.PROFILE.getNodeInitialColour();
         ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
         for (QuadTreeBox item : items) {
             if (item instanceof Node) {
@@ -307,7 +306,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         double expandedAura = (factor > FACTOR_TEXT_THRESHOLD)? aura * 2 : aura;
 
-        String  color = PROFILE.getNodeHighlightColour(); // "#E1ED55";
+        String  color = FireworksProfile.PROFILE.getNodeHighlightColour(); // "#E1ED55";
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);
         node.highlight(ctx, aura);
@@ -355,7 +354,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         cleanSelectionCanvas();
         if(node==null) return;
 
-        String color = PROFILE.getNodeSelectionColour(); // "#BBBBFF";
+        String color = FireworksProfile.PROFILE.getNodeSelectionColour(); // "#BBBBFF";
         Context2d ctx = this.nodesSelection.getContext2d();
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);
@@ -367,7 +366,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
             edges.addAll(ancestor.getEdgesTo());
         }
 
-        color = PROFILE.getEdgeSelectionColour(); // "#EEEEFF";
+        color = FireworksProfile.PROFILE.getEdgeSelectionColour(); // "#EEEEFF";
         ctx = this.edgesSelection.getContext2d();
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);

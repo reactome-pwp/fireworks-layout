@@ -1,6 +1,7 @@
 package org.reactome.web.fireworks.util.gradient;
 
 import com.google.gwt.core.client.GWT;
+import org.reactome.web.fireworks.profiles.model.ProfileGradient;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -10,21 +11,34 @@ public class ThreeColorGradient {
     private TwoColorGradient first;
     private TwoColorGradient second;
 
+    public ThreeColorGradient(ProfileGradient gradient){
+        this(gradient.getMin(), gradient.getStop(), gradient.getMax());
+    }
+
     public ThreeColorGradient(String hexFrom, String hexStop, String hexTo) {
+        if(hexStop==null){
+            hexStop = hexTo;
+            hexTo = null;
+        }
         try {
             this.first = new TwoColorGradient(hexStop, hexFrom);
         } catch (Exception e) {
             GWT.log(e.getMessage());
         }
 
-        try {
-            this.second = new TwoColorGradient(hexTo, hexStop);
-        } catch (Exception e) {
-            GWT.log(e.getMessage());
+        if(hexTo != null) { //When set up to null, only applies two color gradient
+            try {
+                this.second = new TwoColorGradient(hexTo, hexStop);
+            } catch (Exception e) {
+                GWT.log(e.getMessage());
+            }
         }
     }
 
     public String getColor(double p){
+        if(this.second==null){ //Only applies two color gradient
+            return this.first.getColor(p);
+        }
         if(p <= 0.5){
             return this.first.getColor(p/0.5);
         } else {
@@ -41,9 +55,5 @@ public class ThreeColorGradient {
         double length = Math.abs(max - min);
         double delta = Math.abs(point - max);
         return delta / length;
-    }
-
-    public static int getValue(int min, int max, double p){
-        return (int) Math.round (min * p + max * (1 - p));
     }
 }

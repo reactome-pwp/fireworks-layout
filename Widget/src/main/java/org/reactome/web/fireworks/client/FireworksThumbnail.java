@@ -36,7 +36,6 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
     private EventBus eventBus;
     private Graph graph;
     private final AnalysisInfo analysisInfo = new AnalysisInfo();
-    private FireworksProfile profile;
 
     private double factor;
 
@@ -51,10 +50,9 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
     private Coordinate mouseDown = null;
     private Coordinate delta = null;
 
-    FireworksThumbnail(EventBus eventBus, Graph graph, FireworksProfile profile) {
+    FireworksThumbnail(EventBus eventBus, Graph graph) {
         this.eventBus = eventBus;
         this.graph = graph;
-        this.profile = profile;
         this.factor = HEIGHT / graph.getMaxY();
         int width = (int) Math.ceil((graph.getMaxX() + 25) * factor);
 
@@ -141,7 +139,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
     void highlightEdges(Node node, Set<Edge> edges){
         cleanCanvas(this.highlight);
         Context2d ctx = this.highlight.getContext2d();
-        String color = profile.getThumbnailHighlightColour();
+        String color = FireworksProfile.PROFILE.getThumbnailHighlightColour();
         ctx.setStrokeStyle(color);
         for (Edge edge : edges) {
             edge.drawThumbnail(ctx, this.factor);
@@ -155,7 +153,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
     void selectNode(Node node, Set<Edge> edges){
         cleanCanvas(this.selection);
         Context2d ctx = this.selection.getContext2d();
-        String color = profile.getThumbnailSelectionColour();
+        String color = FireworksProfile.PROFILE.getThumbnailSelectionColour();
         ctx.setStrokeStyle(color);
         for (Edge edge : edges) {
             edge.drawThumbnail(ctx, this.factor);
@@ -187,7 +185,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
         int column = this.analysisInfo.getColumn();
         Context2d ctx = this.thumbnail.getContext2d();
-        String color = profile.getThumbnailStandardColour();
+        String color = FireworksProfile.PROFILE.getThumbnailInitialColour();
         ctx.setStrokeStyle(color);
         for (Edge edge : this.graph.getEdges()) {
             switch (this.analysisInfo.getType()) {

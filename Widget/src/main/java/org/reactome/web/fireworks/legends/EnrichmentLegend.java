@@ -22,7 +22,7 @@ public class EnrichmentLegend extends LegendPanel implements AnalysisPerformedHa
     private Node hovered;
     private Node selected;
 
-    public EnrichmentLegend(EventBus eventBus, FireworksProfile profile) {
+    public EnrichmentLegend(EventBus eventBus) {
         super(eventBus);
         this.flag = createCanvas(50, 210);
 
@@ -30,7 +30,7 @@ public class EnrichmentLegend extends LegendPanel implements AnalysisPerformedHa
         addStyleName(RESOURCES.getCSS().enrichmentLegend());
 
         this.add(new InlineLabel("0"), 20, 5);
-        this.add(createGradient(profile), 10, 25);
+        this.add(createGradient(FireworksProfile.PROFILE), 10, 25);
         this.add(flag, 0, 20);
         this.add(new InlineLabel("0.05"), 12, 230);
 

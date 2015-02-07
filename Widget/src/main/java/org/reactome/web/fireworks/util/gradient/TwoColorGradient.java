@@ -5,7 +5,7 @@ import net.auroris.ColorPicker.client.Color;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class TwoColorGradient {
+class TwoColorGradient {
 
     private Color from;
     private Color to;
@@ -30,6 +30,7 @@ public class TwoColorGradient {
         return "#" + rtn.getHex();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public String getColor(double point, double min, double max){
         return getColor(getPercentage(point, min, max));
     }

@@ -14,9 +14,8 @@ import java.util.*;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
+@SuppressWarnings("UnusedDeclaration")
 public class Node extends FireworkObject implements Drawable, QuadTreeBox {
-
-    private static FireworksProfile PROFILE = FireworksProfile.getCurrentProfile();
 
     private Long dbId;
     private String stId;
@@ -147,6 +146,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
 
         Node node = (Node) o;
 
+        //noinspection RedundantIfStatement
         if (dbId != null ? !dbId.equals(node.dbId) : node.dbId != null) return false;
 
         return true;
@@ -239,15 +239,15 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
                 return this.expColours.get(column);
             }
         }
-        return PROFILE.getNodeFadeoutColour();
+        return FireworksProfile.PROFILE.getNodeFadeoutColour();
     }
 
     public void initStatistics(){
         this.statistics = null;
         this.expColours = null;
-        this.colour = PROFILE.getNodeStandardColour();
+        this.colour = FireworksProfile.PROFILE.getNodeInitialColour();
         for (Edge edge : this.edgesTo) {
-            edge.setColour(PROFILE.getEdgeStandardColour());
+            edge.setColour(FireworksProfile.PROFILE.getEdgeInitialColour());
             edge.setExpColours(null);
         }
     }
@@ -257,8 +257,8 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
         switch (result.getAnalysisType()){
             case SPECIES_COMPARISON:
             case OVERREPRESENTATION:
-                this.colour = PROFILE.getNodeEnrichmentColour(statistics.getpValue());
-                String edgeColour = PROFILE.getEdgeEnrichmentColour(statistics.getpValue());
+                this.colour = FireworksProfile.PROFILE.getNodeEnrichmentColour(statistics.getpValue());
+                String edgeColour = FireworksProfile.PROFILE.getEdgeEnrichmentColour(statistics.getpValue());
                 for (Edge edge : this.edgesTo) {
                     edge.setColour(edgeColour);
                 }
@@ -271,8 +271,9 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
                     this.expColours = new ArrayList<String>();
                     List<String> edgeExpColours = new ArrayList<String>();
                     for (Double v : exp) {
-                        this.expColours.add(PROFILE.getNodeExpressionColour(statistics.getpValue(), v, min, max));
-                        edgeExpColours.add(PROFILE.getEdgeExpressionColour(statistics.getpValue(), v, min, max));
+                        String colour = FireworksProfile.PROFILE.getNodeExpressionColour(statistics.getpValue(), v, min, max);
+                        this.expColours.add(colour);
+                        edgeExpColours.add(colour);
                     }
                     for (Edge edge : this.edgesTo) {
                         edge.setExpColours(edgeExpColours);
@@ -286,7 +287,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
     }
 
     public void setFadoutColour(){
-        this.colour = PROFILE.getNodeFadeoutColour();
+        this.colour = FireworksProfile.PROFILE.getNodeFadeoutColour();
     }
 
     // ####################################

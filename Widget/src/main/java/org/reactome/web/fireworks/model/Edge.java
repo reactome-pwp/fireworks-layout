@@ -16,8 +16,6 @@ import java.util.List;
  */
 public class Edge implements Drawable, QuadTreeBox {
 
-    private static FireworksProfile PROFILE = FireworksProfile.getCurrentProfile();
-
     private Node from;
     private Node to;
 
@@ -77,9 +75,10 @@ public class Edge implements Drawable, QuadTreeBox {
                 return this.expColours.get(column);
             }
         }
-        return PROFILE.getEdgeFadeoutColour();
+        return FireworksProfile.PROFILE.getEdgeFadeoutColour();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public Node getFrom() {
         return from;
     }
@@ -92,8 +91,9 @@ public class Edge implements Drawable, QuadTreeBox {
         this.colour = colour;
     }
 
+    //Used to set a value only when it is needed.
     public void setFadeoutColour(){
-        this.colour = PROFILE.getEdgeFadeoutColour();
+        this.colour = FireworksProfile.PROFILE.getEdgeFadeoutColour();
     }
 
     public void setExpColours(List<String> expColours) {
@@ -121,6 +121,7 @@ public class Edge implements Drawable, QuadTreeBox {
         Edge edge = (Edge) o;
 
         if (from != null ? !from.equals(edge.from) : edge.from != null) return false;
+        //noinspection RedundantIfStatement
         if (to != null ? !to.equals(edge.to) : edge.to != null) return false;
 
         return true;

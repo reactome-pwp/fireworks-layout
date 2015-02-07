@@ -12,7 +12,7 @@ import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
-import org.reactome.web.fireworks.util.gradient.TwoColorGradient;
+import org.reactome.web.fireworks.util.gradient.ThreeColorGradient;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -32,7 +32,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
     private InlineLabel topLabel;
     private InlineLabel bottomLabel;
 
-    public ExpressionLegend(EventBus eventBus, FireworksProfile profile) {
+    public ExpressionLegend(EventBus eventBus) {
         super(eventBus);
         this.flag = createCanvas(50, 210);
 
@@ -42,7 +42,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         this.topLabel = new InlineLabel("");
         this.add(this.topLabel, 5, 5);
 
-        this.add(createGradient(profile), 10, 25);
+        this.add(createGradient(FireworksProfile.PROFILE), 10, 25);
         this.add(flag, 0, 20);
 
         this.bottomLabel = new InlineLabel("");
@@ -152,7 +152,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
             if(statistics!=null && statistics.getpValue()<0.05){
                 if(statistics.getExp()!=null) {
                     double expression = statistics.getExp().get(this.column);
-                    double p = TwoColorGradient.getPercentage(expression, this.min, this.max);
+                    double p = ThreeColorGradient.getPercentage(expression, this.min, this.max);
                     int y = (int) Math.round(200 * p) + 5;
                     ctx.setFillStyle("yellow");
                     ctx.setStrokeStyle("yellow");
@@ -180,7 +180,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
             if(statistics!=null && statistics.getpValue()<0.05){
                 if(statistics.getExp()!=null) {
                     double expression = statistics.getExp().get(this.column);
-                    double p = TwoColorGradient.getPercentage(expression, this.min, this.max);
+                    double p = ThreeColorGradient.getPercentage(expression, this.min, this.max);
                     int y = (int) Math.round(200 * p) + 5;
                     ctx.setFillStyle("blue");
                     ctx.setStrokeStyle("blue");
