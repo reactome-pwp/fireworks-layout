@@ -1,5 +1,5 @@
 {
-    "name" : "Standard",
+    "name" : "Test",
     "node" : {
         "initial"   : "#0000FF",
         "highlight" : "#E1ED55",
