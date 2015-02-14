@@ -47,7 +47,7 @@ public class FireworksData {
 
     public void setPathwaysAnalysisResult(SpeciesFilteredResult result) {
         for (Node node : this.graph.getNodes()) {
-            node.setFadoutColour();
+            node.setFadeoutColour();
         }
         for (Edge edge : this.graph.edges) {
             edge.setFadeoutColour();

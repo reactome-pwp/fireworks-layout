@@ -285,7 +285,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
         }
     }
 
-    public void setFadoutColour(){
+    public void setFadeoutColour(){
         this.colour = FireworksColours.PROFILE.getNodeFadeoutColour();
     }
 
