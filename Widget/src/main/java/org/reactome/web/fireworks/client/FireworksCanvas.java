@@ -19,7 +19,7 @@ import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
-import org.reactome.web.fireworks.profiles.FireworksProfile;
+import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Tooltip;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
@@ -159,7 +159,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         int column = this.analysisInfo.getColumn();
         Context2d ctx = this.edges.getContext2d();
-        ctx.setStrokeStyle(FireworksProfile.PROFILE.getEdgeInitialColour());
+        ctx.setStrokeStyle(FireworksColours.PROFILE.getEdgeInitialColour());
         for (QuadTreeBox item : items) {
             if (item instanceof Edge) {
                 Edge edge = (Edge) item;
@@ -182,7 +182,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         this.drawnNodes = new HashSet<Node>();
         ctx = this.nodes.getContext2d();
-        String colour = FireworksProfile.PROFILE.getNodeInitialColour();
+        String colour = FireworksColours.PROFILE.getNodeInitialColour();
         ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
         for (QuadTreeBox item : items) {
             if (item instanceof Node) {
@@ -306,7 +306,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         double expandedAura = (factor > FACTOR_TEXT_THRESHOLD)? aura * 2 : aura;
 
-        String  color = FireworksProfile.PROFILE.getNodeHighlightColour(); // "#E1ED55";
+        String color = FireworksColours.PROFILE.getNodeHighlightColour();
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);
         node.highlight(ctx, aura);
@@ -325,6 +325,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
             edges.addAll(ancestor.getEdgesTo());
         }
 
+        color = FireworksColours.PROFILE.getEdgeHighlightColour();
         ctx = this.edgesHighlight.getContext2d();
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);
@@ -354,7 +355,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         cleanSelectionCanvas();
         if(node==null) return;
 
-        String color = FireworksProfile.PROFILE.getNodeSelectionColour(); // "#BBBBFF";
+        String color = FireworksColours.PROFILE.getNodeSelectionColour();
         Context2d ctx = this.nodesSelection.getContext2d();
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);
@@ -366,7 +367,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
             edges.addAll(ancestor.getEdgesTo());
         }
 
-        color = FireworksProfile.PROFILE.getEdgeSelectionColour(); // "#EEEEFF";
+        color = FireworksColours.PROFILE.getEdgeSelectionColour();
         ctx = this.edgesSelection.getContext2d();
         ctx.setFillStyle(color);
         ctx.setStrokeStyle(color);

@@ -9,6 +9,7 @@ import org.reactome.web.fireworks.analysis.EntityStatistics;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.model.Node;
+import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
 
 /**
@@ -30,7 +31,7 @@ public class EnrichmentLegend extends LegendPanel implements AnalysisPerformedHa
         addStyleName(RESOURCES.getCSS().enrichmentLegend());
 
         this.add(new InlineLabel("0"), 20, 5);
-        this.add(createGradient(FireworksProfile.PROFILE), 10, 25);
+        this.add(createGradient(FireworksColours.PROFILE), 10, 25);
         this.add(flag, 0, 20);
         this.add(new InlineLabel("0.05"), 12, 230);
 

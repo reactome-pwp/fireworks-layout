@@ -5,7 +5,7 @@ import org.reactome.web.fireworks.analysis.EntityStatistics;
 import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 import org.reactome.web.fireworks.data.RawNode;
 import org.reactome.web.fireworks.interfaces.Drawable;
-import org.reactome.web.fireworks.profiles.FireworksProfile;
+import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Coordinate;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
@@ -239,15 +239,15 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
                 return this.expColours.get(column);
             }
         }
-        return FireworksProfile.PROFILE.getNodeFadeoutColour();
+        return FireworksColours.PROFILE.getNodeFadeoutColour();
     }
 
     public void initStatistics(){
         this.statistics = null;
         this.expColours = null;
-        this.colour = FireworksProfile.PROFILE.getNodeInitialColour();
+        this.colour = FireworksColours.PROFILE.getNodeInitialColour();
         for (Edge edge : this.edgesTo) {
-            edge.setColour(FireworksProfile.PROFILE.getEdgeInitialColour());
+            edge.setColour(FireworksColours.PROFILE.getEdgeInitialColour());
             edge.setExpColours(null);
         }
     }
@@ -257,8 +257,8 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
         switch (result.getAnalysisType()){
             case SPECIES_COMPARISON:
             case OVERREPRESENTATION:
-                this.colour = FireworksProfile.PROFILE.getNodeEnrichmentColour(statistics.getpValue());
-                String edgeColour = FireworksProfile.PROFILE.getEdgeEnrichmentColour(statistics.getpValue());
+                this.colour = FireworksColours.PROFILE.getNodeEnrichmentColour(statistics.getpValue());
+                String edgeColour = FireworksColours.PROFILE.getEdgeEnrichmentColour(statistics.getpValue());
                 for (Edge edge : this.edgesTo) {
                     edge.setColour(edgeColour);
                 }
@@ -271,9 +271,8 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
                     this.expColours = new ArrayList<String>();
                     List<String> edgeExpColours = new ArrayList<String>();
                     for (Double v : exp) {
-                        String colour = FireworksProfile.PROFILE.getNodeExpressionColour(statistics.getpValue(), v, min, max);
-                        this.expColours.add(colour);
-                        edgeExpColours.add(colour);
+                        this.expColours.add(FireworksColours.PROFILE.getNodeExpressionColour(statistics.getpValue(), v, min, max));
+                        edgeExpColours.add(FireworksColours.PROFILE.getEdgeExpressionColour(statistics.getpValue(), v, min, max));
                     }
                     for (Edge edge : this.edgesTo) {
                         edge.setExpColours(edgeExpColours);
@@ -287,7 +286,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
     }
 
     public void setFadoutColour(){
-        this.colour = FireworksProfile.PROFILE.getNodeFadeoutColour();
+        this.colour = FireworksColours.PROFILE.getNodeFadeoutColour();
     }
 
     // ####################################

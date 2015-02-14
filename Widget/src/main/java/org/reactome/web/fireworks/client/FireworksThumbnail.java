@@ -19,7 +19,7 @@ import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
-import org.reactome.web.fireworks.profiles.FireworksProfile;
+import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Coordinate;
 
 import java.util.Set;
@@ -139,7 +139,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
     void highlightEdges(Node node, Set<Edge> edges){
         cleanCanvas(this.highlight);
         Context2d ctx = this.highlight.getContext2d();
-        String color = FireworksProfile.PROFILE.getThumbnailHighlightColour();
+        String color = FireworksColours.PROFILE.getThumbnailHighlightColour();
         ctx.setStrokeStyle(color);
         for (Edge edge : edges) {
             edge.drawThumbnail(ctx, this.factor);
@@ -153,7 +153,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
     void selectNode(Node node, Set<Edge> edges){
         cleanCanvas(this.selection);
         Context2d ctx = this.selection.getContext2d();
-        String color = FireworksProfile.PROFILE.getThumbnailSelectionColour();
+        String color = FireworksColours.PROFILE.getThumbnailSelectionColour();
         ctx.setStrokeStyle(color);
         for (Edge edge : edges) {
             edge.drawThumbnail(ctx, this.factor);
@@ -185,7 +185,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
         int column = this.analysisInfo.getColumn();
         Context2d ctx = this.thumbnail.getContext2d();
-        String color = FireworksProfile.PROFILE.getThumbnailInitialColour();
+        String color = FireworksColours.PROFILE.getThumbnailInitialColour();
         ctx.setStrokeStyle(color);
         for (Edge edge : this.graph.getEdges()) {
             switch (this.analysisInfo.getType()) {

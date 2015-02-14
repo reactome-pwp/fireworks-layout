@@ -1,32 +1,15 @@
 package org.reactome.web.fireworks.profiles;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
-import org.reactome.web.fireworks.profiles.factory.ProfileFactory;
-import org.reactome.web.fireworks.profiles.factory.ProfileModelException;
 import org.reactome.web.fireworks.profiles.model.Profile;
 import org.reactome.web.fireworks.util.gradient.ThreeColorGradient;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-@SuppressWarnings("UnusedDeclaration")
 public final class FireworksProfile {
+
     private static final Double THRESHOLD = 0.05;
-
-    private static final TextResource initialProfile = ProfileSource.SOURCE.profile01();
-    protected final Profile profile;
-
-    public static FireworksProfile PROFILE;
-    static {
-        try {
-            Profile profile = ProfileFactory.getModelObject(Profile.class, initialProfile.getText());
-            PROFILE = new FireworksProfile(profile);
-        } catch (ProfileModelException e) {
-            GWT.log(e.getMessage());
-            PROFILE = null;
-        }
-    }
+    private final Profile profile;
 
     ThreeColorGradient nodeEnrichment;
     ThreeColorGradient nodeExpression;
@@ -47,10 +30,6 @@ public final class FireworksProfile {
         }
     }
 
-    public final Profile getProfile() {
-        return profile;
-    }
-
     /*#################### NODE ####################*/
     public final String getNodeInitialColour(){
         return this.profile.getNode().getInitial();
@@ -66,7 +45,7 @@ public final class FireworksProfile {
     }
     public final String getNodeEnrichmentColour(double p) {
         if(p<=THRESHOLD) {
-            return this.nodeEnrichment.getColor(p/0.05);
+            return this.nodeEnrichment.getColor(p/THRESHOLD);
         }else{
             return this.profile.getNode().getHit();
         }
@@ -98,7 +77,7 @@ public final class FireworksProfile {
     }
     public final String getEdgeEnrichmentColour(double p) {
         if(p<=THRESHOLD) {
-            return this.edgeEnrichment.getColor(p/0.05);
+            return this.edgeEnrichment.getColor(p/THRESHOLD);
         }else{
             return this.profile.getEdge().getHit();
         }

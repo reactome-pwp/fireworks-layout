@@ -2,7 +2,7 @@ package org.reactome.web.fireworks.model;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import org.reactome.web.fireworks.interfaces.Drawable;
-import org.reactome.web.fireworks.profiles.FireworksProfile;
+import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Coordinate;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
@@ -75,7 +75,7 @@ public class Edge implements Drawable, QuadTreeBox {
                 return this.expColours.get(column);
             }
         }
-        return FireworksProfile.PROFILE.getEdgeFadeoutColour();
+        return FireworksColours.PROFILE.getEdgeFadeoutColour();
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -93,7 +93,7 @@ public class Edge implements Drawable, QuadTreeBox {
 
     //Used to set a value only when it is needed.
     public void setFadeoutColour(){
-        this.colour = FireworksProfile.PROFILE.getEdgeFadeoutColour();
+        this.colour = FireworksColours.PROFILE.getEdgeFadeoutColour();
     }
 
     public void setExpColours(List<String> expColours) {

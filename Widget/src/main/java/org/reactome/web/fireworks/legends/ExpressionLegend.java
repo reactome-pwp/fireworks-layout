@@ -11,6 +11,7 @@ import org.reactome.web.fireworks.analysis.ExpressionSummary;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.model.Node;
+import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.profiles.FireworksProfile;
 import org.reactome.web.fireworks.util.gradient.ThreeColorGradient;
 
@@ -42,7 +43,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         this.topLabel = new InlineLabel("");
         this.add(this.topLabel, 5, 5);
 
-        this.add(createGradient(FireworksProfile.PROFILE), 10, 25);
+        this.add(createGradient(FireworksColours.PROFILE), 10, 25);
         this.add(flag, 0, 20);
 
         this.bottomLabel = new InlineLabel("");
