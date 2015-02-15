@@ -15,6 +15,7 @@ import org.reactome.web.fireworks.legends.EnrichmentControl;
 import org.reactome.web.fireworks.legends.EnrichmentLegend;
 import org.reactome.web.fireworks.legends.ExpressionControl;
 import org.reactome.web.fireworks.legends.ExpressionLegend;
+import org.reactome.web.fireworks.menu.SettingsMenuPanel;
 import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
@@ -34,7 +35,8 @@ import java.util.Set;
 class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResize,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler,
         NodeSelectedHandler, NodeSelectedResetHandler, NodeHoverHandler, NodeHoverResetHandler,
-        AnalysisPerformedHandler, AnalysisResetHandler {
+        AnalysisPerformedHandler, AnalysisResetHandler,
+        ProfileChangedHandler {
 
     class CanvasNotSupportedException extends Exception {}
 
@@ -110,6 +112,9 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.add(new ExpressionLegend(eventBus));
         this.add(new ExpressionControl(eventBus));
 
+        //Main settings menu
+        this.add(new SettingsMenuPanel(eventBus));
+
         this.initialiseHandlers();
     }
 
@@ -123,6 +128,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         this.eventBus.addHandler(AnalysisPerformedEvent.TYPE, this);
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
+        this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
     }
 
 
@@ -430,6 +436,11 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     public void onNodeSelectionReset() {
         this.selectNode(null);
         this.drawText(null);
+    }
+
+    @Override
+    public void onProfileChanged(ProfileChangedEvent event) {
+
     }
 
     @Override

@@ -1,5 +1,5 @@
 {
-    "name" : "Standard",
+    "name" : "Calcium Salts",
     "node" : {
         "initial"   : "#FF0000",
         "highlight" : "#E1ED55",
@@ -8,12 +8,10 @@
         "hit"       : "#FFB2B2",
         "enrichment": {
             "min"  : "#934A00",
-            "stop" : null,
             "max"  : "#FFAD33"
         },
         "expression": {
             "min"  : "#934A00",
-            "stop" : null,
             "max"  : "#FFAD33"
         }
     },
@@ -25,12 +23,10 @@
         "hit"       : "#FFBABA",
         "enrichment": {
             "min"  : "#A96E33",
-            "stop" : null,
             "max"  : "#FFB547"
         },
         "expression": {
             "min"  : "#A96E33",
-            "stop" : null,
             "max"  : "#FFB547"
         }
     },

@@ -1,9 +1,11 @@
 package org.reactome.web.fireworks.profiles.model;
 
+import java.io.Serializable;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public interface ProfileColour {
+public interface ProfileColour extends Serializable {
 
     public String getInitial();
     public String getHighlight();

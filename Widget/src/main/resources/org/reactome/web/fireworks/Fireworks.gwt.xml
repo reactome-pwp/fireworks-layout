@@ -17,6 +17,7 @@
     <source path="handlers"/>
     <source path="interfaces"/>
     <source path="legends"/>
+    <source path="menu"/>
     <source path="model"/>
     <source path="profiles"/>
     <source path="util"/>

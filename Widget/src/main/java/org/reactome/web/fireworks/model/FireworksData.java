@@ -15,6 +15,8 @@ public class FireworksData {
     private Map<Long, Node> id2Node;
     private Map<String, Node> stId2Node;
 
+    private SpeciesFilteredResult analysisResult;
+
     public FireworksData(Graph graph) {
         this.graph = graph;
         this.id2Node = new HashMap<Long, Node>();
@@ -40,12 +42,15 @@ public class FireworksData {
     }
 
     public void resetPathwaysAnalysisResult(){
+        this.analysisResult = null;
         for (Node node : this.graph.getNodes()) {
             node.initStatistics();
         }
     }
 
     public void setPathwaysAnalysisResult(SpeciesFilteredResult result) {
+        this.analysisResult = result;
+
         for (Node node : this.graph.getNodes()) {
             node.setFadeoutColour();
         }
@@ -60,4 +65,9 @@ public class FireworksData {
         }
     }
 
+    public void updateColours(){
+        if(this.analysisResult!=null){
+            setPathwaysAnalysisResult(this.analysisResult);
+        }
+    }
 }

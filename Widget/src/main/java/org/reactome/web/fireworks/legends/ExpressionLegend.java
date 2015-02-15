@@ -3,6 +3,7 @@ package org.reactome.web.fireworks.legends;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.CanvasGradient;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -20,8 +21,9 @@ import org.reactome.web.fireworks.util.gradient.ThreeColorGradient;
  */
 public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHandler, AnalysisResetHandler,
         NodeHoverHandler, NodeHoverResetHandler, NodeSelectedHandler, NodeSelectedResetHandler,
-        ExpressionColumnChangedHandler {
+        ExpressionColumnChangedHandler, ProfileChangedHandler {
 
+    private Canvas gradient;
     private Canvas flag;
     private Node hovered;
     private Node selected;
@@ -35,16 +37,19 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
 
     public ExpressionLegend(EventBus eventBus) {
         super(eventBus);
+        this.gradient = createCanvas(30, 200);
         this.flag = createCanvas(50, 210);
 
         //Setting the legend style
         addStyleName(RESOURCES.getCSS().expressionLegend());
 
+        fillGradient();
+
         this.topLabel = new InlineLabel("");
         this.add(this.topLabel, 5, 5);
 
-        this.add(createGradient(FireworksColours.PROFILE), 10, 25);
-        this.add(flag, 0, 20);
+        this.add(this.gradient, 10, 25);
+        this.add(this.flag, 0, 20);
 
         this.bottomLabel = new InlineLabel("");
         this.add(this.bottomLabel, 5, 230);
@@ -120,26 +125,36 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
     }
 
     @Override
+    public void onProfileChanged(ProfileChangedEvent event) {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                fillGradient();
+                draw();
+            }
+        });
+    }
+
+    @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         this.draw();
     }
 
-    private Canvas createGradient(FireworksProfile profile){
-        Canvas gradient = createCanvas(30, 200);
-        Context2d ctx = gradient.getContext2d();
+    private void fillGradient(){
+        FireworksProfile profile = FireworksColours.PROFILE;
+        Context2d ctx = this.gradient.getContext2d();
         CanvasGradient grd = ctx.createLinearGradient(0, 0, 30, 200);
 
         grd.addColorStop(0, profile.getNodeExpressionColour(0));
         grd.addColorStop(0.5,profile.getNodeExpressionColour(0.5));
         grd.addColorStop(1, profile.getNodeExpressionColour(1));
 
+        ctx.clearRect(0, 0, this.gradient.getCoordinateSpaceWidth(), this.gradient.getCoordinateSpaceHeight());
         ctx.setFillStyle(grd);
         ctx.beginPath();
         ctx.fillRect(0, 0, 30, 200);
         ctx.closePath();
-
-        return gradient;
     }
 
     private void draw(){
@@ -152,11 +167,12 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
             EntityStatistics statistics = this.hovered.getStatistics();
             if(statistics!=null && statistics.getpValue()<0.05){
                 if(statistics.getExp()!=null) {
+                    String colour = FireworksColours.PROFILE.getNodeHighlightColour();
                     double expression = statistics.getExp().get(this.column);
                     double p = ThreeColorGradient.getPercentage(expression, this.min, this.max);
                     int y = (int) Math.round(200 * p) + 5;
-                    ctx.setFillStyle("yellow");
-                    ctx.setStrokeStyle("yellow");
+                    ctx.setFillStyle(colour);
+                    ctx.setStrokeStyle(colour);
                     ctx.beginPath();
                     ctx.moveTo(5, y - 5);
                     ctx.lineTo(10, y);
@@ -180,11 +196,12 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
             EntityStatistics statistics = this.selected.getStatistics();
             if(statistics!=null && statistics.getpValue()<0.05){
                 if(statistics.getExp()!=null) {
+                    String colour = FireworksColours.PROFILE.getNodeSelectionColour();
                     double expression = statistics.getExp().get(this.column);
                     double p = ThreeColorGradient.getPercentage(expression, this.min, this.max);
                     int y = (int) Math.round(200 * p) + 5;
-                    ctx.setFillStyle("blue");
-                    ctx.setStrokeStyle("blue");
+                    ctx.setFillStyle(colour);
+                    ctx.setStrokeStyle(colour);
                     ctx.beginPath();
                     ctx.moveTo(45, y - 5);
                     ctx.lineTo(40, y);
@@ -212,6 +229,7 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         this.eventBus.addHandler(NodeSelectedEvent.TYPE, this);
         this.eventBus.addHandler(NodeSelectedResetEvent.TYPE, this);
         this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
+        this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
     }
 
 }

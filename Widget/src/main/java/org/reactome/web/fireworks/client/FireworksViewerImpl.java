@@ -31,7 +31,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler, MouseWheelHandler,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, DoubleClickHandler,
         AnalysisResetHandler, ExpressionColumnChangedHandler,
-        ControlActionHandler {
+        ControlActionHandler, ProfileChangedHandler {
 
     EventBus eventBus = new FireworksEventBus();
 
@@ -258,6 +258,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public void onProfileChanged(ProfileChangedEvent event) {
+        data.updateColours();
+        forceFireworksDraw = true;
+    }
+
+    @Override
     public void resetHighlight() {
         this.setHoveredNode(null);
     }
@@ -381,6 +387,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksVisibleAreaChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
+        this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
     }
 
     protected void openNode(Node node){
