@@ -40,6 +40,10 @@ public abstract class FireworksColours {
         Cookies.setCookie(PROFILE_COOKIE, profile.getName(), expires);
     }
 
+    public static String getSelectedProfileName(){
+        return Cookies.getCookie(PROFILE_COOKIE);
+    }
+
     /**
      * To add a profile first please add the ProfileSource interface
      * and then add the corresponding entry in this enumeration.
