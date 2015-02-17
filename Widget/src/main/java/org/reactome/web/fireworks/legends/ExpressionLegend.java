@@ -185,7 +185,6 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
                     ctx.beginPath();
                     ctx.moveTo(10, y);
                     ctx.lineTo(40, y);
-                    ctx.setStrokeStyle("yellow");
                     ctx.stroke();
                     ctx.closePath();
                 }
