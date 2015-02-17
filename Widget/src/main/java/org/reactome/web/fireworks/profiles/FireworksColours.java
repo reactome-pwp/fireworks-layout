@@ -26,18 +26,25 @@ public abstract class FireworksColours {
      */
     static {
         String profileName = Cookies.getCookie(PROFILE_COOKIE);
-        ColourProfile colourProfile = ColourProfile.getColourProfile(profileName);
-        setProfile(colourProfile.profile);
+        ProfileType type = ProfileType.getByName(profileName);
+        setProfile(type.getProfile());
     }
 
     public static void setProfile(Profile profile){
         PROFILE = new FireworksProfile(profile);
 
-        Date expires = new Date();
-        Long nowLong = expires.getTime();
-        nowLong = nowLong + (1000 * 60 * 60 * 24 * 365L); //One year time
-        expires.setTime(nowLong);
-        Cookies.setCookie(PROFILE_COOKIE, profile.getName(), expires);
+        //The strategy is to remove the cookie when the standard is selected so in case
+        //we decide to change the standard profile in the future, that will propagate
+        //automatically for those who have not changed to a different profile
+        if(ProfileType.getStandard().getProfile().equals(profile)){
+            Cookies.removeCookie(PROFILE_COOKIE);
+        }else {
+            Date expires = new Date();
+            Long nowLong = expires.getTime();
+            nowLong = nowLong + (1000 * 60 * 60 * 24 * 365L); //One year time
+            expires.setTime(nowLong);
+            Cookies.setCookie(PROFILE_COOKIE, profile.getName(), expires);
+        }
     }
 
     public static String getSelectedProfileName(){
@@ -49,14 +56,15 @@ public abstract class FireworksColours {
      * and then add the corresponding entry in this enumeration.
      */
     @SuppressWarnings("UnusedDeclaration")
-    public enum ColourProfile {
+    public enum ProfileType {
         PROFILE_01(ProfileSource.SOURCE.profile01()),
         PROFILE_02(ProfileSource.SOURCE.profile02()),
-        PROFILE_03(ProfileSource.SOURCE.profile03());
+        PROFILE_03(ProfileSource.SOURCE.profile03()),
+        PROFILE_04(ProfileSource.SOURCE.profile04());
 
         Profile profile;
 
-        ColourProfile(TextResource resource) {
+        ProfileType(TextResource resource) {
             try {
                 profile = ProfileFactory.getModelObject(Profile.class, resource.getText());
             } catch (ProfileModelException e) {
@@ -71,18 +79,22 @@ public abstract class FireworksColours {
 
         public static List<String> getProfiles() {
             List<String> rtn = new ArrayList<String>();
-            for (ColourProfile value : values()) {
+            for (ProfileType value : values()) {
                 rtn.add(value.profile.getName());
             }
             return rtn;
         }
 
-        public static ColourProfile getColourProfile(String name){
-            for (ColourProfile value : values()) {
+        public static ProfileType getByName(String name){
+            for (ProfileType value : values()) {
                 if(value.profile.getName().equals(name)){
                     return value;
                 }
             }
+            return getStandard();
+        }
+
+        public static ProfileType getStandard(){
             return PROFILE_01;
         }
     }
@@ -99,5 +111,8 @@ public abstract class FireworksColours {
 
         @Source("profile_03.json")
         TextResource profile03();
+
+        @Source("profile_04.json")
+        TextResource profile04();
     }
 }
