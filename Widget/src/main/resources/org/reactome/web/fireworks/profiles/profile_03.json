@@ -1,9 +1,9 @@
 {
-    "name" : "Cooper",
+    "name" : "Barium Lithium",
     "node" : {
-        "initial"   : "#0000FF",
+        "initial"   : "#FF0000",
         "highlight" : "#E1ED55",
-        "selection" : "#BBFFBB",
+        "selection" : "#BBBBFF",
         "fadeout"   : "#F8F8F8",
         "hit"       : "#E0E0E0",
         "enrichment": {
@@ -18,9 +18,9 @@
         }
     },
     "edge" : {
-        "initial"   : "#CCCCFF",
+        "initial"   : "#FFCCCC",
         "highlight" : "#E1ED55",
-        "selection" : "#CCFFCC",
+        "selection" : "#EEEEFF",
         "fadeout"   : "#F8F8F8",
         "hit"       : "#E0E0E0",
         "enrichment": {
@@ -35,9 +35,9 @@
         }
     },
     "thumbnail" : {
-        "initial"   : "#CCCCFF",
+        "initial"   : "#FFCCCC",
         "highlight" : "#0A0A0A",
-        "selection" : "#00FF00",
+        "selection" : "#0000FF",
         "fadeout"   : "#F8F8F8"
     }
 }
