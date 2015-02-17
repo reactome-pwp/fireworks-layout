@@ -33,9 +33,13 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
     public Node getSelected();
 
-    public void highlightNodeByStableIdentifier(String stableIdentifier);
+    public void highlightNode(String stableIdentifier);
 
-    public void highlightNodeByDbIdentifier(Long dbIdentifier);
+    public void highlightNode(Long dbIdentifier);
+
+    public void openPathway(String stableIdentifier);
+
+    public void openPathway(Long dbIdentifier);
 
     public void resetAnalysis();
 
@@ -43,9 +47,9 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
     public void resetSelection();
 
-    public void selectNodeByStableIdentifier(String stableIdentifier);
+    public void selectNode(String stableIdentifier);
 
-    public void selectNodeByDbIdentifier(Long dbIdentifier);
+    public void selectNode(Long dbIdentifier);
 
     public void setAnalysisToken(String token, String resource);
 

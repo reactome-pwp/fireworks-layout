@@ -122,17 +122,29 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
-    public void highlightNodeByStableIdentifier(String stableIdentifier) {
+    public void highlightNode(String stableIdentifier) {
         Node node = this.data.getNode(stableIdentifier); if(node==null) return;
         Tooltip.getTooltip().setPreventShowing(node.equals(this.selected) || !this.manager.isNodeVisible(node));
         this.setHoveredNode(node);
     }
 
     @Override
-    public void highlightNodeByDbIdentifier(Long dbIdentifier) {
+    public void highlightNode(Long dbIdentifier) {
         Node node = this.data.getNode(dbIdentifier); if(node==null) return;
         Tooltip.getTooltip().setPreventShowing(node.equals(this.selected) || !this.manager.isNodeVisible(node));
         this.setHoveredNode(node);
+    }
+
+    @Override
+    public void openPathway(String stableIdentifier) {
+        Node node = this.data.getNode(stableIdentifier); if(node==null) return;
+        this.selectNode(node, false); this.openNode(node);
+    }
+
+    @Override
+    public void openPathway(Long dbIdentifier) {
+        Node node = this.data.getNode(dbIdentifier); if(node==null) return;
+        this.selectNode(node, false); this.openNode(node);
     }
 
     @Override
@@ -274,12 +286,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
-    public void selectNodeByStableIdentifier(String stableIdentifier) {
+    public void selectNode(String stableIdentifier) {
         this.selectNode(this.data.getNode(stableIdentifier), true);
     }
 
     @Override
-    public void selectNodeByDbIdentifier(Long dbIdentifier) {
+    public void selectNode(Long dbIdentifier) {
         this.selectNode(this.data.getNode(dbIdentifier), true);
     }
 

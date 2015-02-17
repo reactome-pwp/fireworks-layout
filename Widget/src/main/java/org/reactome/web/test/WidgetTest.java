@@ -25,14 +25,14 @@ public class WidgetTest implements EntryPoint {
                 @Override
                 public void onClick(ClickEvent event) {
                     viewer.resetHighlight();
-                    viewer.selectNodeByStableIdentifier(stId);
+                    viewer.selectNode(stId);
                 }
             });
 
             this.addMouseOverHandler(new MouseOverHandler() {
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    viewer.highlightNodeByStableIdentifier(stId);
+                    viewer.highlightNode(stId);
                 }
             });
 
