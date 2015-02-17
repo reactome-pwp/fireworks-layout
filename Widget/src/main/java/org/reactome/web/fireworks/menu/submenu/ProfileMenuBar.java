@@ -22,19 +22,22 @@ public class ProfileMenuBar extends SubMenuBar{
 
         String selected = FireworksColours.getSelectedProfileName();
         for (final String name : FireworksColours.ColourProfile.getProfiles()) {
-            MenuItem item = new MenuItem(new SafeHtmlBuilder().appendEscaped(name).toSafeHtml());
-            final Style itemStyle = item.getElement().getStyle();
+            final MenuItem item = new MenuItem(new SafeHtmlBuilder().appendEscaped(name).toSafeHtml());
 
-            itemStyle.setFontWeight(name.equals(selected) ? Style.FontWeight.BOLD : Style.FontWeight.LIGHTER );
+            if(name.equals(selected)){
+                flagItemAsSelected(item);
+            }else{
+                flagItemAsNormal(item);
+            }
 
             item.setScheduledCommand(new Scheduler.ScheduledCommand() {
                 @Override
                 public void execute() {
                     if (handler != null) {
-                        for (MenuItem menuItem : getItems()) {
-                            menuItem.getElement().getStyle().setFontWeight(Style.FontWeight.LIGHTER);
+                        for (MenuItem itemTemp : getItems()) {
+                            flagItemAsNormal(itemTemp);
                         }
-                        itemStyle.setFontWeight(Style.FontWeight.BOLD);
+                        flagItemAsSelected(item);
 
                         Profile p = FireworksColours.ColourProfile.getColourProfile(name).getProfile();
                         handler.onProfileColourChanged(p);
@@ -43,5 +46,17 @@ public class ProfileMenuBar extends SubMenuBar{
             });
             addItem(item);
         }
+    }
+
+    private void flagItemAsSelected(MenuItem item){
+        Style style = item.getElement().getStyle();
+        style.setFontWeight(Style.FontWeight.BOLDER);
+        style.setTextDecoration(Style.TextDecoration.UNDERLINE);
+    }
+
+    private void flagItemAsNormal(MenuItem item){
+        Style style = item.getElement().getStyle();
+        style.setFontWeight(Style.FontWeight.LIGHTER);
+        style.setTextDecoration(Style.TextDecoration.NONE);
     }
 }

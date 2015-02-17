@@ -55,7 +55,7 @@ public class SettingsMenuPanel extends AbsolutePanel implements ClickHandler,
         menu.setAutoOpen(true); menu.setAnimationEnabled(true);
 //        menu.setAppearToLeft();
 
-        menu.addItem("Profiles", new ProfileMenuBar(this));
+        menu.addItem("Colour profiles", new ProfileMenuBar(this));
         menu.addItem(new AboutMenuItem(this.resources.aboutFireworks(), this));
         this.popupPanel.add(menu);
     }
