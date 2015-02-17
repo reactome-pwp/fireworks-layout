@@ -21,7 +21,7 @@ public class ProfileMenuBar extends SubMenuBar{
         setAnimationEnabled(true);
 
         String selected = FireworksColours.getSelectedProfileName();
-        for (final String name : FireworksColours.ColourProfile.getProfiles()) {
+        for (final String name : FireworksColours.ProfileType.getProfiles()) {
             final MenuItem item = new MenuItem(new SafeHtmlBuilder().appendEscaped(name).toSafeHtml());
 
             if(name.equals(selected)){
@@ -39,7 +39,7 @@ public class ProfileMenuBar extends SubMenuBar{
                         }
                         flagItemAsSelected(item);
 
-                        Profile p = FireworksColours.ColourProfile.getColourProfile(name).getProfile();
+                        Profile p = FireworksColours.ProfileType.getByName(name).getProfile();
                         handler.onProfileColourChanged(p);
                     }
                 }
