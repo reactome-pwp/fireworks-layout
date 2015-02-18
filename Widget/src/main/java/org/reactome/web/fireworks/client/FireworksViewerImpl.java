@@ -180,14 +180,14 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     @Override
     public void onControlAction(ControlActionEvent event) {
         switch (event.getAction()){
-            case FIT_ALL:   this.manager.displayAllNodes(); break;
-            case ZOOM_IN:   this.manager.zoom(0.25);        break;
-            case ZOOM_OUT:  this.manager.zoom(-0.25);       break;
-            case UP:        this.manager.translate(0, 10);  break;
-            case RIGHT:     this.manager.translate(-10, 0); break;
-            case DOWN:      this.manager.translate(0, -10); break;
-            case LEFT:      this.manager.translate(10, 0);  break;
-            case OPEN:      this.openNode(this.selected);   break;
+            case FIT_ALL:   this.manager.displayAllNodes(true); break;
+            case ZOOM_IN:   this.manager.zoom(0.25);            break;
+            case ZOOM_OUT:  this.manager.zoom(-0.25);           break;
+            case UP:        this.manager.translate(0, 10);      break;
+            case RIGHT:     this.manager.translate(-10, 0);     break;
+            case DOWN:      this.manager.translate(0, -10);     break;
+            case LEFT:      this.manager.translate(10, 0);      break;
+            case OPEN:      this.openNode(this.selected);       break;
         }
     }
 
@@ -375,7 +375,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.onResize(); // Adjusts size before rendering the Fireworks for the first time
         this.initHandlers();
         this.forceFireworksDraw = true; //IMPORTANT! Do NOT place it inside the scheduler class
-        this.manager.displayAllNodes();
+        this.manager.displayAllNodes(false);
         AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
             @Override
             public void execute(double timestamp) {

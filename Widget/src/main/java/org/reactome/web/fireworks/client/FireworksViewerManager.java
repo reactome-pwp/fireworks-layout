@@ -113,13 +113,13 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         }
     }
 
-    protected void displayAllNodes(){
+    protected void displayAllNodes(boolean animation){
         //1- Calculate the outer box containing the node and all its parents
         double minX = this.graph.getMinX(); double maxX = this.graph.getMaxX();
         double minY = this.graph.getMinY(); double maxY = this.graph.getMaxY();
 
         //2- Display action
-        this.displayAction(minX, minY, maxX, maxY);
+        this.displayAction(minX, minY, maxX, maxY, animation);
     }
 
     private void displayNode(Node node){
@@ -134,10 +134,10 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         }
 
         //2 - Display action
-        this.displayAction(minX, minY, maxX, maxY);
+        this.displayAction(minX, minY, maxX, maxY, true);
     }
 
-    private void displayAction(double minX, double minY, double maxX, double maxY){
+    private void displayAction(double minX, double minY, double maxX, double maxY, boolean animation){
         //1- Growing the box a "space" bigger as the view offset
         double space = 20;
         minX -= space; minY -= space; maxX += space; maxY += space;
@@ -170,11 +170,17 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         Coordinate centre = new Coordinate(minX + width/2.0, minY + height/2.0);
         Coordinate canvasCentre = new Coordinate(this.width/2.0, this.height/2.0);
 
-        //5- Animates the movement
+        //5- Display the area
         if(this.movementAnimation!=null) this.movementAnimation.cancel();
         Coordinate currentCentre = this.currentStatus.getModelCoordinate(canvasCentre);
-        this.movementAnimation = new MovementAnimation(this, currentCentre, canvasCentre, this.currentStatus.getFactor());
-        this.movementAnimation.moveTo(centre, canvasCentre, factor);
+        if(animation) {
+            //5.1- Animates the movement
+            this.movementAnimation = new MovementAnimation(this, currentCentre, canvasCentre, this.currentStatus.getFactor());
+            this.movementAnimation.moveTo(centre, canvasCentre, factor);
+        }else{
+            //5.2- Direct to the final coordinate (No animation)
+            this.zoomToCoordinate(centre, canvasCentre, factor);
+        }
     }
 
     public void expandNode(Node node){
