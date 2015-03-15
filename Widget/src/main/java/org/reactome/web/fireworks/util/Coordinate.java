@@ -24,6 +24,11 @@ public class Coordinate {
         return new Coordinate(x + coordinate.x, y + coordinate.y);
     }
 
+    public double distance(Coordinate coordinate) {
+        Coordinate diff = this.minus(coordinate);
+        return Math.sqrt(diff.getX()*diff.getX() + diff.getY()*diff.getY());
+    }
+
     public Coordinate divide(double f){
         return new Coordinate(this.x/f, this.y/f);
     }
