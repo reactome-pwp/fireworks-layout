@@ -37,15 +37,15 @@
         },
         "1500931": {
             "name": "Cell-Cell communication",
-            "centerX": 475.0,
-            "centerY": 235.0,
+            "centerX": 800.0,
+            "centerY": 275.0,
             "startAngle": 0.0,
             "direction": "ANTICLOCKWISE"
         },
         "397014": {
             "name": "Muscle contraction",
-            "centerX": 625.0,
-            "centerY": 225.0,
+            "centerX": 675.0,
+            "centerY": 260.0,
             "startAngle": 0.0,
             "direction": "ANTICLOCKWISE"
         },
@@ -53,20 +53,6 @@
             "name": "Extracellular matrix organization",
             "centerX": 925.0,
             "centerY": 350.0,
-            "startAngle": 0.0,
-            "direction": "ANTICLOCKWISE"
-        },
-        "199991": {
-            "name": "Membrane Trafficking",
-            "centerX": 775.0,
-            "centerY": 575.0,
-            "startAngle": -90.0,
-            "direction": "ANTICLOCKWISE"
-        },
-        "109581": {
-            "name": "Apoptosis",
-            "centerX": 125.0,
-            "centerY": 275.0,
             "startAngle": 0.0,
             "direction": "ANTICLOCKWISE"
         },
@@ -79,22 +65,22 @@
         },
         "4839726": {
             "name": "Chromatin organization",
-            "centerX": 675.0,
-            "centerY": 325.0,
+            "centerX": 710.0,
+            "centerY": 330.0,
             "startAngle": 180.0,
             "direction": "CLOCKWISE"
         },
         "400253": {
             "name": "Circadian Clock",
-            "centerX": 800.0,
-            "centerY": 250.0,
+            "centerX": 600.0,
+            "centerY": 225.0,
             "startAngle": 0.0,
             "direction": "CLOCKWISE"
         },
         "1474165": {
             "name": "Reproduction",
-            "centerX": 800.0,
-            "centerY": 350.0,
+            "centerX": 825.0,
+            "centerY": 375.0,
             "startAngle": 180.0,
             "direction": "CLOCKWISE"
         },
@@ -105,17 +91,17 @@
             "startAngle": 270.0,
             "direction": "ANTICLOCKWISE"
         },
-        "2173782": {
-            "name": "Binding and Uptake of Ligands by Scavenger Receptors",
-            "centerX": 550.0,
-            "centerY": 300.0,
-            "startAngle": 0.0,
+        "5653656": {
+            "name": "Vesicle-mediated transport",
+            "centerX": 780.0,
+            "centerY": 575.0,
+            "startAngle": 30.0,
             "direction": "ANTICLOCKWISE"
         },
         "74160": {
             "name": "Gene Expression",
             "centerX": 575.0,
-            "centerY": 425.0,
+            "centerY": 375.0,
             "startAngle": 50.0,
             "direction": "CLOCKWISE"
         },
@@ -142,14 +128,14 @@
         },
         "1266738": {
             "name": "Developmental Biology",
-            "centerX": 575.0,
-            "centerY": 575.0,
+            "centerX": 500.0,
+            "centerY": 250.0,
             "startAngle": 90.0,
             "direction": "CLOCKWISE"
         },
         "168256": {
             "name": "Immune System",
-            "centerX": 325.0,
+            "centerX": 300.0,
             "centerY": 275.0,
             "startAngle": 20.0,
             "direction": "ANTICLOCKWISE"
@@ -163,9 +149,9 @@
         },
         "1643685": {
             "name": "Disease",
-            "centerX": 400.0,
-            "centerY": 650.0,
-            "startAngle": 0.0,
+            "centerX": 525.0,
+            "centerY": 575.0,
+            "startAngle": 90.0,
             "direction": "CLOCKWISE"
         },
         "5357801" : {
