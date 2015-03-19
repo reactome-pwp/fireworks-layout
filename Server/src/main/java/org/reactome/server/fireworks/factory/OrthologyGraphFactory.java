@@ -4,7 +4,6 @@ import org.reactome.core.factory.DatabaseObjectFactory;
 import org.reactome.core.model.Event;
 import org.reactome.core.model.Pathway;
 import org.reactome.core.model.Species;
-import org.reactome.server.analysis.core.model.PathwayHierarchy;
 import org.reactome.server.analysis.core.model.SpeciesNodeFactory;
 import org.reactome.server.fireworks.model.GraphNode;
 
