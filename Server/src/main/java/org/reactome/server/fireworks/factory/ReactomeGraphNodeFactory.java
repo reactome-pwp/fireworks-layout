@@ -20,11 +20,9 @@ public class ReactomeGraphNodeFactory {
     public ReactomeGraphNodeFactory(PathwayHierarchy hierarchy) {
         this.graph = new GraphNode(hierarchy.getSpecies().getSpeciesID(), hierarchy.getSpecies().getName());
         for (PathwayRoot pNode : hierarchy.getChildren()) {
-            if (!pNode.getPathwayId().equals(1643685L)) { //We do NOT include Disease top-level-pathway
-                GraphNode gNode = getOrCreateGraphNode(pNode);
-                this.graph.addChild(gNode);
-                buildBranch(pNode, gNode);
-            }
+            GraphNode gNode = getOrCreateGraphNode(pNode);
+            this.graph.addChild(gNode);
+            buildBranch(pNode, gNode);
         }
     }
 
