@@ -342,11 +342,11 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
 
     private List<String> getLines(){
         List<String> rtn = new LinkedList<String>();
-        String[] words = name.split("  *");
-        if(words.length <= 2){
+        if(name.length()<=15){ //Using name length behaves better than counting words
             rtn.add(this.name);
             return rtn;
         }
+        String[] words = name.split("  *");
         StringBuilder line = new StringBuilder();
         for (int i = 0; i < words.length/2 ; i++) {
             line.append(words[i]).append(" ");
