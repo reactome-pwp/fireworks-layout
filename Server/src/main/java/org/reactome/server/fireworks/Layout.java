@@ -128,7 +128,7 @@ public class Layout {
         try {
             return mapper.readValue(new File(fileName), Bursts.class);
         }catch (Exception e){
-            System.out.println(fileName + " could not be found in 'resources'");
+            System.out.println(fileName + " could not be found");
         }
         return null;
     }
