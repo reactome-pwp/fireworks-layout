@@ -14,6 +14,8 @@ import org.reactome.web.fireworks.client.FireworksViewer;
  */
 public class WidgetTest implements EntryPoint {
 
+    private String currentSpecies;
+
     /**
      * Only used for testing purposes
      * It subscribe to onClick and onMouseOver to simulate the future Hierarchy tree
@@ -61,6 +63,7 @@ public class WidgetTest implements EntryPoint {
 //                loadSpeciesFireworks("Gallus_gallus");
 //                loadSpeciesFireworks("Mycobacterium_tuberculosis");
 //                loadSpeciesFireworks("Mus_musculus");
+//                loadSpeciesFireworks("Saccharomyces_cerevisiae");
 //                loadSpeciesFireworks("Sus_scrofa");
 
             }
@@ -80,6 +83,12 @@ public class WidgetTest implements EntryPoint {
         vp.add(new TestButton("Striated", "REACT_16969", fireworks));
 
         FlowPanel fp = new FlowPanel();
+        fp.add(new Button("Reload Fireworks", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                loadSpeciesFireworks(currentSpecies);
+            }
+        }));
         fp.add(new Button("OVERREPRESENTATION", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -111,11 +120,13 @@ public class WidgetTest implements EntryPoint {
         slp.addSouth(fp, 50);
         slp.add(fireworks);
 
+        RootLayoutPanel.get().clear();
         RootLayoutPanel.get().add(slp);
 
     }
 
     public void loadSpeciesFireworks(String species){
+        this.currentSpecies = species;
         String url = "/download/current/fireworks/" + species + ".json";
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
