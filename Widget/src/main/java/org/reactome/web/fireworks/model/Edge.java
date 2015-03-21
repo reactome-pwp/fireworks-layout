@@ -35,7 +35,8 @@ public class Edge implements Drawable, QuadTreeBox {
     @Override
     public void draw(Context2d ctx) {
         ctx.beginPath();
-        ctx.bezierCurveTo(from.getX(), from.getY(), control.getX(), control.getY(), to.getX(), to.getY());
+        ctx.moveTo(from.getX(), from.getY());
+        ctx.quadraticCurveTo(control.getX(), control.getY(), to.getX(), to.getY());
         ctx.stroke();
     }
 
@@ -50,7 +51,8 @@ public class Edge implements Drawable, QuadTreeBox {
         Coordinate to = this.to.originalPosition.multiply(factor);
         Coordinate control = this.originalControl.multiply(factor);
         ctx.beginPath();
-        ctx.bezierCurveTo(from.getX(), from.getY(), control.getX(), control.getY(), to.getX(), to.getY());
+        ctx.moveTo(from.getX(), from.getY());
+        ctx.quadraticCurveTo(control.getX(), control.getY(), to.getX(), to.getY());
         ctx.stroke();
     }
 
@@ -85,6 +87,34 @@ public class Edge implements Drawable, QuadTreeBox {
 
     public Node getTo() {
         return to;
+    }
+
+    public boolean isMouseInEdge(Coordinate mouse){
+        //Manually test p against various points calculated on the Bezier curve
+        //Please note that this is not happening against all the edges but only
+        //against those that are target to be under the mouse (thx to the QuadTree)
+        Coordinate from = this.from.getCurrentPosition();
+        Coordinate to = this.to.getCurrentPosition();
+        double distance = from.distance(to);
+        for (int i = 1; i < distance; i += 1) {
+            double pct = i / distance;
+            Coordinate b = getQuadraticCurveCoordinate(pct);
+            double d = mouse.distance(b);
+            if(d < 1.75){ return true; }
+        }
+        return false;
+    }
+
+    /**
+     * Rind points at various percent along the quadratic curve path
+     * @param pct from 0 to 1
+     * @return the point corresponding to the quadratic curve curve for pct
+     */
+    private Coordinate getQuadraticCurveCoordinate(double pct) {
+        double aux = 1.0 - pct;
+        double x = (aux * aux) * from.getX() + 2 * aux * pct * control.getX() + (pct * pct) * to.getX();
+        double y = (aux * aux) * from.getY() + 2 * aux * pct * control.getY() + (pct * pct) * to.getY();
+        return new Coordinate(x, y);
     }
 
     public void setColour(String colour) {
