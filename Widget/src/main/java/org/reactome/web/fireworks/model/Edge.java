@@ -90,6 +90,15 @@ public class Edge implements Drawable, QuadTreeBox {
         return to;
     }
 
+    public boolean isPointInEdge(Context2d ctx, Coordinate point) {
+        Coordinate from = this.from.getOriginalPosition();
+        Coordinate to = this.to.getOriginalPosition();
+        Coordinate control = this.originalControl;
+        ctx.beginPath();
+        ctx.bezierCurveTo(from.getX(), from.getY(), control.getX(), control.getY(), to.getX(), to.getY());
+        return ctx.isPointInPath(point.getX(), point.getY()) && !isInSegment(point);
+    }
+
     public void setColour(String colour) {
         this.colour = colour;
     }
@@ -137,7 +146,7 @@ public class Edge implements Drawable, QuadTreeBox {
         return result;
     }
 
-    public boolean isInSegment(Coordinate position){
+    private boolean isInSegment(Coordinate position){
         Coordinate from = this.from.getOriginalPosition();
         Coordinate to = this.to.getOriginalPosition();
         double crossProduct = crossProduct(from, to, position);
