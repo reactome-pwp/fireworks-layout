@@ -16,9 +16,6 @@ import java.util.List;
  */
 public class Edge implements Drawable, QuadTreeBox {
 
-    public static final int SEGMENT_WIDTH = 3; //TODO: Figure out the correct number
-    private static final float EPSILON = SEGMENT_WIDTH * 30f;// 0.001f;
-
     private Node from;
     private Node to;
 
@@ -90,15 +87,6 @@ public class Edge implements Drawable, QuadTreeBox {
         return to;
     }
 
-    public boolean isPointInEdge(Context2d ctx, Coordinate point) {
-        Coordinate from = this.from.getOriginalPosition();
-        Coordinate to = this.to.getOriginalPosition();
-        Coordinate control = this.originalControl;
-        ctx.beginPath();
-        ctx.bezierCurveTo(from.getX(), from.getY(), control.getX(), control.getY(), to.getX(), to.getY());
-        return ctx.isPointInPath(point.getX(), point.getY()) && !isInSegment(point);
-    }
-
     public void setColour(String colour) {
         this.colour = colour;
     }
@@ -145,36 +133,6 @@ public class Edge implements Drawable, QuadTreeBox {
         result = 31 * result + (to != null ? to.hashCode() : 0);
         return result;
     }
-
-    private boolean isInSegment(Coordinate position){
-        Coordinate from = this.from.getOriginalPosition();
-        Coordinate to = this.to.getOriginalPosition();
-        double crossProduct = crossProduct(from, to, position);
-        if( Math.abs(crossProduct) > EPSILON ){
-            return false;
-        }
-
-        double dotProduct = dotProduct(from, to, position);
-        if( dotProduct < 0 ){
-            return false;
-        }
-
-        double squaredLengthBA = squaredLengthBA(from, to);
-        return ( dotProduct <= squaredLengthBA );
-    }
-
-    private double crossProduct(Coordinate a, Coordinate b, Coordinate c){
-        return (c.getY() - a.getY()) * (b.getX() - a.getX()) - (c.getX() - a.getX()) * (b.getY() - a.getY());
-    }
-
-    private double dotProduct(Coordinate a, Coordinate b, Coordinate c){
-        return (c.getX() - a.getX()) * (b.getX() - a.getX()) + (c.getY() - a.getY()) * (b.getY() - a.getY());
-    }
-
-    private double squaredLengthBA(Coordinate a, Coordinate b){
-        return (b.getX() - a.getX()) * (b.getX() - a.getX()) + (b.getY() - a.getY()) * (b.getY() -a.getY());
-    }
-
 
     // ####################################
     //  QuadTreeBox methods implementation
