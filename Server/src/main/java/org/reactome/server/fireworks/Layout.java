@@ -45,6 +45,8 @@ public class Layout {
                         "The password to connect to the database")
                     ,new FlaggedOption( "graph", JSAP.STRING_PARSER, JSAP.NO_DEFAULT, JSAP.REQUIRED, 'g', "graph",
                         "The file containing the data structure for the analysis." )
+                    ,new FlaggedOption( "folder", JSAP.STRING_PARSER, JSAP.NO_DEFAULT, JSAP.REQUIRED, 'f', "folder",
+                        "The folder where the configuration file are stored." )
                     ,new FlaggedOption( "output", JSAP.STRING_PARSER, JSAP.NO_DEFAULT, JSAP.REQUIRED, 'o', "output",
                         "The folder where the results are written to." )
                     ,new FlaggedOption( "species", JSAP.STRING_PARSER, "ALL", JSAP.NOT_REQUIRED, 's', "species",
@@ -79,10 +81,23 @@ public class Layout {
             System.exit( 1 );
         }
 
+        File directory = new File(config.getString("folder"));
+        if(!directory.exists()){
+            System.err.println(config.getString("folder") + " is not a valid folder");
+            System.exit(1);
+        }
+
         List<GraphNode> list = graphs.getGraphNodes();
         GraphNode main = list.remove(0);
+
+        String homoSapiens = getBurstsFileName(directory, main.getName());
+        if(!(new File(homoSapiens)).exists()){
+            System.err.println(homoSapiens + " is MANDATORY");
+            System.exit(1);
+        }
+
         System.out.println(main.getName() + "...");
-        Bursts bursts = getBurstsConfiguration(main.getName());
+        Bursts bursts = getBurstsConfiguration(directory, main.getName());
         FireworksLayout layout = new FireworksLayout(bursts, main);
         layout.doLayout();
         saveSerialisedGraphNode(main, outputDir);
@@ -95,7 +110,7 @@ public class Layout {
             }
 
             System.out.println("\n" + node.getName() + "...");
-            bursts = getBurstsConfiguration(node.getName());
+            bursts = getBurstsConfiguration(directory, node.getName());
             if(bursts!=null){
                 layout = new FireworksLayout(bursts, node);
                 layout.doLayout();
@@ -108,18 +123,19 @@ public class Layout {
         System.exit( 0 );
     }
 
-    private static Bursts getBurstsConfiguration(String speciesName){
-        String fileName = speciesName.replaceAll(" ", "_")  + "_bursts.json";
+    private static Bursts getBurstsConfiguration(File directory, String speciesName){
+        String fileName =getBurstsFileName(directory, speciesName);
         try {
-            //Get file from resources folder
-            ClassLoader classLoader = mapper.getClass().getClassLoader();
-            //noinspection ConstantConditions
-            File file = new File(classLoader.getResource(fileName).getFile());
-            return mapper.readValue(file, Bursts.class);
+            return mapper.readValue(new File(fileName), Bursts.class);
         }catch (Exception e){
             System.out.println(fileName + " could not be found in 'resources'");
         }
         return null;
+    }
+
+    private static String getBurstsFileName(File directory, String speciesName){
+        String fileName = speciesName.replaceAll(" ", "_")  + "_bursts.json";
+        return directory.getAbsolutePath() + File.separator + fileName;
     }
 
     private static void saveSerialisedGraphNode(GraphNode graphNode, String dir){
