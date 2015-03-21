@@ -29,7 +29,7 @@ import org.reactome.web.fireworks.util.Tooltip;
  */
 class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler, MouseWheelHandler,
-        FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, DoubleClickHandler,
+        FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, /*DoubleClickHandler,*/
         AnalysisResetHandler, ExpressionColumnChangedHandler,
         ControlActionHandler, ProfileChangedHandler {
 
@@ -195,7 +195,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onClick(ClickEvent event) {
         event.stopPropagation(); event.preventDefault();
         if(this.hovered!=null){
-            if(this.hovered!=this.selected){
+            //After a usability testing it was seen people hardly double
+            //clicked the nodes, so when the already selected node is
+            //clicked again, it automatically expands the node
+            if(this.hovered==this.selected){
+                this.manager.expandNode(this.selected);
+            } else{
                 this.selectNode(hovered, false);
             }
         }else{
@@ -206,20 +211,20 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.fireworksMoved = false;
     }
 
-    @Override
-    public void onDoubleClick(DoubleClickEvent event) {
-        event.stopPropagation(); event.preventDefault();
-        if(this.hovered!=null){
-            if(this.hovered!=this.selected){
-                this.selectNode(hovered, false);
-            }
-            this.manager.expandNode(this.hovered);
-        }else {
-            Element element = event.getRelativeElement();
-            Coordinate mouse = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
-            this.manager.onMouseScrolled(-10, mouse);
-        }
-    }
+//    @Override
+//    public void onDoubleClick(DoubleClickEvent event) {
+//        event.stopPropagation(); event.preventDefault();
+//        if(this.hovered!=null){
+//            if(this.hovered!=this.selected){
+//                this.selectNode(hovered, false);
+//            }
+//            this.manager.expandNode(this.hovered);
+//        }else {
+//            Element element = event.getRelativeElement();
+//            Coordinate mouse = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
+//            this.manager.onMouseScrolled(-10, mouse);
+//        }
+//    }
 
     @Override
     public void onMouseDown(MouseDownEvent event) {
@@ -387,7 +392,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     protected void initHandlers() {
         this.canvases.addClickHandler(this);
-        this.canvases.addDoubleClickHandler(this);
+//        this.canvases.addDoubleClickHandler(this);
         this.canvases.addMouseDownHandler(this);
         this.canvases.addMouseMoveHandler(this);
         this.canvases.addMouseOutHandler(this);
