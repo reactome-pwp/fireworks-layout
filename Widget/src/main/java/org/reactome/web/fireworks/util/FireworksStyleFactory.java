@@ -19,7 +19,7 @@ public abstract class FireworksStyleFactory {
          * The styles used in this widget.
          */
         @Source(FireworksStyle.DEFAULT_CSS)
-        public FireworksStyle analysisStyle();
+        public FireworksStyle fireworksStyle();
 
     }
 
@@ -40,12 +40,12 @@ public abstract class FireworksStyleFactory {
         String bubbleBottomRight();
     }
 
-    public static FireworksStyle getAnalysisStyle(){
+    public static FireworksStyle getFireworksStyle(){
         if(RESOURCES==null){
             RESOURCES = GWT.create(FireworksResources.class);
-            RESOURCES.analysisStyle().ensureInjected();
+            RESOURCES.fireworksStyle().ensureInjected();
         }
-        return RESOURCES.analysisStyle();
+        return RESOURCES.fireworksStyle();
     }
 
 
