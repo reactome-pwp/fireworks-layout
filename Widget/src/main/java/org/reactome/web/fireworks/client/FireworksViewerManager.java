@@ -13,6 +13,8 @@ import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 import uk.ac.ebi.pwp.structures.quadtree.model.Box;
 import uk.ac.ebi.pwp.structures.quadtree.model.QuadTree2D;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,6 +30,9 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
 
     //The max number of elements for every QuadTree quadrant node
     static final int NUMBER_OF_ELEMENTS = 500;
+
+    //Several instances could have different values
+    private boolean EDGES_SELECTABLE = FireworksFactory.EDGES_SELECTABLE;
 
     private Graph graph;
 
@@ -217,9 +222,17 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
 //                return (Node) item;
 //            }
 //        }
+        List<Edge> targetEges = new LinkedList<Edge>();
         for (QuadTreeBox item : quadTree.getItems(new Box(c.getX()-f, c.getY()-f, c.getX()+f, c.getY()+f))) {
             if(item instanceof Node){
                 return (Node) item;
+            }else if(EDGES_SELECTABLE && item instanceof Edge){
+                targetEges.add((Edge) item);
+            }
+        }
+        for (Edge edge : targetEges) {
+            if(edge.isMouseInEdge(mouse)){
+                return edge.getTo();
             }
         }
         return null;
