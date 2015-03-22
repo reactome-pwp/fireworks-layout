@@ -22,6 +22,7 @@ import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Tooltip;
+import org.reactome.web.fireworks.util.TooltipContainer;
 import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
 
 import java.util.HashSet;
@@ -35,8 +36,7 @@ import java.util.Set;
 class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResize,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler,
         NodeSelectedHandler, NodeSelectedResetHandler, NodeHoverHandler, NodeHoverResetHandler,
-        AnalysisPerformedHandler, AnalysisResetHandler,
-        ProfileChangedHandler {
+        AnalysisPerformedHandler, AnalysisResetHandler {
 
     class CanvasNotSupportedException extends Exception {}
 
@@ -69,6 +69,8 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     private Canvas textSelection;
     private Canvas textTLP;
 
+    private TooltipContainer tooltipContainer;
+
     private FireworksThumbnail thumbnail;
     private FireworksInfo info;
 
@@ -94,6 +96,10 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.textAllNodes = createCanvas(width, height);
         this.textSelection = createCanvas(width, height);
         this.textTLP = createCanvas(width, height);
+
+        //DO NOT CHANGE THE ORDER OF THE FOLLOWING TWO LINES
+        this.tooltipContainer = createToolTipContainer(width, height);
+        createCanvas(width, height); //Top-level canvas (mouse ctrl only)
 
         if(FireworksFactory.SHOW_INFO) {
             this.info = new FireworksInfo(eventBus);
@@ -128,13 +134,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         this.eventBus.addHandler(AnalysisPerformedEvent.TYPE, this);
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
-        this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
     }
 
 
-    public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler){
-        return getTopCanvas().addDoubleClickHandler(handler);
-    }
+//    public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler){
+//        return getTopCanvas().addDoubleClickHandler(handler);
+//    }
 
     public HandlerRegistration addClickHandler(ClickHandler handler){
         return getTopCanvas().addClickHandler(handler);
@@ -345,13 +350,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         if(node.isTopLevel()){
             drawText(node);
         }else if(tooltipNeeded){
-            Tooltip.getTooltip().show(
-                    getTopCanvas().getCanvasElement(),
-                    (int) node.getX(),
-                    (int) node.getY(),
-                    node.getSize(),
-                    new PathwayInfoPanel(node)
-            );
+            Tooltip.getTooltip().show(this.tooltipContainer, node);
         }
     }
 
@@ -439,17 +438,14 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     @Override
-    public void onProfileChanged(ProfileChangedEvent event) {
-
-    }
-
-    @Override
     public void onResize() {
         int width = this.getOffsetWidth();
         int height = this.getOffsetHeight();
         for (Canvas canvas : this.canvases) {
             this.setCanvasProperties(canvas, width, height);
         }
+        this.tooltipContainer.setWidth(width);
+        this.tooltipContainer.setHeight(height);
         this.setFontParameters();
         this.eventBus.fireEventFromSource(new FireworksResizedEvent(width, height), this);
     }
@@ -466,6 +462,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.add(canvas, 0, 0);
         this.canvases.add(canvas);
         return canvas;
+    }
+
+    private TooltipContainer createToolTipContainer(int width, int height){
+        TooltipContainer tooltipContainer = new TooltipContainer(width, height);
+        this.add(tooltipContainer, 0, 0);
+        return tooltipContainer;
     }
 
     private Set<Node> getNodeAndAncestorsWithText(Node node, boolean textForAll){

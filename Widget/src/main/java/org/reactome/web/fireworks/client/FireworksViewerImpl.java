@@ -428,7 +428,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     private void selectNode(Node toSelect, boolean displayNodeAndParents){
-        Tooltip.getTooltip().setPreventShowing(true);
+        Tooltip.getTooltip().hide();
         if(toSelect!=null){
             if(displayNodeAndParents) {
                 this.manager.displayNodeAndParents(toSelect);
