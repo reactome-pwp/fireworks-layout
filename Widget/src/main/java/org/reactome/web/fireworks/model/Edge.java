@@ -106,7 +106,7 @@ public class Edge implements Drawable, QuadTreeBox {
     }
 
     /**
-     * Rind points at various percent along the quadratic curve path
+     * Return points at various percent along the quadratic curve path
      * @param pct from 0 to 1
      * @return the point corresponding to the quadratic curve curve for pct
      */
