@@ -133,9 +133,9 @@ public class Edge implements Drawable, QuadTreeBox {
     public void setControl(){
         double dX = to.getX() - from.getX();
         double dY = to.getY() - from.getY();
-        double angle = Math.atan2(dY, dX) - (Math.PI / 4);
+        double angle = Math.atan2(dY, dX) - (Math.PI / 6);
 
-        double r = Math.sqrt(dX*dX + dY*dY) / 2.0;
+        double r = Math.sqrt(dX*dX + dY*dY) * 3 / 5.0;
 
         double x = from.getX() + r * Math.cos(angle);
         double y = from.getY() + r * Math.sin(angle);
