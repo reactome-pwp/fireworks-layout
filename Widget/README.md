@@ -1,5 +1,13 @@
 #FIREWORKS WIDGET
 
+##What is it?
+A genome-wide, hierarchical visualisation of Reactome pathways in a space-filling graph.
+
+##What is its aim?
+  Visualisation of genome-scale pathway analysis results, allowing both a quick “first glance” and rapid zooming in on interesting results.
+
+<img src="Fireworks_example.png" align="center" width="750" height="297" alt="Fireworks example">
+
 ##Main Features
 * Represents the provided Fireworks json file graph in an HTML canvas based view.
 * Fireworks automatically fits all the nodes in the initial available area when a graph is loaded.
