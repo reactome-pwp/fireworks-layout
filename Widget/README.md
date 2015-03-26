@@ -1,8 +1,6 @@
-#FIREWORKS
+#FIREWORKS WIDGET
 
-##Widget
-
-###Main Features
+##Main Features
 * Represents the provided graph in an HTML canvas based view.
 * Fireworks automatically fits all the nodes in the initial available area when a graph is loaded.
 * Controls on the top left corner of the Fireworks widget allow zooming in and out, fitting the zoom level to adjust the view to the
@@ -30,7 +28,7 @@
        combinations for the standard view and analysis result overlays (explained below).
     *  About Fireworks: shows a window with a short explanation about the widget.
 
-###Analysis Service integration
+##Analysis Service integration
 * This widget is integrated with the Reactome Analysis Service. Therefore after analysing data, the produced analysis "token" can be
   set so the result is displayed as an overlay. Nodes and edges are colored depending on their significance in the particular analysis.
     * When an analysis result is overlaid, the widget shows a control panel on the bottom centre of the viewport and a colours legend
@@ -48,7 +46,7 @@
 * If the "play" button is active for the time series, the transitions or padding does not prevent it to happen. Moreover, the previous
   explained feature of the pointers in the legend has been extended to be updated at the same pace.
 
-###Including Fireworks into your GWT project
+##Including Fireworks into your GWT project
 This Fireworks viewer is implemented in Java using GWT. It is a Maven component that can be included in your GWT project adding the
 following dependency into your pom.xml file:
 
@@ -89,7 +87,7 @@ createFireworksViewer method in the FireworksFactory abstract class a FireworksV
 
 Adding the FireworksViewer object into a panel will start the visualisation.
 
-###Interacting with Fireworks
+##Interacting with Fireworks
 All the Handlers and actions are available via the [FireworksViewer](src/main/java/org/reactome/web/fireworks/client/FireworksViewer.java)
 interface. For example, to get a notification when the user selects a Node, just register a SelectHandler to the Fireworks object:
 
@@ -111,5 +109,5 @@ To specify to Fireworks to select a node use the method selectNode specifying a 
 ##Demo
 A working version of Fireworks has been integrated in [Reactome Pathway Browser](http://www.reactome.org/PathwayBrowser/).
 
-###Contact us
+##Contact us
 You can get in touch with [Reactome](http://www.reactome.org) via email: help[at]reactome.org
