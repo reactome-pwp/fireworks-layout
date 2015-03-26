@@ -285,7 +285,9 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
 
     protected void setGraph(Graph graph){
         this.graph = graph;
-        this.quadTree = new QuadTree2D<QuadTreeBox>(this.graph.getMaxX(), this.graph.getMaxY(), NUMBER_OF_ELEMENTS);
+        double minX = this.graph.getMinX(); double maxX = this.graph.getMaxX();
+        double minY = this.graph.getMinY(); double maxY = this.graph.getMaxY();
+        this.quadTree = new QuadTree2D<QuadTreeBox>(minX, minY, maxX, maxY, NUMBER_OF_ELEMENTS);
         for (Node node : this.graph.getNodes()) {
             this.quadTree.add(node);
         }
