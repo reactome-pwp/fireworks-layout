@@ -9,7 +9,7 @@ import java.util.List;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 class Branch {
-    static final double RADIUS_DELTA = 10d;
+    static final double RADIUS_DELTA = 12d;
 
     double minRadius;
     double minAngle;
