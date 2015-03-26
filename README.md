@@ -9,4 +9,4 @@ The Server folder contains a Java project which contains the layout algorithm an
 ## Widget
 The Widget folder contains a web widget implemented in GWT which offers an interactive view of Fireworks.
 
-More info [here](tree/master/Widget)
+More info [here](./tree/master/Widget)
