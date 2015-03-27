@@ -9,7 +9,7 @@ A genome-wide, hierarchical visualisation of Reactome pathways in a space-fillin
 <img src="Fireworks_example.png" align="center" width="750" height="297" alt="Fireworks example">
 
 ##Main Features
-* Represents the provided Fireworks json file graph in an HTML canvas based view.
+* Represents the provided Fireworks graph json file in an HTML canvas based view.
 * Fireworks automatically fits all the nodes in the initial available area when a graph is loaded.
 * Controls on the top left corner of the Fireworks widget allow zooming in and out, fitting the zoom level to adjust the view to the
   available area and also moving the graph up/down/left/right. There is also a button that gets active when a node is selected,
