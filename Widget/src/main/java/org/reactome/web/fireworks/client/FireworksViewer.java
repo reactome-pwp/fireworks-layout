@@ -29,6 +29,8 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
     public HandlerRegistration addNodeSelectedResetHandler(NodeSelectedResetHandler handler);
 
+    public HandlerRegistration addProfileChangedHandler(ProfileChangedHandler handler);
+
 //    public HandlerRegistration addFireworksZoomHandler(FireworksZoomEventHandler handler);
 
     public Node getSelected();
