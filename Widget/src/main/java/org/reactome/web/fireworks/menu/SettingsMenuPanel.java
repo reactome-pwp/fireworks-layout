@@ -41,7 +41,7 @@ public class SettingsMenuPanel extends AbsolutePanel implements ClickHandler,
         setStyleName(resources.getCSS().menuPanel());
 
         String settings = resources.getCSS().settings();
-        add(new SettingsButton("Click for Fireworks settings", settings, this));
+        add(new SettingsButton("Settings", settings, this));
 
         this.popupPanel = new PopupPanel(true, false);
         this.popupPanel.getElement().setId(MENU_ID);
