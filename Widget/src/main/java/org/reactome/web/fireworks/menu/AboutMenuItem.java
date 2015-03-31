@@ -21,7 +21,7 @@ public class AboutMenuItem extends MenuItem implements Scheduler.ScheduledComman
     private AboutMenuItemSelectedHandler handler;
 
     public AboutMenuItem(TextResource about, AboutMenuItemSelectedHandler handler) {
-        super(new SafeHtmlBuilder().appendEscaped("About Fireworks...").toSafeHtml());
+        super(new SafeHtmlBuilder().appendEscaped("About...").toSafeHtml());
         setScheduledCommand(this);
         this.about = about;
         this.handler = handler;
@@ -42,7 +42,7 @@ public class AboutMenuItem extends MenuItem implements Scheduler.ScheduledComman
         public AboutFireworks() {
             super(true, false);
             getCaption().asWidget().getElement().getStyle().setCursor(Style.Cursor.MOVE);
-            getCaption().setHTML("About Fireworks");
+            getCaption().setHTML("About Pathways Overview");
             FlowPanel fp = new FlowPanel();
             fp.getElement().getStyle().setFloat(Style.Float.RIGHT);
             fp.add(new HTMLPanel(about.getText()));
