@@ -152,12 +152,20 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         double height = (maxY - minY);
         double p = this.height / this.width;
 
+        if(Double.isNaN(p)){
+            //This happens when the window where the widget is attached to has not visible area
+            p = 1;
+        }
+
         //3- Calculate the factor
         double fW = this.width / width;
         double fH = this.height / height;
         double factor = fW < fH ? fW : fH;
         if(factor > 3.0){
             factor = 3.0; //Never deeper than 3 (the view result is a little bit useless)
+        }else if (factor < 0.5){
+            //Getting smaller than 0.5 does not produce a nice view either way
+            factor = 0.5;
         }
 
         //3- Calculating proportions (and corrections for positioning)
