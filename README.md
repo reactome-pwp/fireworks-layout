@@ -6,9 +6,9 @@ The aim of this project is to offer users an intuitive overview of dataset analy
 ## Server
 The Server folder contains a Java project which contains the layout algorithm and the intermediate graph file creator tools.
 
-More info [here](Server)
+More info [here](Server).
 
 ## Widget
 The Widget folder contains a web widget implemented in GWT which offers an interactive view of Fireworks.
 
-More info [here](Widget)
+More info [here](Widget).
