@@ -17,6 +17,8 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
     public HandlerRegistration addCanvasNotSupportedHandler(CanvasNotSupportedHandler handler);
 
+    public HandlerRegistration addFireworksLoaded(FireworksLoadedHandler handler);
+
     public HandlerRegistration addExpressionColumnChangedHandler(ExpressionColumnChangedHandler handler);
 
     public HandlerRegistration addNodeHoverHandler(NodeHoverHandler handler);

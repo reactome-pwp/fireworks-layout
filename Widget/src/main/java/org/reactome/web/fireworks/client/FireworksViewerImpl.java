@@ -86,6 +86,11 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public HandlerRegistration addFireworksLoaded(FireworksLoadedHandler handler) {
+        return this.eventBus.addHandler(FireworksLoadedEvent.TYPE, handler);
+    }
+
+    @Override
     public HandlerRegistration addExpressionColumnChangedHandler(ExpressionColumnChangedHandler handler) {
         return this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, handler);
     }
@@ -386,6 +391,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.initHandlers();
         this.forceFireworksDraw = true; //IMPORTANT! Do NOT place it inside the scheduler class
         this.manager.displayAllNodes(false);
+        this.eventBus.fireEventFromSource(new FireworksLoadedEvent(this.data.getSpeciesId()), this);
         AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
             @Override
             public void execute(double timestamp) {
