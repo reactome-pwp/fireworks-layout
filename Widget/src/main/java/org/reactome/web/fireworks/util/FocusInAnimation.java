@@ -78,6 +78,7 @@ public class FocusInAnimation extends Animation {
 
     private int time(double distance){
         int d = (int) Math.ceil(distance) * 10;
+        if(d == 0) d = MAX_ANIMATION_DURATION / 2;
         return d > MAX_ANIMATION_DURATION ? MAX_ANIMATION_DURATION : d;
     }
 
