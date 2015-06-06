@@ -40,6 +40,7 @@
         <init-param>
             <param-name>proxyFilePath</param-name>
             <param-value>/Users/amundo/fireworks/static</param-value>
+            <!--<param-value>/Users/amundo/fireworks/test</param-value>-->
         </init-param>
     </servlet>
     <servlet-mapping>

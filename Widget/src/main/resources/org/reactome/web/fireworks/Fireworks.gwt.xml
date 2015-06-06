@@ -4,7 +4,6 @@
     <inherits name='com.google.gwt.json.JSON'/>
     <inherits name="com.google.web.bindery.autobean.AutoBean"/>
     <inherits name="uk.ac.ebi.pwp.structures.quadtree.QuadTree2D"/>
-    <inherits name="net.auroris.ColorPicker.client"/>
 
     <inherits name="com.google.gwt.resources.Resources" />
 

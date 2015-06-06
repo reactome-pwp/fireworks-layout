@@ -1,6 +1,6 @@
 package org.reactome.web.fireworks.util.gradient;
 
-import net.auroris.ColorPicker.client.Color;
+import org.reactome.web.fireworks.util.Color;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -11,23 +11,21 @@ class TwoColorGradient {
     private Color to;
 
     public TwoColorGradient(String hexFrom, String hexTo) throws Exception {
-        this.from = new Color();
-        this.from.setHex(hexFrom.replace("#", ""));
-        this.to = new Color();
-        this.to.setHex(hexTo.replace("#", ""));
+        this.from = new Color(hexFrom);
+        this.to = new Color(hexTo);
     }
 
     public String getColor(double p){
         int r = getValue(this.from.getRed(), this.to.getRed(), p);
         int g = getValue(this.from.getGreen(), this.to.getGreen(), p);
         int b = getValue(this.from.getBlue(), this.to.getBlue(), p);
-        Color rtn = new Color();
         try {
-            rtn.setRGB(r,g,b);
+            Color rtn = new Color(r, g, b);
+            return "#" + rtn.getHex();
         } catch (Exception e) {
             e.printStackTrace();
+            return "";
         }
-        return "#" + rtn.getHex();
     }
 
     @SuppressWarnings("UnusedDeclaration")
