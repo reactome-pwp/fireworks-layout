@@ -19,7 +19,7 @@ public abstract class FireworksStyleFactory {
          * The styles used in this widget.
          */
         @Source(FireworksStyle.DEFAULT_CSS)
-        public FireworksStyle fireworksStyle();
+        FireworksStyle fireworksStyle();
 
     }
 
