@@ -79,6 +79,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     private Set<Node> drawnNodes = new HashSet<Node>();
 
     FireworksCanvas(EventBus eventBus, Graph graph) throws CanvasNotSupportedException {
+        this.getElement().setClassName("pwp-FireworksCanvas");
         this.eventBus = eventBus;
         this.thumbnail = new FireworksThumbnail(eventBus, graph);
 
@@ -456,6 +457,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     private Canvas createCanvas(int width, int height) {
         Canvas canvas = Canvas.createIfSupported();
+        canvas.getElement().setClassName("pwp-FireworksCanvas");
         canvas.setCoordinateSpaceWidth(width);
         canvas.setCoordinateSpaceHeight(height);
         canvas.setPixelSize(width, height);
