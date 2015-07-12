@@ -13,48 +13,46 @@ import org.reactome.web.fireworks.model.Node;
 @SuppressWarnings("UnusedDeclaration")
 public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
-    public HandlerRegistration addAnalysisResetHandler(AnalysisResetHandler handler);
+    HandlerRegistration addAnalysisResetHandler(AnalysisResetHandler handler);
 
-    public HandlerRegistration addCanvasNotSupportedHandler(CanvasNotSupportedHandler handler);
+    HandlerRegistration addCanvasNotSupportedHandler(CanvasNotSupportedHandler handler);
 
-    public HandlerRegistration addFireworksLoaded(FireworksLoadedHandler handler);
+    HandlerRegistration addFireworksLoaded(FireworksLoadedHandler handler);
 
-    public HandlerRegistration addExpressionColumnChangedHandler(ExpressionColumnChangedHandler handler);
+    HandlerRegistration addExpressionColumnChangedHandler(ExpressionColumnChangedHandler handler);
 
-    public HandlerRegistration addNodeHoverHandler(NodeHoverHandler handler);
+    HandlerRegistration addNodeHoverHandler(NodeHoverHandler handler);
 
-    public HandlerRegistration addNodeHoverResetHandler(NodeHoverResetHandler handler);
+    HandlerRegistration addNodeHoverResetHandler(NodeHoverResetHandler handler);
 
-    public HandlerRegistration addNodeOpenedHandler(NodeOpenedHandler handler);
+    HandlerRegistration addNodeOpenedHandler(NodeOpenedHandler handler);
 
-    public HandlerRegistration addNodeSelectedHandler(NodeSelectedHandler handler);
+    HandlerRegistration addNodeSelectedHandler(NodeSelectedHandler handler);
 
-    public HandlerRegistration addNodeSelectedResetHandler(NodeSelectedResetHandler handler);
+    HandlerRegistration addNodeSelectedResetHandler(NodeSelectedResetHandler handler);
 
-    public HandlerRegistration addProfileChangedHandler(ProfileChangedHandler handler);
+    HandlerRegistration addProfileChangedHandler(ProfileChangedHandler handler);
 
-//    public HandlerRegistration addFireworksZoomHandler(FireworksZoomEventHandler handler);
+    Node getSelected();
 
-    public Node getSelected();
+    void highlightNode(String stableIdentifier);
 
-    public void highlightNode(String stableIdentifier);
+    void highlightNode(Long dbIdentifier);
 
-    public void highlightNode(Long dbIdentifier);
+    void openPathway(String stableIdentifier);
 
-    public void openPathway(String stableIdentifier);
+    void openPathway(Long dbIdentifier);
 
-    public void openPathway(Long dbIdentifier);
+    void resetAnalysis();
 
-    public void resetAnalysis();
+    void resetHighlight();
 
-    public void resetHighlight();
+    void resetSelection();
 
-    public void resetSelection();
+    void selectNode(String stableIdentifier);
 
-    public void selectNode(String stableIdentifier);
+    void selectNode(Long dbIdentifier);
 
-    public void selectNode(Long dbIdentifier);
-
-    public void setAnalysisToken(String token, String resource);
+    void setAnalysisToken(String token, String resource);
 
 }
