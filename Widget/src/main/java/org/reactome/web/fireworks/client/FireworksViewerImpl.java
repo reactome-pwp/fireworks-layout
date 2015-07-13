@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 import org.reactome.web.fireworks.analysis.factory.AnalysisModelFactory;
+import org.reactome.web.fireworks.controls.ControlAction;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.model.FireworksData;
@@ -329,6 +330,11 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 forceFireworksDraw = true;
             }
         });
+    }
+
+    @Override
+    public void showAll() {
+        this.eventBus.fireEventFromSource(new ControlActionEvent(ControlAction.FIT_ALL), this);
     }
 
     @Override

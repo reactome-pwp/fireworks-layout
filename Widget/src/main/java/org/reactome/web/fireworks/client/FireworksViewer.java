@@ -55,4 +55,5 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
     void setAnalysisToken(String token, String resource);
 
+    void showAll();
 }
