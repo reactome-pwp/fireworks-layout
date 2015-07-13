@@ -25,6 +25,8 @@ import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
 import org.reactome.web.fireworks.util.Tooltip;
 
+import java.util.Objects;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -41,6 +43,10 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     FireworksCanvas canvases;
 
     FireworksData data;
+
+    String token;
+
+    String resource;
 
     boolean forceFireworksDraw = true;
 
@@ -222,21 +228,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.fireworksMoved = false;
     }
 
-//    @Override
-//    public void onDoubleClick(DoubleClickEvent event) {
-//        event.stopPropagation(); event.preventDefault();
-//        if(this.hovered!=null){
-//            if(this.hovered!=this.selected){
-//                this.selectNode(hovered, false);
-//            }
-//            this.manager.expandNode(this.hovered);
-//        }else {
-//            Element element = event.getRelativeElement();
-//            Coordinate mouse = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
-//            this.manager.onMouseScrolled(-10, mouse);
-//        }
-//    }
-
     @Override
     public void onMouseDown(MouseDownEvent event) {
         event.stopPropagation(); event.preventDefault();
@@ -313,15 +304,18 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void setAnalysisToken(String token, final String resource){
+        if(token==null || resource==null) return;
+        if(Objects.equals(this.token, token) && Objects.equals(this.resource, resource)) return;
+        this.token = token; this.resource = resource;
+
         this.canvases.onAnalysisReset();
         this.data.resetPathwaysAnalysisResult();
-        final Object _this = this;
         AnalysisModelFactory.retrievePathwayBaseList(token, this.data.getSpeciesId(), resource, new AnalysisModelFactory.AnalysisModelFactoryHandler() {
             @Override
             public void onPathwaysBaseListRetrieved(SpeciesFilteredResult result) {
                 result.setAnalysisType(AnalysisType.getType(result.getType()));
                 data.setPathwaysAnalysisResult(result); //Data has to be set in the first instance
-                eventBus.fireEventFromSource(new AnalysisPerformedEvent(result), _this);
+                eventBus.fireEventFromSource(new AnalysisPerformedEvent(result), FireworksViewerImpl.this);
                 forceFireworksDraw = true;
             }
 
