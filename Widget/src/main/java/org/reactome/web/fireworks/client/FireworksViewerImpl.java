@@ -333,6 +333,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void resetAnalysis() {
+        this.token = null; this.resource=null;
         eventBus.fireEventFromSource(new AnalysisResetEvent(), this);
     }
 
