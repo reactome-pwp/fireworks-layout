@@ -39,8 +39,7 @@
         <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.StaticFilesProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyFilePath</param-name>
-            <param-value>/Users/amundo/fireworks/static</param-value>
-            <!--<param-value>/Users/amundo/fireworks/test</param-value>-->
+            <param-value>/Users/reactome/fireworks/static</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
