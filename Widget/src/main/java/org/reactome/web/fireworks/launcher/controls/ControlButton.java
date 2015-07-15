@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.controls;
+package org.reactome.web.fireworks.launcher.controls;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;

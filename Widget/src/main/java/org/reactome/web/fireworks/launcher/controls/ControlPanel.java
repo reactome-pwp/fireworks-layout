@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.controls;
+package org.reactome.web.fireworks.launcher.controls;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,6 +18,7 @@ import org.reactome.web.fireworks.model.Node;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
+@Deprecated
 public class ControlPanel extends AbsolutePanel implements ClickHandler, NodeSelectedHandler, NodeSelectedResetHandler {
 
     public static ControlResources RESOURCES;

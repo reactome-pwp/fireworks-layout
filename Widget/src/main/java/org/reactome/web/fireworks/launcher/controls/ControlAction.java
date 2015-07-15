@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.controls;
+package org.reactome.web.fireworks.launcher.controls;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

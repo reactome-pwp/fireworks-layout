@@ -1,8 +1,8 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.controls.ControlAction;
 import org.reactome.web.fireworks.handlers.ControlActionHandler;
+import org.reactome.web.fireworks.launcher.controls.ControlAction;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
