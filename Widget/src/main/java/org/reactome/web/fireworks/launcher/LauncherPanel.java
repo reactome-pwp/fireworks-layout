@@ -6,6 +6,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.fireworks.launcher.controls.MainControlPanel;
+import org.reactome.web.fireworks.launcher.search.SearchPanel;
 
 
 /**
@@ -17,7 +18,7 @@ public class LauncherPanel extends FlowPanel {
         this.setStyleName(RESOURCES.getCSS().launcherPanel());
 
         //Search panel
-//        this.add(new SearchPanel(eventBus));
+        this.add(new SearchPanel(eventBus));
         //Main Control panel
         this.add(new MainControlPanel(eventBus));
 

@@ -29,7 +29,7 @@ public class MainControlPanel extends FlowPanel implements ClickHandler, NodeSel
 
         getElement().getStyle().setFloat(Style.Float.LEFT);
         this.fitAll = new ControlButton("Show all", RESOURCES.getCSS().fitall(), this);
-        this.open = new ControlButton("Pathway overview", RESOURCES.getCSS().diagram(), this);
+        this.open = new ControlButton("Open pathway diagram", RESOURCES.getCSS().diagram(), this);
         this.open.setEnabled(false);
 
         this.add(this.fitAll);
