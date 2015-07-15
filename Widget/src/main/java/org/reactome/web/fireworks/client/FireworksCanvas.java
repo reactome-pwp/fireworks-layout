@@ -111,7 +111,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         //Control panel
         this.add(new NavigationControlPanel(eventBus));
-        this.add(new LauncherPanel(eventBus));
+        this.add(new LauncherPanel(eventBus, graph));
 
         //Enrichment legend and control panels
         this.add(new EnrichmentLegend(eventBus));
