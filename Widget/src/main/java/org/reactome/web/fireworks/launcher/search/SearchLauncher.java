@@ -1,15 +1,14 @@
 package org.reactome.web.fireworks.launcher.search;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import org.reactome.web.fireworks.events.NodeHoverEvent;
-import org.reactome.web.fireworks.events.NodeSelectedEvent;
 import org.reactome.web.fireworks.launcher.search.events.PanelCollapsedEvent;
 import org.reactome.web.fireworks.launcher.search.events.PanelExpandedEvent;
 import org.reactome.web.fireworks.launcher.search.events.SearchPerformedEvent;
@@ -40,7 +39,6 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     private static String OPENING_TEXT = "Search for a pathway ...";
 
     private EventBus eventBus;
-    private Graph graph;
     private SuggestionsProvider<Node> suggestionsProvider;
 
     private SearchBox input = null;
@@ -53,7 +51,6 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         setStyleName(RESOURCES.getCSS().launchPanel());
 
         this.eventBus = eventBus;
-        this.graph = graph;
         this.suggestionsProvider = new SuggestionsProviderImpl(graph);
 
         this.searchBtn = new ControlButton("Search pathways", RESOURCES.getCSS().launch(), this);
@@ -98,21 +95,13 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     @Override
     public void onSearchUpdated(SearchBoxUpdatedEvent event) {
         if(suggestionsProvider!=null) {
-            String value = event.getValue();
-//            mustStayExpanded = !value.isEmpty();
             List<Node> suggestions = suggestionsProvider.getSuggestions(input.getText().trim());
             fireEvent(new SearchPerformedEvent(suggestions));
         }
     }
     @Override
     public void onSuggestionSelected(SuggestionSelectedEvent event) {
-        if(event.getSelectedObject()!=null){
-            if(event.getToOpen()==Boolean.FALSE) {
-                eventBus.fireEventFromSource(new NodeHoverEvent(event.getSelectedObject()), this); //Just hovering
-            }else{
-                eventBus.fireEventFromSource(new NodeSelectedEvent(event.getSelectedObject()), this); //Select the node
-            }
-        }
+        eventBus.fireEventFromSource(event, this);
     }
 
     private void collapsePanel(){
