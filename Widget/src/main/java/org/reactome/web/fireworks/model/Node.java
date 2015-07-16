@@ -16,7 +16,7 @@ import java.util.*;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Node extends FireworkObject implements Drawable, QuadTreeBox {
+public class Node extends FireworkObject implements Drawable, QuadTreeBox, Comparable<Node> {
 
     private Long dbId;
     private String stId;
@@ -139,6 +139,15 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
         ctx.arc(this.getX(), this.getY(), this.getSize() + auraSize, 0, 2 * Math.PI, true);
         ctx.closePath();
         ctx.fill();ctx.stroke();
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        int cmp = getName().compareTo(o.getName());
+        if(cmp==0){
+            cmp = getDbId().compareTo(o.getDbId());
+        }
+        return cmp;
     }
 
     @Override

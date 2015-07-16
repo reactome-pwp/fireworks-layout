@@ -50,7 +50,7 @@ public class SuggestionsProviderImpl implements SuggestionsProvider<Node> {
             }
         }
 
-//        Collections.sort(rtn);
+        Collections.sort(rtn);
         for (Node object : rtn) {
             object.setSearchDisplay(inputs);
         }
