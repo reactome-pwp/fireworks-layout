@@ -63,7 +63,7 @@ public class SuggestionCell extends AbstractCell<Node> {
         Image image = new Image(SuggestionPanel.RESOURCES.pathway());
         SafeHtml safeImage = SafeHtmlUtils.fromTrustedString(image.toString());
 
-        SafeHtml safeValue = SafeHtmlUtils.fromTrustedString(value.getName());
+        SafeHtml safeValue = SafeHtmlUtils.fromTrustedString(value.getSearchDisplay());
 
         SafeHtml rendered = templates.cell(safeImage, safeValue);
         sb.append(rendered);

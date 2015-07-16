@@ -1,6 +1,7 @@
 package org.reactome.web.fireworks.model;
 
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.regexp.shared.RegExp;
 import org.reactome.web.fireworks.analysis.EntityStatistics;
 import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 import org.reactome.web.fireworks.data.RawNode;
@@ -23,6 +24,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
     private String name;
     private double ratio;
     private EntityStatistics statistics;
+    private String searchDisplay;
 
     private double angle;
     private double currentSize;
@@ -241,6 +243,38 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox {
         }
         return FireworksColours.PROFILE.getNodeFadeoutColour();
     }
+
+    public String getSearchDisplay() {
+        return searchDisplay;
+    }
+
+    public void setSearchDisplay(String[] searchTerms) {
+        this.searchDisplay = this.name;
+
+        if(searchTerms==null || searchTerms.length==0) return;
+
+        StringBuilder sb = new StringBuilder("(");
+        for (String term : searchTerms) {
+            sb.append(term).append("|");
+        }
+        sb.delete(sb.length()-1, sb.length()).append(")");
+        String term = sb.toString();
+        /**
+         * (term1|term2)    : term is between "(" and ")" because we are creating a group, so this group can
+         *                    be referred later.
+         * gi               : global search and case insensitive
+         * <b><u>$1</u></b> : instead of replacing by input, that would change the case, we replace it by $1,
+         *                    that is the reference to the first matched group. This means that we want to
+         *                    replace it using the exact word that was found.
+         */
+        RegExp regExp = RegExp.compile(term, "gi");
+        this.searchDisplay = regExp.replace(this.searchDisplay, "<u><strong>$1</strong></u>");
+    }
+
+    public void clearSearchDisplayValue(){
+        this.searchDisplay = null;
+    }
+
 
     public void initStatistics(){
         this.statistics = null;

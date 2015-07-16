@@ -30,7 +30,7 @@ public class SuggestionsProviderImpl implements SuggestionsProvider<Node> {
 
         String term = inputs[0].toLowerCase();
         for (Node obj : content.getNodes()) {
-            //obj.clearSearchDisplayValue(); //clears the result of previous searches
+            obj.clearSearchDisplayValue(); //clears the result of previous searches
             if (obj.getName().toLowerCase().contains(term)) {
                 rtn.add(obj);
             }
@@ -51,9 +51,9 @@ public class SuggestionsProviderImpl implements SuggestionsProvider<Node> {
         }
 
 //        Collections.sort(rtn);
-//        for (DatabaseObject object : rtn) {
-//            object.setSearchDisplay(inputs);
-//        }
+        for (Node object : rtn) {
+            object.setSearchDisplay(inputs);
+        }
         return rtn;
     }
 }
