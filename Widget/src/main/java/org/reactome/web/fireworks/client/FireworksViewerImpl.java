@@ -16,6 +16,8 @@ import org.reactome.web.fireworks.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.launcher.controls.ControlAction;
+import org.reactome.web.fireworks.launcher.search.events.SuggestionSelectedEvent;
+import org.reactome.web.fireworks.launcher.search.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.model.FireworksData;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -30,13 +32,13 @@ import java.util.Objects;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
+class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, SuggestionSelectedHandler,
         MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler, MouseWheelHandler,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, /*DoubleClickHandler,*/
         AnalysisResetHandler, ExpressionColumnChangedHandler,
         ControlActionHandler, ProfileChangedHandler {
 
-    EventBus eventBus = new FireworksEventBus();
+    EventBus eventBus;
 
     FireworksViewerManager manager;
 
@@ -62,6 +64,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     Node selected = null;
 
     public FireworksViewerImpl(String json) {
+        this.eventBus = new FireworksEventBus();
         try {
             Graph graph = ModelFactory.getGraph(json);
             this.data = new FireworksData(graph);
@@ -75,6 +78,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             initWidget(new Label(e.getMessage()));
             e.printStackTrace();
         }
+        this.eventBus.addHandler(SuggestionSelectedEvent.TYPE, this);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -280,6 +284,17 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onProfileChanged(ProfileChangedEvent event) {
         data.updateColours();
         forceFireworksDraw = true;
+    }
+
+    @Override
+    public void onSuggestionSelected(SuggestionSelectedEvent event) {
+        if (event.getSelectedObject() != null) {
+            if (event.getToOpen() == Boolean.FALSE) {
+                this.highlightNode(event.getSelectedObject().getDbId());
+            } else {
+                this.selectNode(event.getSelectedObject(), true);
+            }
+        }
     }
 
     @Override
