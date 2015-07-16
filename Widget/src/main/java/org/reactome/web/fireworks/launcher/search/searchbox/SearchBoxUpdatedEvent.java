@@ -6,7 +6,7 @@ import com.google.gwt.event.shared.GwtEvent;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class SearchBoxUpdatedEvent extends GwtEvent<SearchBoxUpdatedHandler> {
-    public static Type<SearchBoxUpdatedHandler> TYPE = new Type<SearchBoxUpdatedHandler>();
+    public static Type<SearchBoxUpdatedHandler> TYPE = new Type<>();
 
     private String value;
 

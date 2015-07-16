@@ -6,7 +6,7 @@ import com.google.gwt.event.shared.GwtEvent;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SearchBoxArrowKeysEvent extends GwtEvent<SearchBoxArrowKeysHandler> {
-    public static Type<SearchBoxArrowKeysHandler> TYPE = new Type<SearchBoxArrowKeysHandler>();
+    public static Type<SearchBoxArrowKeysHandler> TYPE = new Type<>();
 
     private Integer value;
 
@@ -21,7 +21,7 @@ public class SearchBoxArrowKeysEvent extends GwtEvent<SearchBoxArrowKeysHandler>
 
     @Override
     protected void dispatch(SearchBoxArrowKeysHandler handler) {
-        handler.onArrowKeysPressed(this);
+        handler.onKeysPressed(this);
     }
 
     public Integer getValue() {

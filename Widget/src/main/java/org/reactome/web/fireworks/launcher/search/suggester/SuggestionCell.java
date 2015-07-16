@@ -8,7 +8,6 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Image;
-import org.reactome.web.fireworks.launcher.controls.MainControlPanel;
 import org.reactome.web.fireworks.model.Node;
 
 /**

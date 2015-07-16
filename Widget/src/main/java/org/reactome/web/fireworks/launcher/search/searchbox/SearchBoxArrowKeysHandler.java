@@ -6,5 +6,5 @@ import com.google.gwt.event.shared.EventHandler;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public interface SearchBoxArrowKeysHandler extends EventHandler {
-    void onArrowKeysPressed(SearchBoxArrowKeysEvent event);
+    void onKeysPressed(SearchBoxArrowKeysEvent event);
 }

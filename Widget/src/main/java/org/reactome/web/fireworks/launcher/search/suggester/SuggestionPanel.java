@@ -58,12 +58,12 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         this.sinkEvents(Event.ONCLICK);
 
         // Add a selection model so we can select cells.
-        selectionModel = new SingleSelectionModel<Node>(KEY_PROVIDER);
+        selectionModel = new SingleSelectionModel<>(KEY_PROVIDER);
         selectionModel.addSelectionChangeHandler(this);
 
         SuggestionCell suggestionCell = new SuggestionCell();
 
-        suggestions = new CellList<Node>(suggestionCell, KEY_PROVIDER);
+        suggestions = new CellList<>(suggestionCell, KEY_PROVIDER);
         suggestions.sinkEvents(Event.FOCUSEVENTS);
         suggestions.setSelectionModel(selectionModel);
 
@@ -84,12 +84,14 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
     }
 
     @Override
-    public void onArrowKeysPressed(SearchBoxArrowKeysEvent event) {
-        if(suggestions.getRowCount()>0){
+    public void onKeysPressed(SearchBoxArrowKeysEvent event) {
+        if(suggestions.getRowCount()>0) {
             Node current = selectionModel.getSelectedObject();
-            int currentIndex = current==null?-1:dataProvider.getList().indexOf(current);
+            int currentIndex = current == null ? -1 : dataProvider.getList().indexOf(current);
             int toIndex = currentIndex;
-            if(event.getValue() == KeyCodes.KEY_DOWN) {
+            if(event.getValue() == KeyCodes.KEY_ENTER){
+                fireEvent(new SuggestionSelectedEvent(current, Boolean.TRUE));
+            }else if(event.getValue() == KeyCodes.KEY_DOWN) {
                 toIndex = currentIndex + 1 < dataProvider.getList().size() ? currentIndex + 1 : dataProvider.getList().size() - 1;
             }else if(event.getValue() == KeyCodes.KEY_UP) {
                 toIndex = currentIndex - 1 > 0 ? currentIndex - 1 : 0;
@@ -108,7 +110,7 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         List<Node> searchResult = event.getSuggestions();
         if(!searchResult.isEmpty() && !searchResult.contains(sel)) selectionModel.clear();
 
-        dataProvider = new ListDataProvider<Node>(searchResult);
+        dataProvider = new ListDataProvider<>(searchResult);
         dataProvider.addDataDisplay(this.suggestions);
         if (dataProvider.getList().isEmpty()) {
             fireEvent(new SuggestionSelectedEvent(null));

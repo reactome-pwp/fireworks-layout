@@ -8,12 +8,18 @@ import org.reactome.web.fireworks.model.Node;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class SuggestionSelectedEvent extends GwtEvent<SuggestionSelectedHandler> {
-    public static Type<SuggestionSelectedHandler> TYPE = new Type<SuggestionSelectedHandler>();
+    public static Type<SuggestionSelectedHandler> TYPE = new Type<>();
 
     private Node node;
+    private Boolean toOpen = Boolean.FALSE;
 
     public SuggestionSelectedEvent(Node databaseObject) {
         this.node = databaseObject;
+    }
+
+    public SuggestionSelectedEvent(Node databaseObject, Boolean toExpand) {
+        this.node = databaseObject;
+        this.toOpen = toExpand;
     }
 
     @Override
@@ -30,10 +36,15 @@ public class SuggestionSelectedEvent extends GwtEvent<SuggestionSelectedHandler>
         return node;
     }
 
+    public Boolean getToOpen() {
+        return toOpen;
+    }
+
     @Override
     public String toString() {
         return "SuggestionSelectedEvent{" +
-                ", selected=" + node +
+                "node=" + node +
+                ", toOpen=" + toOpen +
                 '}';
     }
 }

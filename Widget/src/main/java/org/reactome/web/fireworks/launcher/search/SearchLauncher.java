@@ -65,7 +65,6 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         this.add(input);
 
         this.initHandlers();
-//        this.setVisible(false);
         this.searchBtn.setEnabled(true);
     }
 
@@ -108,7 +107,11 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     @Override
     public void onSuggestionSelected(SuggestionSelectedEvent event) {
         if(event.getSelectedObject()!=null){
-            eventBus.fireEventFromSource(new NodeHoverEvent(event.getSelectedObject()), this);
+            if(event.getToOpen()==Boolean.FALSE) {
+                eventBus.fireEventFromSource(new NodeHoverEvent(event.getSelectedObject()), this); //Just hovering
+            }else{
+                eventBus.fireEventFromSource(new NodeSelectedEvent(event.getSelectedObject()), this); //Select the node
+            }
         }
     }
 
