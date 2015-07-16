@@ -27,7 +27,7 @@ public class MainControlPanel extends FlowPanel implements ClickHandler, NodeSel
     public MainControlPanel(EventBus eventBus) {
         this.eventBus = eventBus;
 
-        getElement().getStyle().setFloat(Style.Float.LEFT);
+        this.addStyleName(RESOURCES.getCSS().mainControlPanel());
         this.fitAll = new ControlButton("Show all", RESOURCES.getCSS().fitall(), this);
         this.open = new ControlButton("Open pathway diagram", RESOURCES.getCSS().diagram(), this);
         this.open.setEnabled(false);
@@ -110,6 +110,8 @@ public class MainControlPanel extends FlowPanel implements ClickHandler, NodeSel
          * The path to the default CSS styles used by this resource.
          */
         String CSS = "org/reactome/web/fireworks/launcher/controls/MainControlPanel.css";
+
+        String mainControlPanel();
 
         String fitall();
 

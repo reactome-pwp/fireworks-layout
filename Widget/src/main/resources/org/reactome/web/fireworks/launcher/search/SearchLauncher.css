@@ -65,5 +65,6 @@
 
 .inputActive {
     opacity: 0.8;
+    margin: 5px 0px 0 4px;
     color: #FFFFFF;
 }
