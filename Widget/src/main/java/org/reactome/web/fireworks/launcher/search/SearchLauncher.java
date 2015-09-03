@@ -3,6 +3,7 @@ package org.reactome.web.fireworks.launcher.search;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundle;
@@ -19,10 +20,7 @@ import org.reactome.web.fireworks.launcher.search.handlers.SearchPerformedHandle
 import org.reactome.web.fireworks.launcher.search.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.launcher.search.provider.SuggestionsProvider;
 import org.reactome.web.fireworks.launcher.search.provider.SuggestionsProviderImpl;
-import org.reactome.web.fireworks.launcher.search.searchbox.SearchBox;
-import org.reactome.web.fireworks.launcher.search.searchbox.SearchBoxArrowKeysHandler;
-import org.reactome.web.fireworks.launcher.search.searchbox.SearchBoxUpdatedEvent;
-import org.reactome.web.fireworks.launcher.search.searchbox.SearchBoxUpdatedHandler;
+import org.reactome.web.fireworks.launcher.search.searchbox.*;
 import org.reactome.web.fireworks.legends.ControlButton;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -33,7 +31,7 @@ import java.util.List;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SearchLauncher extends AbsolutePanel implements ClickHandler, SearchBoxUpdatedHandler,
-        SuggestionSelectedHandler {
+        SuggestionSelectedHandler, SearchBoxArrowKeysHandler {
 
     @SuppressWarnings("FieldCanBeLocal")
     private static String OPENING_TEXT = "Search for a pathway ...";
@@ -120,7 +118,7 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
 
     private void initHandlers(){
         this.input.addSearchBoxUpdatedHandler(this);
-
+        this.input.addSearchBoxArrowKeysHandler(this);
     }
 
     public void setFocus(boolean focused){
@@ -132,6 +130,14 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     static {
         RESOURCES = GWT.create(SearchLauncherResources.class);
         RESOURCES.getCSS().ensureInjected();
+    }
+
+    @Override
+    public void onKeysPressed(SearchBoxArrowKeysEvent event) {
+        if(event.getValue() == KeyCodes.KEY_ESCAPE) {
+            setFocus(false);
+            this.collapsePanel();
+        }
     }
 
     /**
