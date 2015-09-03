@@ -24,7 +24,7 @@ import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Tooltip;
 import org.reactome.web.fireworks.util.TooltipContainer;
-import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
+import uk.ac.ebi.pwp.structures.quadtree.client.QuadTreeBox;
 
 import java.util.HashSet;
 import java.util.LinkedList;

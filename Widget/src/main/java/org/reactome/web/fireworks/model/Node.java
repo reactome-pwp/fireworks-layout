@@ -8,7 +8,7 @@ import org.reactome.web.fireworks.data.RawNode;
 import org.reactome.web.fireworks.interfaces.Drawable;
 import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Coordinate;
-import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
+import uk.ac.ebi.pwp.structures.quadtree.client.QuadTreeBox;
 
 import java.util.*;
 

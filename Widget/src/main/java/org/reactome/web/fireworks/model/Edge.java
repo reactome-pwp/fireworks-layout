@@ -4,7 +4,7 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import org.reactome.web.fireworks.interfaces.Drawable;
 import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Coordinate;
-import uk.ac.ebi.pwp.structures.quadtree.interfaces.QuadTreeBox;
+import uk.ac.ebi.pwp.structures.quadtree.client.QuadTreeBox;
 
 import java.util.List;
 
@@ -65,15 +65,15 @@ public class Edge implements Drawable, QuadTreeBox {
      * Can be used either for normal visualisation, overrepresentation analysis or species comparison.
      *
      * @return the color associated with this node for normal visualisation, overrepresentation
-     *         analysis or species comparison.
+     * analysis or species comparison.
      */
     public String getColour() {
         return this.colour;
     }
 
-    public String getExpressionColor(int column){
-        if(this.expColours!=null){
-            if( column >= 0 && column < this.expColours.size()) {
+    public String getExpressionColor(int column) {
+        if (this.expColours != null) {
+            if (column >= 0 && column < this.expColours.size()) {
                 return this.expColours.get(column);
             }
         }
@@ -89,7 +89,7 @@ public class Edge implements Drawable, QuadTreeBox {
         return to;
     }
 
-    public boolean isMouseInEdge(Coordinate mouse){
+    public boolean isMouseInEdge(Coordinate mouse) {
         //Manually test p against various points calculated on the Bezier curve
         //Please note that this is not happening against all the edges but only
         //against those that are target to be under the mouse (thx to the QuadTree)
@@ -100,13 +100,16 @@ public class Edge implements Drawable, QuadTreeBox {
             double pct = i / distance;
             Coordinate b = getQuadraticCurveCoordinate(pct);
             double d = mouse.distance(b);
-            if(d < 1.75){ return true; }
+            if (d < 1.75) {
+                return true;
+            }
         }
         return false;
     }
 
     /**
      * Return points at various percent along the quadratic curve path
+     *
      * @param pct from 0 to 1
      * @return the point corresponding to the quadratic curve curve for pct
      */
@@ -122,7 +125,7 @@ public class Edge implements Drawable, QuadTreeBox {
     }
 
     //Used to set a value only when it is needed.
-    public void setFadeoutColour(){
+    public void setFadeoutColour() {
         this.colour = FireworksColours.PROFILE.getEdgeFadeoutColour();
     }
 
@@ -130,12 +133,12 @@ public class Edge implements Drawable, QuadTreeBox {
         this.expColours = expColours;
     }
 
-    public void setControl(){
+    public void setControl() {
         double dX = to.getX() - from.getX();
         double dY = to.getY() - from.getY();
         double angle = Math.atan2(dY, dX) - (Math.PI / 6);
 
-        double r = Math.sqrt(dX*dX + dY*dY) * 3 / 5.0;
+        double r = Math.sqrt(dX * dX + dY * dY) * 3 / 5.0;
 
         double x = from.getX() + r * Math.cos(angle);
         double y = from.getY() + r * Math.sin(angle);
@@ -181,7 +184,7 @@ public class Edge implements Drawable, QuadTreeBox {
     }
 
     @Override
-    public double getMaxX(){
+    public double getMaxX() {
         double rtn = Math.max(from.getX(), control.getX());
         return Math.max(rtn, to.getX());
     }
