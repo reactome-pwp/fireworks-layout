@@ -59,9 +59,16 @@
     "397014": {
       "name": "Muscle contraction",
       "centerX": 1100.0,
-      "centerY": 415.0,
+      "centerY": 400.0,
       "startAngle": 0.0,
       "direction": "ANTICLOCKWISE"
+    },
+    "5205647" : {
+      "name": "Mitophagy",
+      "centerX": 1175.0,
+      "centerY": 450.0,
+      "startAngle": 0.0,
+      "direction": "CLOCKWISE"
     },
     "1474244": {
       "name": "Extracellular matrix organization",
@@ -109,7 +116,7 @@
       "name": "Hemostasis",
       "centerX": 125.0,
       "centerY": 450.0,
-      "startAngle": -195.0,
+      "startAngle": 165.0,
       "direction": "ANTICLOCKWISE"
     },
     "112316": {
