@@ -9,6 +9,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import org.reactome.web.fireworks.launcher.search.events.PanelCollapsedEvent;
 import org.reactome.web.fireworks.launcher.search.events.PanelExpandedEvent;
@@ -43,6 +44,7 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     private ControlButton searchBtn = null;
 
     private Boolean isExpanded = false;
+    private Timer focusTimer;
 
     public SearchLauncher(EventBus eventBus, Graph graph) {
         //Setting the search style
@@ -61,6 +63,14 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
 
         this.initHandlers();
         this.searchBtn.setEnabled(true);
+
+        focusTimer = new Timer() {
+            @Override
+            public void run() {
+                SearchLauncher.this.input.setFocus(true);
+            }
+        };
+
     }
 
     public HandlerRegistration addPanelCollapsedHandler(PanelCollapsedHandler handler){
@@ -103,6 +113,9 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     }
 
     private void collapsePanel(){
+        if(focusTimer.isRunning()){
+            focusTimer.cancel();
+        }
         removeStyleName(RESOURCES.getCSS().launchPanelExpanded());
         input.removeStyleName(RESOURCES.getCSS().inputActive());
         isExpanded = false;
@@ -114,6 +127,7 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         input.addStyleName(RESOURCES.getCSS().inputActive());
         isExpanded = true;
         fireEvent(new PanelExpandedEvent());
+        focusTimer.schedule(300);
     }
 
     private void initHandlers(){
@@ -161,6 +175,18 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
 
         @Source("images/search_normal.png")
         ImageResource launchNormal();
+
+        @Source("images/search_clicked.png")
+        ImageResource clearClicked();
+
+        @Source("images/search_disabled.png")
+        ImageResource clearDisabled();
+
+        @Source("images/search_hovered.png")
+        ImageResource clearHovered();
+
+        @Source("images/search_normal.png")
+        ImageResource clearNormal();
     }
 
     /**
