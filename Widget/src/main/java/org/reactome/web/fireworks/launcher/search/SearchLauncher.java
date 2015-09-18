@@ -11,14 +11,8 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import org.reactome.web.fireworks.launcher.search.events.PanelCollapsedEvent;
-import org.reactome.web.fireworks.launcher.search.events.PanelExpandedEvent;
-import org.reactome.web.fireworks.launcher.search.events.SearchPerformedEvent;
-import org.reactome.web.fireworks.launcher.search.events.SuggestionSelectedEvent;
-import org.reactome.web.fireworks.launcher.search.handlers.PanelCollapsedHandler;
-import org.reactome.web.fireworks.launcher.search.handlers.PanelExpandedHandler;
-import org.reactome.web.fireworks.launcher.search.handlers.SearchPerformedHandler;
-import org.reactome.web.fireworks.launcher.search.handlers.SuggestionSelectedHandler;
+import org.reactome.web.fireworks.launcher.search.events.*;
+import org.reactome.web.fireworks.launcher.search.handlers.*;
 import org.reactome.web.fireworks.launcher.search.provider.SuggestionsProvider;
 import org.reactome.web.fireworks.launcher.search.provider.SuggestionsProviderImpl;
 import org.reactome.web.fireworks.launcher.search.searchbox.*;
@@ -32,7 +26,7 @@ import java.util.List;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SearchLauncher extends AbsolutePanel implements ClickHandler, SearchBoxUpdatedHandler,
-        SuggestionSelectedHandler, SearchBoxArrowKeysHandler {
+        SuggestionHoveredHandler, SuggestionSelectedHandler, SearchBoxArrowKeysHandler {
 
     @SuppressWarnings("FieldCanBeLocal")
     private static String OPENING_TEXT = "Search for a pathway ...";
@@ -44,7 +38,9 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     private ControlButton searchBtn = null;
 
     private Boolean isExpanded = false;
+
     private Timer focusTimer;
+    private Timer focusOnPathwayTimer;
 
     public SearchLauncher(EventBus eventBus, Graph graph) {
         //Setting the search style
@@ -70,7 +66,6 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
                 SearchLauncher.this.input.setFocus(true);
             }
         };
-
     }
 
     public HandlerRegistration addPanelCollapsedHandler(PanelCollapsedHandler handler){
@@ -108,6 +103,22 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         }
     }
     @Override
+    public void onSuggestionHovered(final SuggestionHoveredEvent event) {
+        eventBus.fireEventFromSource(event, this);
+//        if(focusOnPathwayTimer.isRunning()) {
+//            focusOnPathwayTimer.cancel();
+//        }
+        focusOnPathwayTimer = new Timer() {
+
+            @Override
+            public void run() {
+                eventBus.fireEventFromSource(new SuggestionHoveredEvent(event.getHoveredObject(), Boolean.TRUE), this);
+            }
+        };
+        focusOnPathwayTimer.schedule(1000);
+    }
+
+    @Override
     public void onSuggestionSelected(SuggestionSelectedEvent event) {
         eventBus.fireEventFromSource(event, this);
     }
@@ -135,15 +146,9 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         this.input.addSearchBoxArrowKeysHandler(this);
     }
 
+
     public void setFocus(boolean focused){
         this.input.setFocus(focused);
-    }
-
-
-    public static SearchLauncherResources RESOURCES;
-    static {
-        RESOURCES = GWT.create(SearchLauncherResources.class);
-        RESOURCES.getCSS().ensureInjected();
     }
 
     @Override
@@ -152,6 +157,14 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
             setFocus(false);
             this.collapsePanel();
         }
+    }
+
+
+    public static SearchLauncherResources RESOURCES;
+
+    static {
+        RESOURCES = GWT.create(SearchLauncherResources.class);
+        RESOURCES.getCSS().ensureInjected();
     }
 
     /**

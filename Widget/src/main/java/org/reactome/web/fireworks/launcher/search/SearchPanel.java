@@ -31,6 +31,7 @@ public class SearchPanel extends FlowPanel {
 
         SuggestionPanel suggestions = new SuggestionPanel();
         suggestions.addSuggestionSelectedHandler(launcher);
+        suggestions.addSuggestionHoveredHandler(launcher);
         // Listen to click events on suggestions and return focus on SearchBox
         suggestions.addClickHandler(new ClickHandler() {
             @Override

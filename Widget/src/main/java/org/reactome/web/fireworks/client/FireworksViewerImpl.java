@@ -16,7 +16,9 @@ import org.reactome.web.fireworks.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.launcher.controls.ControlAction;
+import org.reactome.web.fireworks.launcher.search.events.SuggestionHoveredEvent;
 import org.reactome.web.fireworks.launcher.search.events.SuggestionSelectedEvent;
+import org.reactome.web.fireworks.launcher.search.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.launcher.search.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.model.FireworksData;
 import org.reactome.web.fireworks.model.Graph;
@@ -32,11 +34,12 @@ import java.util.Objects;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, SuggestionSelectedHandler,
+class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler, MouseWheelHandler,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, /*DoubleClickHandler,*/
         AnalysisResetHandler, ExpressionColumnChangedHandler,
-        ControlActionHandler, ProfileChangedHandler {
+        ControlActionHandler, ProfileChangedHandler,
+        SuggestionSelectedHandler, SuggestionHoveredHandler {
 
     EventBus eventBus;
 
@@ -79,6 +82,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, Su
             e.printStackTrace();
         }
         this.eventBus.addHandler(SuggestionSelectedEvent.TYPE, this);
+        this.eventBus.addHandler(SuggestionHoveredEvent.TYPE, this);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -287,12 +291,24 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer, Su
     }
 
     @Override
+    public void onSuggestionHovered(SuggestionHoveredEvent event) {
+        if (event.getHoveredObject() != null) {
+            if (!event.getToFocus()) {
+                this.highlightNode(event.getHoveredObject().getDbId());
+            } else {
+                this.selectNode(event.getHoveredObject(), true);
+            }
+        }
+    }
+
+    @Override
     public void onSuggestionSelected(SuggestionSelectedEvent event) {
         if (event.getSelectedObject() != null) {
-            if (event.getToOpen() == Boolean.FALSE) {
+            if (!event.getToOpen()) {
                 this.highlightNode(event.getSelectedObject().getDbId());
             } else {
-                this.selectNode(event.getSelectedObject(), true);
+                this.selectNode(event.getSelectedObject(), false);
+                this.openNode(event.getSelectedObject());
             }
         }
     }

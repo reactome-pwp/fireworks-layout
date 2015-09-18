@@ -17,14 +17,15 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import org.reactome.web.fireworks.launcher.search.events.SearchPerformedEvent;
+import org.reactome.web.fireworks.launcher.search.events.SuggestionHoveredEvent;
 import org.reactome.web.fireworks.launcher.search.events.SuggestionSelectedEvent;
 import org.reactome.web.fireworks.launcher.search.handlers.SearchPerformedHandler;
+import org.reactome.web.fireworks.launcher.search.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.launcher.search.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.launcher.search.panels.AbstractAccordionPanel;
 import org.reactome.web.fireworks.launcher.search.searchbox.SearchBoxArrowKeysEvent;
 import org.reactome.web.fireworks.launcher.search.searchbox.SearchBoxArrowKeysHandler;
 import org.reactome.web.fireworks.model.Node;
-
 
 import java.util.List;
 
@@ -79,6 +80,10 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         return this.addHandler(handler, ClickEvent.getType());
     }
 
+    public HandlerRegistration addSuggestionHoveredHandler(SuggestionHoveredHandler handler) {
+        return addHandler(handler, SuggestionHoveredEvent.TYPE);
+    }
+
     public HandlerRegistration addSuggestionSelectedHandler(SuggestionSelectedHandler handler) {
         return addHandler(handler, SuggestionSelectedEvent.TYPE);
     }
@@ -119,7 +124,7 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
 
     @Override
     public void onSelectionChange(SelectionChangeEvent event) {
-        fireEvent(new SuggestionSelectedEvent(selectionModel.getSelectedObject()));
+        fireEvent(new SuggestionHoveredEvent(selectionModel.getSelectedObject()));
     }
 
     /**
