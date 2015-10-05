@@ -30,6 +30,8 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
 
     @SuppressWarnings("FieldCanBeLocal")
     private static String OPENING_TEXT = "Search for a pathway ...";
+    private static int FOCUS_IN_TEXTBOX_DELAY = 300;
+    private static int FOCUS_IN_PATHWAY_DELAY = 500;
 
     private EventBus eventBus;
     private SuggestionsProvider<Node> suggestionsProvider;
@@ -105,17 +107,18 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     @Override
     public void onSuggestionHovered(final SuggestionHoveredEvent event) {
         eventBus.fireEventFromSource(event, this);
-//        if(focusOnPathwayTimer.isRunning()) {
-//            focusOnPathwayTimer.cancel();
-//        }
-        focusOnPathwayTimer = new Timer() {
 
+        if(focusOnPathwayTimer!=null && focusOnPathwayTimer.isRunning()) {
+            focusOnPathwayTimer.cancel();
+        }
+
+        focusOnPathwayTimer = new Timer() {
             @Override
             public void run() {
                 eventBus.fireEventFromSource(new SuggestionHoveredEvent(event.getHoveredObject(), Boolean.TRUE), this);
             }
         };
-        focusOnPathwayTimer.schedule(1000);
+        focusOnPathwayTimer.schedule(FOCUS_IN_PATHWAY_DELAY);
     }
 
     @Override
@@ -138,7 +141,7 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         input.addStyleName(RESOURCES.getCSS().inputActive());
         isExpanded = true;
         fireEvent(new PanelExpandedEvent());
-        focusTimer.schedule(300);
+        focusTimer.schedule(FOCUS_IN_TEXTBOX_DELAY);
     }
 
     private void initHandlers(){

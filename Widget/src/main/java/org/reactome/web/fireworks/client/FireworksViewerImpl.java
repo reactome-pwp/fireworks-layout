@@ -294,9 +294,9 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onSuggestionHovered(SuggestionHoveredEvent event) {
         if (event.getHoveredObject() != null) {
             if (!event.getToFocus()) {
-                this.highlightNode(event.getHoveredObject().getDbId());
+                this.highlightNode(event.getHoveredObject().getDbId()); // Simply highlight the node
             } else {
-                this.selectNode(event.getHoveredObject(), true);
+                this.selectNode(event.getHoveredObject(), true);        // Select and focus on the node
             }
         }
     }
@@ -305,9 +305,9 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onSuggestionSelected(SuggestionSelectedEvent event) {
         if (event.getSelectedObject() != null) {
             if (!event.getToOpen()) {
-                this.highlightNode(event.getSelectedObject().getDbId());
+                this.highlightNode(event.getSelectedObject().getDbId());// Simply highlight the node
             } else {
-                this.selectNode(event.getSelectedObject(), false);
+                this.selectNode(event.getSelectedObject(), false);      // Expand the node
                 this.openNode(event.getSelectedObject());
             }
         }
