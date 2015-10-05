@@ -1,9 +1,7 @@
 package org.reactome.web.fireworks.launcher.search.suggester;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
@@ -12,6 +10,7 @@ import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -33,7 +32,7 @@ import java.util.List;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class SuggestionPanel extends AbstractAccordionPanel implements SearchPerformedHandler, SearchBoxArrowKeysHandler,
-        SelectionChangeEvent.Handler {
+        SelectionChangeEvent.Handler, DoubleClickHandler {
     private final SingleSelectionModel<Node> selectionModel;
     private CellList<Node> suggestions;
     private ListDataProvider<Node> dataProvider;
@@ -68,6 +67,8 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         suggestions.sinkEvents(Event.FOCUSEVENTS);
         suggestions.setSelectionModel(selectionModel);
 
+        suggestions.addDomHandler(this, DoubleClickEvent.getType());
+
         suggestions.setKeyboardPagingPolicy(HasKeyboardPagingPolicy.KeyboardPagingPolicy.INCREASE_RANGE);
         suggestions.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
 
@@ -77,7 +78,7 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
     }
 
     public HandlerRegistration addClickHandler(ClickHandler handler){
-        return this.addHandler(handler, ClickEvent.getType());
+        return addHandler(handler, ClickEvent.getType());
     }
 
     public HandlerRegistration addSuggestionHoveredHandler(SuggestionHoveredHandler handler) {
@@ -86,6 +87,16 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
 
     public HandlerRegistration addSuggestionSelectedHandler(SuggestionSelectedHandler handler) {
         return addHandler(handler, SuggestionSelectedEvent.TYPE);
+    }
+
+    @Override
+    public void onDoubleClick(DoubleClickEvent event) {
+        event.stopPropagation(); event.preventDefault();
+        if(clickTimer !=null) clickTimer.cancel();
+        Node selected = selectionModel.getSelectedObject();
+        if (selected != null) {
+            fireEvent(new SuggestionSelectedEvent(selected, Boolean.TRUE));
+        }
     }
 
     @Override
@@ -122,9 +133,17 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         }
     }
 
+    Timer clickTimer;
+
     @Override
     public void onSelectionChange(SelectionChangeEvent event) {
-        fireEvent(new SuggestionHoveredEvent(selectionModel.getSelectedObject()));
+        clickTimer = new Timer() {
+            @Override
+            public void run() {
+                fireEvent(new SuggestionHoveredEvent(selectionModel.getSelectedObject()));
+            }
+        };
+        clickTimer.schedule(500);
     }
 
     /**

@@ -40,7 +40,6 @@ public class SearchPanel extends FlowPanel {
             }
         });
 
-
         launcher.addSearchPerformedHandler(suggestions);
         launcher.addPanelCollapsedHandler(suggestions);
         launcher.addPanelExpandedHandler(suggestions);

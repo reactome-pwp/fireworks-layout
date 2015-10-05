@@ -104,6 +104,7 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
             fireEvent(new SearchPerformedEvent(suggestions));
         }
     }
+
     @Override
     public void onSuggestionHovered(final SuggestionHoveredEvent event) {
         eventBus.fireEventFromSource(event, this);
@@ -149,7 +150,6 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         this.input.addSearchBoxArrowKeysHandler(this);
     }
 
-
     public void setFocus(boolean focused){
         this.input.setFocus(focused);
     }
@@ -162,13 +162,12 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         }
     }
 
-
     public static SearchLauncherResources RESOURCES;
-
     static {
         RESOURCES = GWT.create(SearchLauncherResources.class);
         RESOURCES.getCSS().ensureInjected();
     }
+
 
     /**
      * A ClientBundle of resources used by this widget.
