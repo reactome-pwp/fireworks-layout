@@ -1,0 +1,9 @@
+.diagramCanvases {
+    outline: none;
+    width: 200px;
+    height: 330px;
+}
+
+.diagramCanvases canvas {
+    outline: none;
+}

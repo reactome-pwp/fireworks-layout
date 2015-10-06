@@ -8,15 +8,15 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.RequiresResize;
+import org.reactome.web.fireworks.controls.LeftTopLauncherPanel;
+import org.reactome.web.fireworks.controls.RightTopLauncherPanel;
+import org.reactome.web.fireworks.controls.navigation.NavigationControlPanel;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
-import org.reactome.web.fireworks.launcher.LauncherPanel;
-import org.reactome.web.fireworks.launcher.controls.NavigationControlPanel;
 import org.reactome.web.fireworks.legends.EnrichmentControl;
 import org.reactome.web.fireworks.legends.EnrichmentLegend;
 import org.reactome.web.fireworks.legends.ExpressionControl;
 import org.reactome.web.fireworks.legends.ExpressionLegend;
-import org.reactome.web.fireworks.menu.SettingsMenuPanel;
 import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
@@ -72,12 +72,14 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     private TooltipContainer tooltipContainer;
 
+    private IllustrationPanel illustration;
+
     private FireworksThumbnail thumbnail;
     private FireworksInfo info;
 
-    private List<Canvas> canvases = new LinkedList<Canvas>();
+    private List<Canvas> canvases = new LinkedList<>();
 
-    private Set<Node> drawnNodes = new HashSet<Node>();
+    private Set<Node> drawnNodes = new HashSet<>();
 
     FireworksCanvas(EventBus eventBus, Graph graph) throws CanvasNotSupportedException {
         this.getElement().setClassName("pwp-FireworksCanvas");
@@ -111,7 +113,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         //Control panel
         this.add(new NavigationControlPanel(eventBus));
-        this.add(new LauncherPanel(eventBus, graph));
 
         //Enrichment legend and control panels
         this.add(new EnrichmentLegend(eventBus));
@@ -121,8 +122,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.add(new ExpressionLegend(eventBus));
         this.add(new ExpressionControl(eventBus));
 
-        //Main settings menu
-        this.add(new SettingsMenuPanel(eventBus));
+        //Launcher panels
+        this.add(new LeftTopLauncherPanel(eventBus, graph));
+        this.add(new RightTopLauncherPanel(eventBus));
+
+        //Illustration panel
+        this.add(this.illustration = new IllustrationPanel(), 0 , 0);
 
         this.initialiseHandlers();
     }
@@ -194,7 +199,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
             }
         }
 
-        this.drawnNodes = new HashSet<Node>();
+        this.drawnNodes = new HashSet<>();
         ctx = this.nodes.getContext2d();
         String colour = FireworksColours.PROFILE.getNodeInitialColour();
         ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
@@ -453,6 +458,16 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.eventBus.fireEventFromSource(new FireworksResizedEvent(width, height), this);
     }
 
+    public void setIllustration(String url){
+        this.illustration.setUrl(url);
+    }
+
+    public void resetIllustration(){
+        if(this.illustration!=null) {
+            this.illustration.reset();
+        }
+    }
+
     public void setColumn(int column){
         this.analysisInfo.setColumn(column);
     }
@@ -475,7 +490,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     private Set<Node> getNodeAndAncestorsWithText(Node node, boolean textForAll){
-        Set<Node> rtn = new HashSet<Node>();
+        Set<Node> rtn = new HashSet<>();
         if(node!=null){
             rtn.add(node);
             if(textForAll){

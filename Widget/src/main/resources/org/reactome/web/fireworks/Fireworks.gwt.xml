@@ -4,6 +4,7 @@
     <inherits name='com.google.gwt.json.JSON'/>
     <inherits name="com.google.web.bindery.autobean.AutoBean"/>
     <inherits name="uk.ac.ebi.pwp.structures.quadtree.QuadTree2D"/>
+    <inherits name="org.reactome.web.pwp.model.PathwayPortalModel"/>
 
     <inherits name="com.google.gwt.resources.Resources" />
 
@@ -11,15 +12,15 @@
 
     <source path="analysis"/>
     <source path="client"/>
+    <source path="controls"/>
     <source path="data"/>
     <source path="events"/>
     <source path="exceptions"/>
     <source path="handlers"/>
     <source path="interfaces"/>
-    <source path="launcher"/>
     <source path="legends"/>
-    <source path="menu"/>
     <source path="model"/>
     <source path="profiles"/>
+    <source path="search"/>
     <source path="util"/>
 </module>

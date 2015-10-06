@@ -1,0 +1,64 @@
+.mainControlPanel {
+    float: left;
+    margin-left: 10px;
+}
+
+@sprite .fitall {
+    background-color: rgba(88, 195, 229, 0.8) ;
+    border: none;
+    border-radius: 16px;
+    height: 32px;
+    width: 32px;
+    float: left;
+
+    -webkit-box-shadow: 3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Firefox 3.5 - 3.6 */
+    box-shadow:         3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+
+    position: relative;
+    gwt-image: 'fitallNormal';
+    outline: none;
+    border: 0;
+    cursor: pointer;
+}
+
+@sprite .fitall:hover {
+    gwt-image: 'fitallHovered';
+}
+
+@sprite .fitall:active:hover {
+    gwt-image: 'fitallClicked';
+}
+
+@sprite .diagram {
+    background-color: rgba(88, 195, 229, 0.8) ;
+    border: none;
+    border-radius: 16px;
+    height: 32px;
+    width: 32px;
+    margin-left: 10px;
+    float: left;
+
+    -webkit-box-shadow: 3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Firefox 3.5 - 3.6 */
+    box-shadow:         3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+
+    position: relative;
+    gwt-image: 'diagramNormal';
+    outline: none;
+    border: 0;
+    cursor: pointer;
+}
+
+@sprite .diagram:hover {
+    gwt-image: 'diagramHovered';
+}
+
+@sprite .diagram:disabled, .diagram:disabled:hover, .diagram:disabled:active {
+    gwt-image: 'diagramDisabled';
+    cursor: auto;
+}
+
+@sprite .diagram:enabled:active:hover {
+    gwt-image: 'diagramClicked';
+}

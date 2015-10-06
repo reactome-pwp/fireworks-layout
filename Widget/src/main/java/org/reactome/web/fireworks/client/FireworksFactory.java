@@ -10,6 +10,8 @@ public abstract class FireworksFactory {
     public static boolean SHOW_INFO = false;
     public static boolean EDGES_SELECTABLE = true;
 
+    public static String ILLUSTRATION_SERVER = "";
+
     public static FireworksViewer createFireworksViewer(TextResource json){
         return new FireworksViewerImpl(json.getText());
     }

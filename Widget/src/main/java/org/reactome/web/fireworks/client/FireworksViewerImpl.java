@@ -13,18 +13,18 @@ import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.fireworks.analysis.AnalysisType;
 import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
 import org.reactome.web.fireworks.analysis.factory.AnalysisModelFactory;
+import org.reactome.web.fireworks.controls.navigation.ControlAction;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
-import org.reactome.web.fireworks.launcher.controls.ControlAction;
-import org.reactome.web.fireworks.launcher.search.events.SuggestionHoveredEvent;
-import org.reactome.web.fireworks.launcher.search.events.SuggestionSelectedEvent;
-import org.reactome.web.fireworks.launcher.search.handlers.SuggestionHoveredHandler;
-import org.reactome.web.fireworks.launcher.search.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.model.FireworksData;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.model.factory.ModelException;
 import org.reactome.web.fireworks.model.factory.ModelFactory;
+import org.reactome.web.fireworks.search.events.SuggestionHoveredEvent;
+import org.reactome.web.fireworks.search.events.SuggestionSelectedEvent;
+import org.reactome.web.fireworks.search.handlers.SuggestionHoveredHandler;
+import org.reactome.web.fireworks.search.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
 import org.reactome.web.fireworks.util.Tooltip;
@@ -39,7 +39,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, /*DoubleClickHandler,*/
         AnalysisResetHandler, ExpressionColumnChangedHandler,
         ControlActionHandler, ProfileChangedHandler,
-        SuggestionSelectedHandler, SuggestionHoveredHandler {
+        SuggestionSelectedHandler, SuggestionHoveredHandler,
+        IllustrationSelectedHandler {
 
     EventBus eventBus;
 
@@ -234,6 +235,11 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             }
         }
         this.fireworksMoved = false;
+    }
+
+    @Override
+    public void onIllustrationSelected(IllustrationSelectedEvent event) {
+        this.canvases.setIllustration(event.getUrl());
     }
 
     @Override
@@ -447,6 +453,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksVisibleAreaChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
+        this.eventBus.addHandler(IllustrationSelectedEvent.TYPE, this);
         this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
     }
 
