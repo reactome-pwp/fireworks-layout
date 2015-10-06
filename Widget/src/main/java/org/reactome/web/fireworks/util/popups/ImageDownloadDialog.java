@@ -42,7 +42,7 @@ public class ImageDownloadDialog extends PopupPanel {
 
         FlowPanel buttons = new FlowPanel();
         if (isIE) {
-            Label infoLabel = new Label("To save the diagram, simply right-click on the image, and then click \'Save Picture As...\'");
+            Label infoLabel = new Label("To save the image, simply right-click on it, and then click \'Save Picture As...\'");
             infoLabel.addStyleName(RESOURCES.getCSS().infoLabel());
             buttons.add(infoLabel);
         } else {

@@ -9,6 +9,7 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.fireworks.controls.top.illustrations.Illustrations;
+import org.reactome.web.fireworks.controls.top.key.PathwayOverviewKey;
 import org.reactome.web.fireworks.controls.top.menu.SettingsMenuPanel;
 import org.reactome.web.fireworks.events.CanvasExportRequestedEvent;
 import org.reactome.web.fireworks.legends.ControlButton;
@@ -21,12 +22,12 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
     private EventBus eventBus;
 
     private Illustrations diagramIllustrations;
-//    private DiagramKey diagramKey;
+    private PathwayOverviewKey pathwayOverviewKey;
     private SettingsMenuPanel settings;
 
     private ControlButton illustrationsBtn;
     private ControlButton captureBtn;
-    private ControlButton diagramKeyBtn;
+    private ControlButton pathwayOverviewKeyBtn;
     private ControlButton settingBtn;
 
     public RightTopLauncherPanel(EventBus eventBus) {
@@ -34,17 +35,17 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
 
         this.eventBus = eventBus;
         this.diagramIllustrations = new Illustrations(eventBus);
-//        this.diagramKey = new DiagramKey(eventBus);
+        this.pathwayOverviewKey = new PathwayOverviewKey(eventBus);
         this.settings = new SettingsMenuPanel(eventBus);
 
-//        this.illustrationsBtn = new ControlButton("Show illustrations", RESOURCES.getCSS().illustrations(), this);
-//        this.add(illustrationsBtn);
+        this.illustrationsBtn = new ControlButton("Show illustrations", RESOURCES.getCSS().illustrations(), this);
+        this.add(illustrationsBtn);
 
         this.captureBtn = new ControlButton("Diagram export", RESOURCES.getCSS().camera(), this);
         this.add(this.captureBtn);
 
-//        this.diagramKeyBtn = new ControlButton("Diagram key", RESOURCES.getCSS().key(), this);
-//        this.add(this.diagramKeyBtn);
+        this.pathwayOverviewKeyBtn = new ControlButton("Pathway overview key", RESOURCES.getCSS().key(), this);
+        this.add(this.pathwayOverviewKeyBtn);
 
         this.settingBtn = new ControlButton("Settings", RESOURCES.getCSS().settings(), this);
         this.add(this.settingBtn);
@@ -57,12 +58,12 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         ControlButton btn = (ControlButton) event.getSource();
         if (btn.equals(this.captureBtn)) {
             this.eventBus.fireEventFromSource(new CanvasExportRequestedEvent(), this);
-//        } else if (btn.equals(this.diagramKeyBtn)) {
-//            if (this.diagramKey.isShowing()) {
-//                this.diagramKey.hide();
-//            } else {
-//                this.diagramKey.showRelativeTo(this.diagramKeyBtn);
-//            }
+        } else if (btn.equals(this.pathwayOverviewKeyBtn)) {
+            if (this.pathwayOverviewKey.isShowing()) {
+                this.pathwayOverviewKey.hide();
+            } else {
+                this.pathwayOverviewKey.showRelativeTo(this.pathwayOverviewKeyBtn);
+            }
         } else if (btn.equals(this.settingBtn)) {
             this.settings.showRelativeTo(btn);
         } else if (btn.equals(this.illustrationsBtn)) {

@@ -10,12 +10,11 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.client.FireworksFactory;
-import org.reactome.web.fireworks.controls.navigation.ControlAction;
 import org.reactome.web.fireworks.controls.top.common.AbstractMenuDialog;
-import org.reactome.web.fireworks.events.ControlActionEvent;
 import org.reactome.web.fireworks.events.IllustrationSelectedEvent;
+import org.reactome.web.fireworks.events.NodeOpenedEvent;
 import org.reactome.web.fireworks.events.NodeSelectedEvent;
-import org.reactome.web.fireworks.handlers.ControlActionHandler;
+import org.reactome.web.fireworks.handlers.NodeOpenedHandler;
 import org.reactome.web.fireworks.handlers.NodeSelectedHandler;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.util.Console;
@@ -29,7 +28,7 @@ import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class Illustrations extends AbstractMenuDialog implements ControlActionHandler,
+public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandler,
         NodeSelectedHandler {
 
     private EventBus eventBus;
@@ -48,10 +47,8 @@ public class Illustrations extends AbstractMenuDialog implements ControlActionHa
     }
 
     @Override
-    public void onControlAction(ControlActionEvent event) {
-        if (event.getAction().equals(ControlAction.OPEN)) {
-            hide();
-        }
+    public void onNodeOpened(NodeOpenedEvent event) {
+        hide();
     }
 
     @Override
@@ -142,7 +139,7 @@ public class Illustrations extends AbstractMenuDialog implements ControlActionHa
     }
 
     private void initHandlers() {
-        this.eventBus.addHandler(ControlActionEvent.TYPE, this);
+        this.eventBus.addHandler(NodeOpenedEvent.TYPE, this);
         this.eventBus.addHandler(NodeSelectedEvent.TYPE, this);
     }
 

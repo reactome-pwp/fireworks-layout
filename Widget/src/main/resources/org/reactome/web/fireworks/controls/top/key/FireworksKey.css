@@ -1,9 +1,21 @@
-.diagramCanvases {
+.canvases {
     outline: none;
-    width: 200px;
-    height: 330px;
+    height: 100px;
 }
 
-.diagramCanvases canvas {
+.canvases canvas {
     outline: none;
+}
+
+.bullets {
+    text-align: justify;
+    font-family: Arial, serif;
+    font-size: 13px;
+    margin: 20px 30px 0 0;
+    width: 175px;
+}
+
+.bullets li {
+    list-style-type: square;
+    margin-top: 5px;
 }
