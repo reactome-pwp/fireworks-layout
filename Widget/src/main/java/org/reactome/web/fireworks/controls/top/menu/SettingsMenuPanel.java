@@ -117,7 +117,7 @@ public class SettingsMenuPanel extends AbsolutePanel implements ClickHandler,
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/menu/MenuPanel.css";
+        String CSS = "org/reactome/web/fireworks/controls/top/menu/MenuPanel.css";
 
         String menuPanel();
 

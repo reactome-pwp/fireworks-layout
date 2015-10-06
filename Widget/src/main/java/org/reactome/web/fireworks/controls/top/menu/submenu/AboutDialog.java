@@ -81,7 +81,7 @@ public class AboutDialog extends DialogBox {
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/menu/submenu/AboutDialog.css";
+        String CSS = "org/reactome/web/fireworks/controls/top/menu/submenu/AboutDialog.css";
 
         String popup();
 
