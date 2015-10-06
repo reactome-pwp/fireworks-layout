@@ -40,7 +40,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         AnalysisResetHandler, ExpressionColumnChangedHandler,
         ControlActionHandler, ProfileChangedHandler,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
-        IllustrationSelectedHandler {
+        IllustrationSelectedHandler, CanvasExportRequestedHandler {
 
     EventBus eventBus;
 
@@ -235,6 +235,11 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             }
         }
         this.fireworksMoved = false;
+    }
+
+    @Override
+    public void onDiagramExportRequested(CanvasExportRequestedEvent event) {
+        this.canvases.exportImage(data.getSpeciesId().toString());
     }
 
     @Override
@@ -455,6 +460,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
         this.eventBus.addHandler(IllustrationSelectedEvent.TYPE, this);
         this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
+        this.eventBus.addHandler(CanvasExportRequestedEvent.TYPE, this);
     }
 
     protected void openNode(Node node){

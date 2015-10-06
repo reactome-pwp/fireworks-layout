@@ -10,6 +10,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.fireworks.controls.top.illustrations.Illustrations;
 import org.reactome.web.fireworks.controls.top.menu.SettingsMenuPanel;
+import org.reactome.web.fireworks.events.CanvasExportRequestedEvent;
 import org.reactome.web.fireworks.legends.ControlButton;
 
 /**
@@ -39,8 +40,8 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
 //        this.illustrationsBtn = new ControlButton("Show illustrations", RESOURCES.getCSS().illustrations(), this);
 //        this.add(illustrationsBtn);
 
-//        this.captureBtn = new ControlButton("Diagram export", RESOURCES.getCSS().camera(), this);
-//        this.add(this.captureBtn);
+        this.captureBtn = new ControlButton("Diagram export", RESOURCES.getCSS().camera(), this);
+        this.add(this.captureBtn);
 
 //        this.diagramKeyBtn = new ControlButton("Diagram key", RESOURCES.getCSS().key(), this);
 //        this.add(this.diagramKeyBtn);
@@ -54,16 +55,15 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
         ControlButton btn = (ControlButton) event.getSource();
-//        if (btn.equals(this.captureBtn)) {
-//            this.eventBus.fireEventFromSource(new DiagramExportRequestedEvent(), this);
+        if (btn.equals(this.captureBtn)) {
+            this.eventBus.fireEventFromSource(new CanvasExportRequestedEvent(), this);
 //        } else if (btn.equals(this.diagramKeyBtn)) {
 //            if (this.diagramKey.isShowing()) {
 //                this.diagramKey.hide();
 //            } else {
 //                this.diagramKey.showRelativeTo(this.diagramKeyBtn);
 //            }
-//        } else
-        if (btn.equals(this.settingBtn)) {
+        } else if (btn.equals(this.settingBtn)) {
             this.settings.showRelativeTo(btn);
         } else if (btn.equals(this.illustrationsBtn)) {
             if (this.diagramIllustrations.isShowing()) {
