@@ -109,8 +109,7 @@ public class ImageDownloadDialog extends PopupPanel {
         fp.add(new InlineLabel(text));
 
         SafeHtml safeHtml = SafeHtmlUtils.fromSafeConstant(fp.toString());
-        Button btn = new Button(safeHtml);
-        return btn;
+        return new Button(safeHtml);
     }
 
     @Override
@@ -189,7 +188,7 @@ public class ImageDownloadDialog extends PopupPanel {
     /**
      * Styles used by this widget.
      */
-    @CssResource.ImportedWithPrefix("diagram-ImageDownloadDialog")
+    @CssResource.ImportedWithPrefix("fireworks-ImageDownloadDialog")
     public interface ResourceCSS extends CssResource {
         /**
          * The path to the default CSS styles used by this resource.

@@ -37,6 +37,16 @@
     width: 300px;
 }
 
+.warning {
+    color: #d06f2a;
+    font-size: small;
+    margin: 10px 0 0 9px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 300px;
+}
+
 .loading {
     color: #61c2d0;
     font-size: small;

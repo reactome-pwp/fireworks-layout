@@ -14,8 +14,10 @@ import org.reactome.web.fireworks.controls.top.common.AbstractMenuDialog;
 import org.reactome.web.fireworks.events.IllustrationSelectedEvent;
 import org.reactome.web.fireworks.events.NodeOpenedEvent;
 import org.reactome.web.fireworks.events.NodeSelectedEvent;
+import org.reactome.web.fireworks.events.NodeSelectedResetEvent;
 import org.reactome.web.fireworks.handlers.NodeOpenedHandler;
 import org.reactome.web.fireworks.handlers.NodeSelectedHandler;
+import org.reactome.web.fireworks.handlers.NodeSelectedResetHandler;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.util.Console;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
@@ -29,12 +31,9 @@ import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandler,
-        NodeSelectedHandler {
+        NodeSelectedHandler, NodeSelectedResetHandler {
 
     private EventBus eventBus;
-
-    private FlowPanel main = new FlowPanel();
-    private FlowPanel other = new FlowPanel();
 
     public Illustrations(EventBus eventBus) {
         super("Illustrations");
@@ -44,6 +43,7 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
         this.initHandlers();
 
         initialise();
+        setInitialMessage();
     }
 
     @Override
@@ -54,30 +54,42 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
     @Override
     public void onNodeSelected(NodeSelectedEvent event) {
         Node node = event.getNode();
-        setIllustrations(node.getDbId(), other);
+        setIllustrations(node.getDbId());
     }
 
-    private void setIllustrations(Long dbId, final FlowPanel panel){
-        panel.clear();
+    @Override
+    public void onNodeSelectionReset() {
+        setInitialMessage();
+    }
+
+    private void setInitialMessage(){
+        clear();
+        Label warning = new Label("No pathway selected");
+        warning.setStyleName(RESOURCES.getCSS().warning());
+        add(warning);
+    }
+
+    private void setIllustrations(Long dbId){
+        clear();
         if(dbId==null) return;
         Label loadingLbl = new Label("Loading...");
         loadingLbl.setStyleName(RESOURCES.getCSS().loading());
-        panel.add(loadingLbl);
+        add(loadingLbl);
         DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
             @Override
             public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
                 if (databaseObject instanceof Pathway) {
-                    panel.clear();
+                    clear();
                     final Pathway pathway = (Pathway) databaseObject;
                     if (pathway.getFigure().isEmpty()) {
-                        panel.add(getIllustration(pathway, null));
+                        add(getIllustration(pathway, null));
                     } else {
                         for (Figure figure : pathway.getFigure()) {
                             figure.load(new DatabaseObjectLoadedHandler() {
                                 @Override
                                 public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
                                     Figure figure = (Figure) databaseObject;
-                                    panel.add(getIllustration(pathway, FireworksFactory.ILLUSTRATION_SERVER + figure.getUrl()));
+                                    add(getIllustration(pathway, FireworksFactory.ILLUSTRATION_SERVER + figure.getUrl()));
                                 }
 
                                 @Override
@@ -92,8 +104,8 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
 
             @Override
             public void onDatabaseObjectError(Throwable exception) {
-                panel.clear();
-                panel.add(getErrorMsg("There was an error retrieving data for the loaded diagram..."));
+                clear();
+                add(getErrorMsg("There was an error retrieving data for the loaded diagram..."));
             }
         });
     }
@@ -132,15 +144,12 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
 
     private void initialise(){
         clear();
-        main.clear();
-        add(main);
-        other.clear();
-        add(other);
     }
 
     private void initHandlers() {
         this.eventBus.addHandler(NodeOpenedEvent.TYPE, this);
         this.eventBus.addHandler(NodeSelectedEvent.TYPE, this);
+        this.eventBus.addHandler(NodeSelectedResetEvent.TYPE, this);
     }
 
 
@@ -170,6 +179,8 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
         String illustration();
 
         String error();
+
+        String warning();
 
         String loading();
     }
