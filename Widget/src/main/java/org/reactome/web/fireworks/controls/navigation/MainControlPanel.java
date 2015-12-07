@@ -8,7 +8,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
-import org.reactome.web.fireworks.controls.common.ControlButton;
+import org.reactome.web.fireworks.controls.common.PwpButton;
 import org.reactome.web.fireworks.events.ControlActionEvent;
 import org.reactome.web.fireworks.events.NodeSelectedEvent;
 import org.reactome.web.fireworks.events.NodeSelectedResetEvent;
@@ -21,15 +21,15 @@ import org.reactome.web.fireworks.handlers.NodeSelectedResetHandler;
 public class MainControlPanel extends FlowPanel implements ClickHandler, NodeSelectedHandler, NodeSelectedResetHandler {
 
     private EventBus eventBus;
-    private ControlButton fitAll;
-    private ControlButton open;
+    private PwpButton fitAll;
+    private PwpButton open;
 
     public MainControlPanel(EventBus eventBus) {
         this.eventBus = eventBus;
 
         this.addStyleName(RESOURCES.getCSS().mainControlPanel());
-        this.fitAll = new ControlButton("Show all", RESOURCES.getCSS().fitall(), this);
-        this.open = new ControlButton("Open pathway diagram", RESOURCES.getCSS().diagram(), this);
+        this.fitAll = new PwpButton("Show all", RESOURCES.getCSS().fitall(), this);
+        this.open = new PwpButton("Open pathway diagram", RESOURCES.getCSS().diagram(), this);
         this.open.setEnabled(false);
 
         this.add(this.fitAll);
@@ -41,7 +41,7 @@ public class MainControlPanel extends FlowPanel implements ClickHandler, NodeSel
 
     @Override
     public void onClick(ClickEvent event) {
-        ControlButton btn = (ControlButton) event.getSource();
+        PwpButton btn = (PwpButton) event.getSource();
         if(btn.equals(this.fitAll)) {
             this.eventBus.fireEventFromSource(new ControlActionEvent(ControlAction.FIT_ALL), this);
         }else if(btn.equals(this.open)){

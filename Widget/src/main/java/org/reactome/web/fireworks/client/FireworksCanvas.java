@@ -10,15 +10,14 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RequiresResize;
-import org.reactome.web.fireworks.controls.LeftTopLauncherPanel;
-import org.reactome.web.fireworks.controls.RightTopLauncherPanel;
 import org.reactome.web.fireworks.controls.navigation.NavigationControlPanel;
+import org.reactome.web.fireworks.controls.settings.HideableContainerPanel;
+import org.reactome.web.fireworks.controls.settings.RightContainerPanel;
+import org.reactome.web.fireworks.controls.top.LeftTopLauncherPanel;
+import org.reactome.web.fireworks.controls.top.RightTopLauncherPanel;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
-import org.reactome.web.fireworks.legends.EnrichmentControl;
-import org.reactome.web.fireworks.legends.EnrichmentLegend;
-import org.reactome.web.fireworks.legends.ExpressionControl;
-import org.reactome.web.fireworks.legends.ExpressionLegend;
+import org.reactome.web.fireworks.legends.*;
 import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
@@ -117,17 +116,30 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         //Control panel
         this.add(new NavigationControlPanel(eventBus));
 
+        //Right container
+        RightContainerPanel rightContainerPanel = new RightContainerPanel();
+        this.add(rightContainerPanel);
+
+        //Bottom Controls container
+        BottomContainerPanel bottomContainerPanel = new BottomContainerPanel();
+        this.add(bottomContainerPanel);
+
+
         //Enrichment legend and control panels
-        this.add(new EnrichmentLegend(eventBus));
-        this.add(new EnrichmentControl(eventBus));
+        rightContainerPanel.add(new EnrichmentLegend(eventBus));
+        bottomContainerPanel.add(new EnrichmentControl(eventBus));
 
         //Expression legend and control panels
-        this.add(new ExpressionLegend(eventBus));
-        this.add(new ExpressionControl(eventBus));
+        rightContainerPanel.add(new ExpressionLegend(eventBus));
+        bottomContainerPanel.add(new ExpressionControl(eventBus));
 
         //Launcher panels
         this.add(new LeftTopLauncherPanel(eventBus, graph));
         this.add(new RightTopLauncherPanel(eventBus));
+
+        //Settings panel
+        rightContainerPanel.add(new HideableContainerPanel(eventBus));
+
 
         //Illustration panel
         this.add(this.illustration = new IllustrationPanel(), 0 , 0);
