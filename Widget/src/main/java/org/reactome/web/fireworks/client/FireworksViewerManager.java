@@ -30,6 +30,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
 
     //The max number of elements for every QuadTree quadrant node
     static final int NUMBER_OF_ELEMENTS = 500;
+    static final int MIN_AREA = 25;
 
     //Several instances could have different values
     private boolean EDGES_SELECTABLE = FireworksFactory.EDGES_SELECTABLE;
@@ -309,7 +310,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         double maxX = this.graph.getMaxX();
         double minY = this.graph.getMinY();
         double maxY = this.graph.getMaxY();
-        this.quadTree = new QuadTree<>(minX, minY, maxX, maxY, NUMBER_OF_ELEMENTS);
+        this.quadTree = new QuadTree<>(minX, minY, maxX, maxY, NUMBER_OF_ELEMENTS, MIN_AREA);
         for (Node node : this.graph.getNodes()) {
             this.quadTree.add(node);
         }
