@@ -73,6 +73,9 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         suggestions.setKeyboardPagingPolicy(HasKeyboardPagingPolicy.KeyboardPagingPolicy.INCREASE_RANGE);
         suggestions.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
 
+        dataProvider = new ListDataProvider<>();
+        dataProvider.addDataDisplay(this.suggestions);
+
         this.add(suggestions);
         //Setting the legend style
         setStyleName(RESOURCES.getCSS().suggestionPanel());
@@ -133,8 +136,11 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
             suggestions.setEmptyListWidget(null);
         }
 
-        dataProvider = new ListDataProvider<>(searchResult);
-        dataProvider.addDataDisplay(this.suggestions);
+        dataProvider.getList().clear();
+        dataProvider.getList().addAll(searchResult);
+        suggestions.setVisibleRange(0, searchResult.size()); //configure list paging
+        suggestions.setRowCount(searchResult.size());
+
         if (dataProvider.getList().isEmpty()) {
             fireEvent(new SuggestionSelectedEvent(null));
         }
