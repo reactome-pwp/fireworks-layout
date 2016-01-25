@@ -11,6 +11,7 @@ import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -124,7 +125,13 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
     public void onSearchPerformed(SearchPerformedEvent event) {
         Node sel = selectionModel.getSelectedObject();
         List<Node> searchResult = event.getSuggestions();
-        if(!searchResult.isEmpty() && !searchResult.contains(sel)) selectionModel.clear();
+        if(!searchResult.isEmpty() && !searchResult.contains(sel)) {
+            selectionModel.clear();
+        } else if (searchResult.isEmpty() && !event.getTerm().isEmpty()){
+            suggestions.setEmptyListWidget(new HTML("No results found for '" + event.getTerm() +"'"));
+        } else {
+            suggestions.setEmptyListWidget(null);
+        }
 
         dataProvider = new ListDataProvider<>(searchResult);
         dataProvider.addDataDisplay(this.suggestions);

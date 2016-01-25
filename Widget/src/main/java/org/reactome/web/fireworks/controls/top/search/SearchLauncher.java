@@ -106,8 +106,9 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     @Override
     public void onSearchUpdated(SearchBoxUpdatedEvent event) {
         if(suggestionsProvider!=null) {
-            List<Node> suggestions = suggestionsProvider.getSuggestions(input.getText().trim());
-            fireEvent(new SearchPerformedEvent(suggestions));
+            String term = input.getText().trim();
+            List<Node> suggestions = suggestionsProvider.getSuggestions(term);
+            fireEvent(new SearchPerformedEvent(term, suggestions));
         }
     }
 

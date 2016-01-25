@@ -11,9 +11,11 @@ import java.util.List;
 public class SearchPerformedEvent extends GwtEvent<SearchPerformedHandler> {
     public static Type<SearchPerformedHandler> TYPE = new Type<>();
 
+    private String term;
     private List<Node> suggestions;
 
-    public SearchPerformedEvent(List<Node> suggestions) {
+    public SearchPerformedEvent(String term, List<Node> suggestions) {
+        this.term = term;
         this.suggestions = suggestions;
     }
 
@@ -25,6 +27,10 @@ public class SearchPerformedEvent extends GwtEvent<SearchPerformedHandler> {
     @Override
     protected void dispatch(SearchPerformedHandler handler) {
         handler.onSearchPerformed(this);
+    }
+
+    public String getTerm() {
+        return term;
     }
 
     public List<Node> getSuggestions() {
