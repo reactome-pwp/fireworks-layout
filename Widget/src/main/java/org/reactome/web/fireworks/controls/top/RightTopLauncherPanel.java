@@ -47,8 +47,8 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         this.pathwayOverviewKeyBtn = new ControlButton("Pathway overview key", RESOURCES.getCSS().key(), this);
         this.add(this.pathwayOverviewKeyBtn);
 
-        this.settingBtn = new ControlButton("Settings", RESOURCES.getCSS().settings(), this);
-        this.add(this.settingBtn);
+//        this.settingBtn = new ControlButton("Settings", RESOURCES.getCSS().settings(), this);
+//        this.add(this.settingBtn);
 
         this.setVisible(true);
     }
