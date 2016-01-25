@@ -237,13 +237,8 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
     protected Node getHoveredNode(Coordinate mouse) {
         Coordinate c = this.currentStatus.getModelCoordinate(mouse);
         double f = 1 / this.currentStatus.getFactor();
-        //TODO: Test if the following strategy currently works
-//        for (QuadTreeBox item : quadTree.getItems(c.getX(), c.getY())) {
-//            if(item instanceof Node){
-//                return (Node) item;
-//            }
-//        }
-        List<Edge> targetEges = new LinkedList<Edge>();
+
+        List<Edge> targetEges = new LinkedList<>();
         for (QuadTreeBox item : quadTree.getItems(new Box(c.getX() - f, c.getY() - f, c.getX() + f, c.getY() + f))) {
             if (item instanceof Node) {
                 return (Node) item;
