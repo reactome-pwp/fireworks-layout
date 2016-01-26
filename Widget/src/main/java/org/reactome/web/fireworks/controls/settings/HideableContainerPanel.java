@@ -148,14 +148,14 @@ public class HideableContainerPanel extends FlowPanel implements ClickHandler {
         @Source("images/profiles_s.png")
         ImageResource profilesTabIcon();
 
-//        @Source("images/interactors_s.png")
-//        ImageResource interactorsTabIcon();
-
         @Source("images/about_s.png")
         ImageResource aboutTabIcon();
 
         @Source("images/showHide.png")
         ImageResource showHideIcon();
+
+        @Source("images/showHide_blue.png")
+        ImageResource showHideHoveredIcon();
 
     }
 
