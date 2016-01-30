@@ -1,12 +1,15 @@
 package org.reactome.web.fireworks.util;
 
+import com.google.gwt.core.client.GWT;
+import org.reactome.web.fireworks.client.FireworksFactory;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class Console {
 
-    public static boolean VERBOSE = false;
+    private static final boolean IS_SCRIPT = GWT.isScript();
 
     private static native void _error(String message)/*-{
         if($wnd.console){
@@ -19,7 +22,8 @@ public abstract class Console {
     }
 
     public static void error(Object msg){
-        if(VERBOSE){
+        if(!FireworksFactory.CONSOLE_VERBOSE) return;
+        if(IS_SCRIPT){
             Console._error(String.valueOf(msg));
         }else{
             System.err.println(msg);
@@ -35,9 +39,10 @@ public abstract class Console {
     public static void info(Object msg, Object source){
         info(source.getClass().getSimpleName() + " >> " + msg);
     }
-    
+
     public static void info(Object msg){
-        if(VERBOSE){
+        if(!FireworksFactory.CONSOLE_VERBOSE) return;
+        if(IS_SCRIPT){
             Console._info(String.valueOf(msg));
         }else{
             System.out.println(msg);
@@ -53,9 +58,10 @@ public abstract class Console {
     public static void log(Object msg, Object source){
         log(source.getClass().getSimpleName() + " >> " + msg);
     }
-    
+
     public static void log(Object msg){
-        if(VERBOSE){
+        if(!FireworksFactory.CONSOLE_VERBOSE) return;
+        if(IS_SCRIPT){
             Console._log(String.valueOf(msg));
         }else{
             System.out.println(msg);
@@ -72,9 +78,10 @@ public abstract class Console {
         warn(source.getClass().getSimpleName() + " >> " + msg);
     }
 
-    
+
     public static void warn(Object msg){
-            if(VERBOSE){
+        if(!FireworksFactory.CONSOLE_VERBOSE) return;
+        if(IS_SCRIPT){
             Console._warn(String.valueOf(msg));
         }else{
             System.out.println("! "  + msg);
