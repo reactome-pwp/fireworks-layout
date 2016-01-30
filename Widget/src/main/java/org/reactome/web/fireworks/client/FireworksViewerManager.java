@@ -205,6 +205,8 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
     }
 
     public void expandNode(Node node) {
+        if(!FireworksFactory.OPEN_NODE_ACTION) return;
+
         //In case there is an animation running for selection, it has to be canceled first
         if(this.movementAnimation != null) this.movementAnimation.cancel();
 
