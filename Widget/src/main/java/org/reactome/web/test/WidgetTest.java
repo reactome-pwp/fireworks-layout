@@ -55,6 +55,7 @@ public class WidgetTest implements EntryPoint {
 
             @SuppressWarnings("unchecked")
             public void onSuccess() {
+                FireworksFactory.CONSOLE_VERBOSE = true;
                 FireworksFactory.EVENT_BUS_VERBOSE = true;
 //                FireworksFactory.SHOW_INFO = true;
 

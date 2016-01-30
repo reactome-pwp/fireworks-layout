@@ -8,6 +8,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
+import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.controls.common.PwpButton;
 import org.reactome.web.fireworks.events.ControlActionEvent;
 import org.reactome.web.fireworks.events.NodeSelectedEvent;
@@ -29,11 +30,13 @@ public class MainControlPanel extends FlowPanel implements ClickHandler, NodeSel
 
         this.addStyleName(RESOURCES.getCSS().mainControlPanel());
         this.fitAll = new PwpButton("Show all", RESOURCES.getCSS().fitall(), this);
-        this.open = new PwpButton("Open pathway diagram", RESOURCES.getCSS().diagram(), this);
-        this.open.setEnabled(false);
-
         this.add(this.fitAll);
-        this.add(this.open);
+
+        if (FireworksFactory.SHOW_DIAGRAM_BTN) {
+            this.open = new PwpButton("Open pathway diagram", RESOURCES.getCSS().diagram(), this);
+            this.open.setEnabled(false);
+            this.add(this.open);
+        }
 
         this.eventBus.addHandler(NodeSelectedEvent.TYPE, this);
         this.eventBus.addHandler(NodeSelectedResetEvent.TYPE, this);
@@ -42,21 +45,25 @@ public class MainControlPanel extends FlowPanel implements ClickHandler, NodeSel
     @Override
     public void onClick(ClickEvent event) {
         PwpButton btn = (PwpButton) event.getSource();
-        if(btn.equals(this.fitAll)) {
+        if (btn.equals(this.fitAll)) {
             this.eventBus.fireEventFromSource(new ControlActionEvent(ControlAction.FIT_ALL), this);
-        }else if(btn.equals(this.open)){
+        } else if (btn.equals(this.open)) {
             this.eventBus.fireEventFromSource(new ControlActionEvent(ControlAction.OPEN), this);
         }
     }
 
     @Override
     public void onNodeSelected(NodeSelectedEvent event) {
-        this.open.setEnabled(true);
+        if (this.open != null) {
+            this.open.setEnabled(true);
+        }
     }
 
     @Override
     public void onNodeSelectionReset() {
-        this.open.setEnabled(false);
+        if (this.open != null) {
+            this.open.setEnabled(false);
+        }
     }
 
 

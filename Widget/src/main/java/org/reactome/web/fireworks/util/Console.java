@@ -22,7 +22,7 @@ public abstract class Console {
     }
 
     public static void error(Object msg){
-        if(!FireworksFactory.EVENT_BUS_VERBOSE) return;
+        if(!FireworksFactory.CONSOLE_VERBOSE) return;
         if(IS_SCRIPT){
             Console._error(String.valueOf(msg));
         }else{
@@ -39,9 +39,9 @@ public abstract class Console {
     public static void info(Object msg, Object source){
         info(source.getClass().getSimpleName() + " >> " + msg);
     }
-    
+
     public static void info(Object msg){
-        if(!FireworksFactory.EVENT_BUS_VERBOSE) return;
+        if(!FireworksFactory.CONSOLE_VERBOSE) return;
         if(IS_SCRIPT){
             Console._info(String.valueOf(msg));
         }else{
@@ -58,9 +58,9 @@ public abstract class Console {
     public static void log(Object msg, Object source){
         log(source.getClass().getSimpleName() + " >> " + msg);
     }
-    
+
     public static void log(Object msg){
-        if(!FireworksFactory.EVENT_BUS_VERBOSE) return;
+        if(!FireworksFactory.CONSOLE_VERBOSE) return;
         if(IS_SCRIPT){
             Console._log(String.valueOf(msg));
         }else{
@@ -78,9 +78,9 @@ public abstract class Console {
         warn(source.getClass().getSimpleName() + " >> " + msg);
     }
 
-    
+
     public static void warn(Object msg){
-        if(!FireworksFactory.EVENT_BUS_VERBOSE) return;
+        if(!FireworksFactory.CONSOLE_VERBOSE) return;
         if(IS_SCRIPT){
             Console._warn(String.valueOf(msg));
         }else{
