@@ -23,7 +23,7 @@ import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksColours;
-import org.reactome.web.fireworks.util.ToolTipContainer;
+import org.reactome.web.fireworks.util.TooltipContainer;
 import org.reactome.web.fireworks.util.popups.ImageDownloadDialog;
 import uk.ac.ebi.pwp.structures.quadtree.client.QuadTreeBox;
 
@@ -70,7 +70,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     private Canvas textSelection;
     private Canvas textTLP;
 
-    private ToolTipContainer tooltipContainer;
+    private TooltipContainer tooltipContainer;
 
     private IllustrationPanel illustration;
 
@@ -528,8 +528,8 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         return canvas;
     }
 
-    private ToolTipContainer createToolTipContainer(int width, int height){
-        ToolTipContainer tooltipContainer = new ToolTipContainer(width, height);
+    private TooltipContainer createToolTipContainer(int width, int height){
+        TooltipContainer tooltipContainer = new TooltipContainer(this.eventBus, width, height);
         this.add(tooltipContainer, 0, 0);
         return tooltipContainer;
     }
