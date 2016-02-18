@@ -23,7 +23,6 @@ import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksColours;
-import org.reactome.web.fireworks.util.Tooltip;
 import org.reactome.web.fireworks.util.TooltipContainer;
 import org.reactome.web.fireworks.util.popups.ImageDownloadDialog;
 import uk.ac.ebi.pwp.structures.quadtree.client.QuadTreeBox;
@@ -58,7 +57,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     private double fontSize;
     private double factor = 1;
     private double aura = 2;
-    private boolean tooltipNeeded = true;
 
     private Canvas edgesHighlight;
     private Canvas edgesSelection;
@@ -407,8 +405,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         if(node.isTopLevel()){
             drawText(node);
-        }else if(tooltipNeeded){
-            Tooltip.getTooltip().show(this.tooltipContainer, node);
         }
     }
 
@@ -477,7 +473,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     @Override
     public void onNodeHoverReset() {
-        Tooltip.getTooltip().hide();
         drawText(this.selected);
         this.cleanHighlightCanvas();
         this.thumbnail.clearHighlights();
@@ -534,7 +529,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     private TooltipContainer createToolTipContainer(int width, int height){
-        TooltipContainer tooltipContainer = new TooltipContainer(width, height);
+        TooltipContainer tooltipContainer = new TooltipContainer(this.eventBus, width, height);
         this.add(tooltipContainer, 0, 0);
         return tooltipContainer;
     }
@@ -570,7 +565,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         }else if(fontSize > MAX_FONT_SIZE){
             fontSize = MAX_FONT_SIZE;
         }
-        this.tooltipNeeded = fontSize < 7;
 
         Context2d ctx = this.textAllNodes.getContext2d();
         ctx.setFont(fontSize + "pt Arial"); //ctx.setFont(fontSize + "pt Calibri");

@@ -27,7 +27,6 @@ import org.reactome.web.fireworks.search.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.search.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
-import org.reactome.web.fireworks.util.Tooltip;
 
 import java.util.Objects;
 
@@ -150,14 +149,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     @Override
     public void highlightNode(String stableIdentifier) {
         Node node = this.data.getNode(stableIdentifier); if(node==null) return;
-        Tooltip.getTooltip().setPreventShowing(node.equals(this.selected) || !this.manager.isNodeVisible(node));
         this.setHoveredNode(node);
     }
 
     @Override
     public void highlightNode(Long dbIdentifier) {
         Node node = this.data.getNode(dbIdentifier); if(node==null) return;
-        Tooltip.getTooltip().setPreventShowing(node.equals(this.selected) || !this.manager.isNodeVisible(node));
         this.setHoveredNode(node);
     }
 
@@ -250,7 +247,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     @Override
     public void onMouseDown(MouseDownEvent event) {
         event.stopPropagation(); event.preventDefault();
-        Tooltip.getTooltip().setPreventShowing(true);
 
         this.fireworksMoved = false;
         setMouseDownPosition(event.getRelativeElement(), event);
@@ -274,7 +270,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         event.stopPropagation(); event.preventDefault();
         this.fireworksMoved = false;
         mouseDown = null;
-        Tooltip.getTooltip().setPreventShowing(false);
         mouseCurrent = new Coordinate(-200, -200);
     }
 
@@ -282,14 +277,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onMouseUp(MouseUpEvent event) {
         event.stopPropagation(); event.preventDefault();
         mouseDown = null;
-        Tooltip.getTooltip().setPreventShowing(false);
         setMousePosition(event.getRelativeElement(), event);
     }
 
     @Override
     public void onMouseWheel(MouseWheelEvent event) {
         event.stopPropagation(); event.preventDefault();
-        Tooltip.getTooltip().hide(); //Let's the manager decide whether it is still needed ;)
         Element element = event.getRelativeElement();
         Coordinate mouse = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
         this.manager.onMouseScrolled(event.getDeltaY(), mouse);
@@ -484,7 +477,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     private void selectNode(Node toSelect, boolean displayNodeAndParents){
-        Tooltip.getTooltip().hide();
+        setHoveredNode(null);
         if(toSelect!=null){
             if(displayNodeAndParents) {
                 this.manager.displayNodeAndParents(toSelect);
