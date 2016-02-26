@@ -529,7 +529,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     private TooltipContainer createToolTipContainer(int width, int height){
-        TooltipContainer tooltipContainer = new TooltipContainer(this.eventBus, width, height);
+        TooltipContainer tooltipContainer = new TooltipContainer(width, height);
         this.add(tooltipContainer, 0, 0);
         return tooltipContainer;
     }
