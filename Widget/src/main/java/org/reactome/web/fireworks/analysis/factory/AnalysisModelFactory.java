@@ -8,6 +8,7 @@ import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 import org.reactome.web.fireworks.analysis.EntityStatistics;
 import org.reactome.web.fireworks.analysis.PathwayBase;
 import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
+import org.reactome.web.fireworks.client.FireworksFactory;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -27,7 +28,7 @@ public abstract class AnalysisModelFactory {
                                                Long species,
                                                String resource,
                                                final AnalysisModelFactoryHandler handler){
-        String url = "/AnalysisService/token/" + token + "/filter/species/" + species + "?resource=" + resource;
+        String url = FireworksFactory.SERVER + "/AnalysisService/token/" + token + "/filter/species/" + species + "?resource=" + resource;
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
         try {
