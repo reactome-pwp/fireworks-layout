@@ -10,21 +10,19 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RequiresResize;
-import org.reactome.web.fireworks.controls.LeftTopLauncherPanel;
-import org.reactome.web.fireworks.controls.RightTopLauncherPanel;
 import org.reactome.web.fireworks.controls.navigation.NavigationControlPanel;
+import org.reactome.web.fireworks.controls.settings.HideableContainerPanel;
+import org.reactome.web.fireworks.controls.settings.RightContainerPanel;
+import org.reactome.web.fireworks.controls.top.LeftTopLauncherPanel;
+import org.reactome.web.fireworks.controls.top.RightTopLauncherPanel;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
-import org.reactome.web.fireworks.legends.EnrichmentControl;
-import org.reactome.web.fireworks.legends.EnrichmentLegend;
-import org.reactome.web.fireworks.legends.ExpressionControl;
-import org.reactome.web.fireworks.legends.ExpressionLegend;
+import org.reactome.web.fireworks.legends.*;
 import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksColours;
-import org.reactome.web.fireworks.util.Tooltip;
 import org.reactome.web.fireworks.util.TooltipContainer;
 import org.reactome.web.fireworks.util.popups.ImageDownloadDialog;
 import uk.ac.ebi.pwp.structures.quadtree.client.QuadTreeBox;
@@ -59,7 +57,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     private double fontSize;
     private double factor = 1;
     private double aura = 2;
-    private boolean tooltipNeeded = true;
 
     private Canvas edgesHighlight;
     private Canvas edgesSelection;
@@ -117,17 +114,30 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         //Control panel
         this.add(new NavigationControlPanel(eventBus));
 
+        //Right container
+        RightContainerPanel rightContainerPanel = new RightContainerPanel();
+        this.add(rightContainerPanel);
+
+        //Bottom Controls container
+        BottomContainerPanel bottomContainerPanel = new BottomContainerPanel();
+        this.add(bottomContainerPanel);
+
+
         //Enrichment legend and control panels
-        this.add(new EnrichmentLegend(eventBus));
-        this.add(new EnrichmentControl(eventBus));
+        rightContainerPanel.add(new EnrichmentLegend(eventBus));
+        bottomContainerPanel.add(new EnrichmentControl(eventBus));
 
         //Expression legend and control panels
-        this.add(new ExpressionLegend(eventBus));
-        this.add(new ExpressionControl(eventBus));
+        rightContainerPanel.add(new ExpressionLegend(eventBus));
+        bottomContainerPanel.add(new ExpressionControl(eventBus));
 
         //Launcher panels
         this.add(new LeftTopLauncherPanel(eventBus, graph));
         this.add(new RightTopLauncherPanel(eventBus));
+
+        //Settings panel
+        rightContainerPanel.add(new HideableContainerPanel(eventBus));
+
 
         //Illustration panel
         this.add(this.illustration = new IllustrationPanel(), 0 , 0);
@@ -395,8 +405,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         if(node.isTopLevel()){
             drawText(node);
-        }else if(tooltipNeeded){
-            Tooltip.getTooltip().show(this.tooltipContainer, node);
         }
     }
 
@@ -465,7 +473,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     @Override
     public void onNodeHoverReset() {
-        Tooltip.getTooltip().hide();
         drawText(this.selected);
         this.cleanHighlightCanvas();
         this.thumbnail.clearHighlights();
@@ -558,7 +565,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         }else if(fontSize > MAX_FONT_SIZE){
             fontSize = MAX_FONT_SIZE;
         }
-        this.tooltipNeeded = fontSize < 7;
 
         Context2d ctx = this.textAllNodes.getContext2d();
         ctx.setFont(fontSize + "pt Arial"); //ctx.setFont(fontSize + "pt Calibri");

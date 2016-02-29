@@ -10,9 +10,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.fireworks.analysis.AnalysisType;
-import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
-import org.reactome.web.fireworks.analysis.factory.AnalysisModelFactory;
+import org.reactome.web.analysis.client.AnalysisClient;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisError;
+import org.reactome.web.analysis.client.model.AnalysisType;
+import org.reactome.web.analysis.client.model.SpeciesFilteredResult;
 import org.reactome.web.fireworks.controls.navigation.ControlAction;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
@@ -27,7 +29,6 @@ import org.reactome.web.fireworks.search.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.search.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
-import org.reactome.web.fireworks.util.Tooltip;
 
 import java.util.Objects;
 
@@ -150,14 +151,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     @Override
     public void highlightNode(String stableIdentifier) {
         Node node = this.data.getNode(stableIdentifier); if(node==null) return;
-        Tooltip.getTooltip().setPreventShowing(node.equals(this.selected) || !this.manager.isNodeVisible(node));
         this.setHoveredNode(node);
     }
 
     @Override
     public void highlightNode(Long dbIdentifier) {
         Node node = this.data.getNode(dbIdentifier); if(node==null) return;
-        Tooltip.getTooltip().setPreventShowing(node.equals(this.selected) || !this.manager.isNodeVisible(node));
         this.setHoveredNode(node);
     }
 
@@ -250,7 +249,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     @Override
     public void onMouseDown(MouseDownEvent event) {
         event.stopPropagation(); event.preventDefault();
-        Tooltip.getTooltip().setPreventShowing(true);
 
         this.fireworksMoved = false;
         setMouseDownPosition(event.getRelativeElement(), event);
@@ -274,7 +272,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         event.stopPropagation(); event.preventDefault();
         this.fireworksMoved = false;
         mouseDown = null;
-        Tooltip.getTooltip().setPreventShowing(false);
         mouseCurrent = new Coordinate(-200, -200);
     }
 
@@ -282,14 +279,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onMouseUp(MouseUpEvent event) {
         event.stopPropagation(); event.preventDefault();
         mouseDown = null;
-        Tooltip.getTooltip().setPreventShowing(false);
         setMousePosition(event.getRelativeElement(), event);
     }
 
     @Override
     public void onMouseWheel(MouseWheelEvent event) {
         event.stopPropagation(); event.preventDefault();
-        Tooltip.getTooltip().hide(); //Let's the manager decide whether it is still needed ;)
         Element element = event.getRelativeElement();
         Coordinate mouse = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
         this.manager.onMouseScrolled(event.getDeltaY(), mouse);
@@ -352,9 +347,9 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
         this.canvases.onAnalysisReset();
         this.data.resetPathwaysAnalysisResult();
-        AnalysisModelFactory.retrievePathwayBaseList(token, this.data.getSpeciesId(), resource, new AnalysisModelFactory.AnalysisModelFactoryHandler() {
+        AnalysisClient.filterResultBySpecies(token, resource, this.data.getSpeciesId(), new AnalysisHandler.Pathways() {
             @Override
-            public void onPathwaysBaseListRetrieved(SpeciesFilteredResult result) {
+            public void onPathwaysSpeciesFiltered(SpeciesFilteredResult result) {
                 result.setAnalysisType(AnalysisType.getType(result.getType()));
                 data.setPathwaysAnalysisResult(result); //Data has to be set in the first instance
                 eventBus.fireEventFromSource(new AnalysisPerformedEvent(result), FireworksViewerImpl.this);
@@ -362,7 +357,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             }
 
             @Override
-            public void onPathwaysBaseListError(Throwable e) {
+            public void onPathwaysSpeciesError(AnalysisError error) {
+                forceFireworksDraw = true;
+            }
+
+            @Override
+            public void onAnalysisServerException(String message) {
                 forceFireworksDraw = true;
             }
         });
@@ -484,7 +484,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     private void selectNode(Node toSelect, boolean displayNodeAndParents){
-        Tooltip.getTooltip().hide();
+        setHoveredNode(null);
         if(toSelect!=null){
             if(displayNodeAndParents) {
                 this.manager.displayNodeAndParents(toSelect);

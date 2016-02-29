@@ -8,7 +8,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import org.reactome.web.fireworks.controls.common.ControlButton;
+import org.reactome.web.fireworks.controls.common.PwpButton;
 import org.reactome.web.fireworks.events.ControlActionEvent;
 
 /**
@@ -18,12 +18,12 @@ public class NavigationControlPanel extends AbsolutePanel implements ClickHandle
 
     protected EventBus eventBus;
 
-    private ControlButton zoomIn;
-    private ControlButton zoomOut;
-    private ControlButton up;
-    private ControlButton right;
-    private ControlButton down;
-    private ControlButton left;
+    private PwpButton zoomIn;
+    private PwpButton zoomOut;
+    private PwpButton up;
+    private PwpButton right;
+    private PwpButton down;
+    private PwpButton left;
 
     public NavigationControlPanel(EventBus eventBus) {
         this.eventBus = eventBus;
@@ -34,25 +34,25 @@ public class NavigationControlPanel extends AbsolutePanel implements ClickHandle
 
         ControlPanelCSS css = RESOURCES.getCSS();
 
-        this.zoomIn = new ControlButton("Zoom in", css.zoomIn(), this);
+        this.zoomIn = new PwpButton("Zoom in", css.zoomIn(), this);
         this.add(this.zoomIn);
-        this.zoomOut = new ControlButton("Zoom out", css.zoomOut(), this);
+        this.zoomOut = new PwpButton("Zoom out", css.zoomOut(), this);
         this.add(this.zoomOut);
 
-        this.up = new ControlButton("Move up", css.up(), this);
+        this.up = new PwpButton("Move up", css.up(), this);
         this.add(this.up);
-        this.left = new ControlButton("Move left", css.left(), this);
+        this.left = new PwpButton("Move left", css.left(), this);
         this.add(this.left);
-        this.right = new ControlButton("Move right", css.right(), this);
+        this.right = new PwpButton("Move right", css.right(), this);
         this.add(this.right);
-        this.down = new ControlButton("Move down", css.down(), this);
+        this.down = new PwpButton("Move down", css.down(), this);
         this.add(this.down);
     }
 
     @Override
     public void onClick(ClickEvent event) {
         ControlAction action = ControlAction.NONE;
-        ControlButton btn = (ControlButton) event.getSource();
+        PwpButton btn = (PwpButton) event.getSource();
         if (btn.equals(this.zoomIn)) {
             action = ControlAction.ZOOM_IN;
         } else if (btn.equals(this.zoomOut)) {

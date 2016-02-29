@@ -55,6 +55,7 @@ public class WidgetTest implements EntryPoint {
 
             @SuppressWarnings("unchecked")
             public void onSuccess() {
+                FireworksFactory.CONSOLE_VERBOSE = true;
                 FireworksFactory.EVENT_BUS_VERBOSE = true;
 //                FireworksFactory.SHOW_INFO = true;
 
@@ -92,25 +93,25 @@ public class WidgetTest implements EntryPoint {
         fp.add(new Button("OVERREPRESENTATION", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNTAxMTIxNjI3MDFfMg%3D%3D", "TOTAL");
+                fireworks.setAnalysisToken("MjAxNjAyMjYxMDU5MzBfNA%253D%253D", "TOTAL");
             }
         }));
         fp.add(new Button("EXPRESSION", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNTAxMjAxMTQ5MjJfNA%3D%3D", "TOTAL");
+                fireworks.setAnalysisToken("MjAxNjAyMDkxMTQxMzRfMg%253D%253D", "TOTAL");
             }
         }));
         fp.add(new Button("EXPRESSION 2", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNTAxMjMwOTQzMDBfMg%3D%3D", "TOTAL");
+                fireworks.setAnalysisToken("MjAxNjAyMjkwODQzMjZfNw%253D%253D", "TOTAL");
             }
         }));
         fp.add(new Button("SPECIES COMPARISON", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNTAxMjQxMDMxMjBfMQ%3D%3D", "TOTAL");
+                fireworks.setAnalysisToken(URL.decode("MjAxNjAyMjkwNjU4MDNfNQ%253D%253D"), "TOTAL");
             }
         }));
 

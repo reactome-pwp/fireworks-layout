@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.controls;
+package org.reactome.web.fireworks.controls.top;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;

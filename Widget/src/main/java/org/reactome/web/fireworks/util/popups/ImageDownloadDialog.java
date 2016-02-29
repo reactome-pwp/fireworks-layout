@@ -11,7 +11,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.fireworks.controls.common.ControlButton;
+import org.reactome.web.fireworks.controls.common.PwpButton;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -92,7 +92,7 @@ public class ImageDownloadDialog extends PopupPanel {
         header.add(image);
         Label title = new Label("Export pathways overview to image");
         title.setStyleName(RESOURCES.getCSS().headerText());
-        Button closeBtn = new ControlButton("Close", RESOURCES.getCSS().close(), new ClickHandler() {
+        Button closeBtn = new PwpButton("Close", RESOURCES.getCSS().close(), new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
                 ImageDownloadDialog.this.hide();

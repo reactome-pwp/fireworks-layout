@@ -1,10 +1,10 @@
 package org.reactome.web.fireworks.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.analysis.AnalysisType;
-import org.reactome.web.fireworks.analysis.ExpressionSummary;
-import org.reactome.web.fireworks.analysis.PathwayBase;
-import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
+import org.reactome.web.analysis.client.model.AnalysisType;
+import org.reactome.web.analysis.client.model.ExpressionSummary;
+import org.reactome.web.analysis.client.model.PathwayBase;
+import org.reactome.web.analysis.client.model.SpeciesFilteredResult;
 import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package org.reactome.web.fireworks.model;
 
-import org.reactome.web.fireworks.analysis.AnalysisType;
-import org.reactome.web.fireworks.analysis.ExpressionSummary;
+import org.reactome.web.analysis.client.model.AnalysisType;
+import org.reactome.web.analysis.client.model.ExpressionSummary;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

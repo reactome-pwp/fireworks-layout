@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.controls;
+package org.reactome.web.fireworks.controls.top;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -10,7 +10,6 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.fireworks.controls.top.illustrations.Illustrations;
 import org.reactome.web.fireworks.controls.top.key.PathwayOverviewKey;
-import org.reactome.web.fireworks.controls.top.menu.SettingsMenuPanel;
 import org.reactome.web.fireworks.events.CanvasExportRequestedEvent;
 import org.reactome.web.fireworks.legends.ControlButton;
 
@@ -23,12 +22,10 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
 
     private Illustrations diagramIllustrations;
     private PathwayOverviewKey pathwayOverviewKey;
-    private SettingsMenuPanel settings;
 
     private ControlButton illustrationsBtn;
     private ControlButton captureBtn;
     private ControlButton pathwayOverviewKeyBtn;
-    private ControlButton settingBtn;
 
     public RightTopLauncherPanel(EventBus eventBus) {
         this.setStyleName(RESOURCES.getCSS().launcherPanel());
@@ -36,7 +33,6 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         this.eventBus = eventBus;
         this.diagramIllustrations = new Illustrations(eventBus);
         this.pathwayOverviewKey = new PathwayOverviewKey(eventBus);
-        this.settings = new SettingsMenuPanel(eventBus);
 
         this.illustrationsBtn = new ControlButton("Show illustrations", RESOURCES.getCSS().illustrations(), this);
         this.add(illustrationsBtn);
@@ -46,9 +42,6 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
 
         this.pathwayOverviewKeyBtn = new ControlButton("Pathway overview key", RESOURCES.getCSS().key(), this);
         this.add(this.pathwayOverviewKeyBtn);
-
-        this.settingBtn = new ControlButton("Settings", RESOURCES.getCSS().settings(), this);
-        this.add(this.settingBtn);
 
         this.setVisible(true);
     }
@@ -64,8 +57,6 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
             } else {
                 this.pathwayOverviewKey.showRelativeTo(this.pathwayOverviewKeyBtn);
             }
-        } else if (btn.equals(this.settingBtn)) {
-            this.settings.showRelativeTo(btn);
         } else if (btn.equals(this.illustrationsBtn)) {
             if (this.diagramIllustrations.isShowing()) {
                 this.diagramIllustrations.hide();
@@ -87,52 +78,52 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         ResourceCSS getCSS();
 
 
-        @Source("top/images/camera_clicked.png")
+        @Source("images/camera_clicked.png")
         ImageResource cameraClicked();
 
-        @Source("top/images/camera_disabled.png")
+        @Source("images/camera_disabled.png")
         ImageResource cameraDisabled();
 
-        @Source("top/images/camera_hovered.png")
+        @Source("images/camera_hovered.png")
         ImageResource cameraHovered();
 
-        @Source("top/images/camera_normal.png")
+        @Source("images/camera_normal.png")
         ImageResource cameraNormal();
 
-        @Source("top/images/illustrations_clicked.png")
+        @Source("images/illustrations_clicked.png")
         ImageResource illustrationsClicked();
 
-        @Source("top/images/illustrations_disabled.png")
+        @Source("images/illustrations_disabled.png")
         ImageResource illustrationsDisabled();
 
-        @Source("top/images/illustrations_hovered.png")
+        @Source("images/illustrations_hovered.png")
         ImageResource illustrationsHovered();
 
-        @Source("top/images/illustrations_normal.png")
+        @Source("images/illustrations_normal.png")
         ImageResource illustrationsNormal();
 
-        @Source("top/images/key_clicked.png")
+        @Source("images/key_clicked.png")
         ImageResource keyClicked();
 
-        @Source("top/images/key_disabled.png")
+        @Source("images/key_disabled.png")
         ImageResource keyDisabled();
 
-        @Source("top/images/key_hovered.png")
+        @Source("images/key_hovered.png")
         ImageResource keyHovered();
 
-        @Source("top/images/key_normal.png")
+        @Source("images/key_normal.png")
         ImageResource keyNormal();
 
-        @Source("top/images/settings_clicked.png")
+        @Source("images/settings_clicked.png")
         ImageResource settingsClicked();
 
-        @Source("top/images/settings_disabled.png")
+        @Source("images/settings_disabled.png")
         ImageResource settingsDisabled();
 
-        @Source("top/images/settings_hovered.png")
+        @Source("images/settings_hovered.png")
         ImageResource settingsHovered();
 
-        @Source("top/images/settings_normal.png")
+        @Source("images/settings_normal.png")
         ImageResource settingsNormal();
     }
 
@@ -147,7 +138,5 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         String illustrations();
 
         String key();
-
-        String settings();
     }
 }
