@@ -10,9 +10,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.fireworks.analysis.AnalysisType;
-import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
-import org.reactome.web.fireworks.analysis.factory.AnalysisModelFactory;
+import org.reactome.web.analysis.client.AnalysisClient;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisError;
+import org.reactome.web.analysis.client.model.AnalysisType;
+import org.reactome.web.analysis.client.model.SpeciesFilteredResult;
 import org.reactome.web.fireworks.controls.navigation.ControlAction;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
@@ -345,9 +347,9 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
         this.canvases.onAnalysisReset();
         this.data.resetPathwaysAnalysisResult();
-        AnalysisModelFactory.retrievePathwayBaseList(token, this.data.getSpeciesId(), resource, new AnalysisModelFactory.AnalysisModelFactoryHandler() {
+        AnalysisClient.filterResultBySpecies(token, resource, this.data.getSpeciesId(), new AnalysisHandler.Pathways() {
             @Override
-            public void onPathwaysBaseListRetrieved(SpeciesFilteredResult result) {
+            public void onPathwaysSpeciesFiltered(SpeciesFilteredResult result) {
                 result.setAnalysisType(AnalysisType.getType(result.getType()));
                 data.setPathwaysAnalysisResult(result); //Data has to be set in the first instance
                 eventBus.fireEventFromSource(new AnalysisPerformedEvent(result), FireworksViewerImpl.this);
@@ -355,7 +357,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             }
 
             @Override
-            public void onPathwaysBaseListError(Throwable e) {
+            public void onPathwaysSpeciesError(AnalysisError error) {
+                forceFireworksDraw = true;
+            }
+
+            @Override
+            public void onAnalysisServerException(String message) {
                 forceFireworksDraw = true;
             }
         });

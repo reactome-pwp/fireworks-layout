@@ -93,25 +93,25 @@ public class WidgetTest implements EntryPoint {
         fp.add(new Button("OVERREPRESENTATION", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNTExMDkwOTQ2NDJfMTc%3D", "TOTAL");
+                fireworks.setAnalysisToken("MjAxNjAyMjYxMDU5MzBfNA%253D%253D", "TOTAL");
             }
         }));
         fp.add(new Button("EXPRESSION", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNTExMDQxOTQzNDhfNA%3D%3D", "TOTAL");
+                fireworks.setAnalysisToken("MjAxNjAyMDkxMTQxMzRfMg%253D%253D", "TOTAL");
             }
         }));
         fp.add(new Button("EXPRESSION 2", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNTExMDQxOTQzNDhfNA%3D%3D", "TOTAL");
+                fireworks.setAnalysisToken("MjAxNjAyMjkwODQzMjZfNw%253D%253D", "TOTAL");
             }
         }));
         fp.add(new Button("SPECIES COMPARISON", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNTEyMDcwNjIzNDhfNA%253D%253D", "TOTAL");
+                fireworks.setAnalysisToken(URL.decode("MjAxNjAyMjkwNjU4MDNfNQ%253D%253D"), "TOTAL");
             }
         }));
 

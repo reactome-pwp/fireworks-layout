@@ -6,7 +6,7 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.InlineLabel;
-import org.reactome.web.fireworks.analysis.EntityStatistics;
+import org.reactome.web.analysis.client.model.EntityStatistics;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.model.Node;

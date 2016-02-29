@@ -1,7 +1,7 @@
 package org.reactome.web.fireworks.model;
 
-import org.reactome.web.fireworks.analysis.PathwayBase;
-import org.reactome.web.fireworks.analysis.SpeciesFilteredResult;
+import org.reactome.web.analysis.client.model.PathwayBase;
+import org.reactome.web.analysis.client.model.SpeciesFilteredResult;
 
 import java.util.HashMap;
 import java.util.Map;
