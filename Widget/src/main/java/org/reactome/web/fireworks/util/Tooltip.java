@@ -69,7 +69,7 @@ public class Tooltip extends PopupPanel {
 
     @CssResource.ImportedWithPrefix("fireworks-ToolTips")
     public interface ResourceCSS extends CssResource {
-        String CSS = "org/reactome/web/fireworks/tooltips/ToolTips.css";
+        String CSS = "org/reactome/web/fireworks/util/ToolTips.css";
 
         String popup();
     }
