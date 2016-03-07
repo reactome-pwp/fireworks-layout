@@ -41,7 +41,7 @@ public class Tooltip extends PopupPanel {
         super.add(w);
     }
 
-    public void setPositionAndShow(TooltipContainer container, double offsetX, double offsetY, double distance) {
+    public void setPositionAndShow(ToolTipContainer container, double offsetX, double offsetY, double distance) {
         container.add(this, -1000, -1000); //Adding it where is not visible
         container.getElement().appendChild(this.getElement());
 

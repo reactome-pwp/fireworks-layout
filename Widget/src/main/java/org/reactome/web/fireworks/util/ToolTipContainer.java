@@ -18,7 +18,7 @@ import java.util.Objects;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class TooltipContainer extends AbsolutePanel implements NodeHoverHandler, NodeHoverResetHandler,
+public class ToolTipContainer extends AbsolutePanel implements NodeHoverHandler, NodeHoverResetHandler,
         FireworksZoomHandler {
 
     private static final int DELAY = 100;
@@ -37,7 +37,7 @@ public class TooltipContainer extends AbsolutePanel implements NodeHoverHandler,
     private int width;
     private int height;
 
-    public TooltipContainer(EventBus eventBus, int width, int height) {
+    public ToolTipContainer(EventBus eventBus, int width, int height) {
         this.eventBus = eventBus;
         this.hoveredTimer = new Timer() {
             @Override
