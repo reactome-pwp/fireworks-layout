@@ -5,12 +5,12 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class TooltipContainer extends AbsolutePanel {
+public class ToolTipContainer extends AbsolutePanel {
 
     private int width;
     private int height;
 
-    public TooltipContainer(int width, int height) {
+    public ToolTipContainer(int width, int height) {
         super();
         setWidth(width);
         setHeight(height);
