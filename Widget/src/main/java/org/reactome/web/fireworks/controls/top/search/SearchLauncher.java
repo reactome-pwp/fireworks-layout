@@ -1,16 +1,18 @@
 package org.reactome.web.fireworks.controls.top.search;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.RootPanel;
+import org.reactome.web.fireworks.events.SearchKeyPressedEvent;
+import org.reactome.web.fireworks.handlers.SearchKeyPressedHandler;
 import org.reactome.web.fireworks.legends.ControlButton;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -33,7 +35,7 @@ import java.util.List;
  */
 public class SearchLauncher extends AbsolutePanel implements ClickHandler, SearchBoxUpdatedHandler,
         SuggestionHoveredHandler, SuggestionSelectedHandler, SearchBoxArrowKeysHandler,
-        KeyDownHandler {
+        SearchKeyPressedHandler {
 
     @SuppressWarnings("FieldCanBeLocal")
     private static String OPENING_TEXT = "Search for a pathway ...";
@@ -52,8 +54,6 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     private Timer focusOnPathwayTimer;
 
     public SearchLauncher(EventBus eventBus, Graph graph) {
-        //Attaching this as a KeyDownHandler
-        RootPanel.get().addDomHandler(this, KeyDownEvent.getType());
 
         //Setting the search style
         setStyleName(RESOURCES.getCSS().launchPanel());
@@ -108,24 +108,6 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     }
 
     @Override
-    public void onKeyDown(KeyDownEvent event) {
-        if (!isVisible()) return;
-        int keyCode = event.getNativeKeyCode();
-        String platform = Window.Navigator.getPlatform();
-        // If this is a Mac, check for the cmd key. In case of any other platform, check for the ctrl key
-        boolean isModifierKeyPressed = platform.toLowerCase().contains("mac") ? event.isMetaKeyDown() : event.isControlKeyDown();
-        if (keyCode == KeyCodes.KEY_F && isModifierKeyPressed) {
-            event.preventDefault();
-            event.stopPropagation();
-            if(!isExpanded){
-                expandPanel();
-            }else{
-                collapsePanel();
-            }
-        }
-    }
-
-    @Override
     public void onSearchUpdated(SearchBoxUpdatedEvent event) {
         if(suggestionsProvider!=null) {
             String term = input.getText().trim();
@@ -156,6 +138,15 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         eventBus.fireEventFromSource(event, this);
     }
 
+    @Override
+    public void onSearchKeyPressed(SearchKeyPressedEvent event) {
+        if(!isExpanded){
+            expandPanel();
+        }else{
+            collapsePanel();
+        }
+    }
+
     private void collapsePanel(){
         if(focusTimer.isRunning()){
             focusTimer.cancel();
@@ -177,6 +168,7 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
     private void initHandlers(){
         this.input.addSearchBoxUpdatedHandler(this);
         this.input.addSearchBoxArrowKeysHandler(this);
+        eventBus.addHandler(SearchKeyPressedEvent.TYPE, this);
     }
 
     public void setFocus(boolean focused){
@@ -191,12 +183,12 @@ public class SearchLauncher extends AbsolutePanel implements ClickHandler, Searc
         }
     }
 
+
     public static SearchLauncherResources RESOURCES;
     static {
         RESOURCES = GWT.create(SearchLauncherResources.class);
         RESOURCES.getCSS().ensureInjected();
     }
-
 
     /**
      * A ClientBundle of resources used by this widget.

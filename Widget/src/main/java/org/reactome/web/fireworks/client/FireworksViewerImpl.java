@@ -7,8 +7,10 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ResizeComposite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
@@ -41,7 +43,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         AnalysisResetHandler, ExpressionColumnChangedHandler,
         ControlActionHandler, ProfileChangedHandler,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
-        IllustrationSelectedHandler, CanvasExportRequestedHandler {
+        IllustrationSelectedHandler, CanvasExportRequestedHandler,
+        KeyDownHandler {
 
     EventBus eventBus;
 
@@ -374,6 +377,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) onResize();
+    }
+
+    @Override
     public void resetAnalysis() {
         this.token = null; this.resource=null;
         eventBus.fireEventFromSource(new AnalysisResetEvent(), this);
@@ -445,8 +454,10 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     protected void initHandlers() {
+        //Attaching this as a KeyDownHandler
+        RootPanel.get().addDomHandler(this, KeyDownEvent.getType());
+
         this.canvases.addClickHandler(this);
-//        this.canvases.addDoubleClickHandler(this);
         this.canvases.addMouseDownHandler(this);
         this.canvases.addMouseMoveHandler(this);
         this.canvases.addMouseOutHandler(this);
@@ -513,6 +524,21 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             if(this.hovered!=null){
                 this.hovered = null;
                 this.eventBus.fireEventFromSource(new NodeHoverResetEvent(), this);
+            }
+        }
+    }
+
+    @Override
+    public void onKeyDown(KeyDownEvent keyDownEvent) {
+        if(isVisible()){
+            int keyCode = keyDownEvent.getNativeKeyCode();
+            String platform = Window.Navigator.getPlatform();
+            // If this is a Mac, check for the cmd key. In case of any other platform, check for the ctrl key
+            boolean isModifierKeyPressed = platform.toLowerCase().contains("mac") ? keyDownEvent.isMetaKeyDown() : keyDownEvent.isControlKeyDown();
+            if (keyCode == KeyCodes.KEY_F && isModifierKeyPressed) {
+                keyDownEvent.preventDefault();
+                keyDownEvent.stopPropagation();
+                eventBus.fireEventFromSource(new SearchKeyPressedEvent(), this);
             }
         }
     }
