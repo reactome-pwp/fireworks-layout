@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.search.suggester;
+package org.reactome.web.fireworks.search.fallback.suggester;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;

@@ -1,8 +1,8 @@
-package org.reactome.web.fireworks.search.events;
+package org.reactome.web.fireworks.search.fallback.events;
 
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.search.handlers.PanelCollapsedHandler;
+import org.reactome.web.fireworks.search.fallback.handlers.PanelCollapsedHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

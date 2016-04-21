@@ -25,10 +25,10 @@ import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.model.factory.ModelException;
 import org.reactome.web.fireworks.model.factory.ModelFactory;
-import org.reactome.web.fireworks.search.events.SuggestionHoveredEvent;
-import org.reactome.web.fireworks.search.events.SuggestionSelectedEvent;
-import org.reactome.web.fireworks.search.handlers.SuggestionHoveredHandler;
-import org.reactome.web.fireworks.search.handlers.SuggestionSelectedHandler;
+import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
+import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
+import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
+import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
 

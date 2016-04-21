@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.search.provider;
+package org.reactome.web.fireworks.search.fallback.provider;
 
 import java.util.List;
 

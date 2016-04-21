@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.search.searchbox;
+package org.reactome.web.fireworks.search.fallback.searchbox;
 
 import com.google.gwt.event.shared.EventHandler;
 

@@ -27,8 +27,8 @@ public abstract class ModelFactory {
             throw new ModelException(e.getMessage(), e);
         }
 
-        Set<Node> nodes = new HashSet<Node>();
-        Map<Long, Node> map = new HashMap<Long, Node>();
+        Set<Node> nodes = new HashSet<>();
+        Map<Long, Node> map = new HashMap<>();
         for (RawNode rNode : graph.getNodes()) {
             Node node = new Node(rNode);
             //TODO: Fix the bug on the server side and remove the condition here :)
@@ -39,7 +39,7 @@ public abstract class ModelFactory {
 
         }
 
-        Set<Edge> edges = new HashSet<Edge>();
+        Set<Edge> edges = new HashSet<>();
         for (RawEdge rEdge : graph.getEdges()) {
             Node from = map.get(rEdge.getFrom());
             Node to = map.get(rEdge.getTo());

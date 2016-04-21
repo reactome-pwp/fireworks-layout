@@ -16,17 +16,17 @@ import org.reactome.web.fireworks.handlers.SearchKeyPressedHandler;
 import org.reactome.web.fireworks.legends.ControlButton;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
-import org.reactome.web.fireworks.search.events.PanelCollapsedEvent;
-import org.reactome.web.fireworks.search.events.PanelExpandedEvent;
-import org.reactome.web.fireworks.search.events.SuggestionHoveredEvent;
-import org.reactome.web.fireworks.search.events.SuggestionSelectedEvent;
-import org.reactome.web.fireworks.search.handlers.PanelCollapsedHandler;
-import org.reactome.web.fireworks.search.handlers.PanelExpandedHandler;
-import org.reactome.web.fireworks.search.handlers.SuggestionHoveredHandler;
-import org.reactome.web.fireworks.search.handlers.SuggestionSelectedHandler;
-import org.reactome.web.fireworks.search.provider.SuggestionsProvider;
-import org.reactome.web.fireworks.search.provider.SuggestionsProviderImpl;
-import org.reactome.web.fireworks.search.searchbox.*;
+import org.reactome.web.fireworks.search.fallback.events.PanelCollapsedEvent;
+import org.reactome.web.fireworks.search.fallback.events.PanelExpandedEvent;
+import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
+import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
+import org.reactome.web.fireworks.search.fallback.handlers.PanelCollapsedHandler;
+import org.reactome.web.fireworks.search.fallback.handlers.PanelExpandedHandler;
+import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
+import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
+import org.reactome.web.fireworks.search.fallback.provider.SuggestionsProvider;
+import org.reactome.web.fireworks.search.fallback.provider.SuggestionsProviderImpl;
+import org.reactome.web.fireworks.search.fallback.searchbox.*;
 
 import java.util.List;
 

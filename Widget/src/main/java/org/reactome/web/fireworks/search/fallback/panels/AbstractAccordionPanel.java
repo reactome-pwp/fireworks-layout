@@ -1,9 +1,9 @@
-package org.reactome.web.fireworks.search.panels;
+package org.reactome.web.fireworks.search.fallback.panels;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.SimplePanel;
-import org.reactome.web.fireworks.search.events.PanelCollapsedEvent;
-import org.reactome.web.fireworks.search.events.PanelExpandedEvent;
+import org.reactome.web.fireworks.search.fallback.events.PanelCollapsedEvent;
+import org.reactome.web.fireworks.search.fallback.events.PanelExpandedEvent;
 
 
 /**

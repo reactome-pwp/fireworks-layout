@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.search.suggester;
+package org.reactome.web.fireworks.search.fallback.suggester;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
@@ -19,13 +19,13 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import org.reactome.web.fireworks.controls.top.search.SearchPerformedEvent;
 import org.reactome.web.fireworks.controls.top.search.SearchPerformedHandler;
 import org.reactome.web.fireworks.model.Node;
-import org.reactome.web.fireworks.search.events.SuggestionHoveredEvent;
-import org.reactome.web.fireworks.search.events.SuggestionSelectedEvent;
-import org.reactome.web.fireworks.search.handlers.SuggestionHoveredHandler;
-import org.reactome.web.fireworks.search.handlers.SuggestionSelectedHandler;
-import org.reactome.web.fireworks.search.panels.AbstractAccordionPanel;
-import org.reactome.web.fireworks.search.searchbox.SearchBoxArrowKeysEvent;
-import org.reactome.web.fireworks.search.searchbox.SearchBoxArrowKeysHandler;
+import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
+import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
+import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
+import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
+import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
+import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysEvent;
+import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysHandler;
 
 import java.util.List;
 

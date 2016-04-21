@@ -9,7 +9,7 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.fireworks.controls.top.search.SearchLauncher;
 import org.reactome.web.fireworks.model.Graph;
-import org.reactome.web.fireworks.search.suggester.SuggestionPanel;
+import org.reactome.web.fireworks.search.fallback.suggester.SuggestionPanel;
 
 
 /**
