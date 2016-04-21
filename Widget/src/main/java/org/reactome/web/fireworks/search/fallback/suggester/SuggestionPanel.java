@@ -181,7 +181,7 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/search/suggester/SuggestionPanel.css";
+        String CSS = "org/reactome/web/fireworks/search/fallback/suggester/SuggestionPanel.css";
 
         String suggestionPanel();
     }

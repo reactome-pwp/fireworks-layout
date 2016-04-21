@@ -70,7 +70,7 @@ public class SearchPanel extends FlowPanel {
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/search/SearchPanel.css";
+        String CSS = "org/reactome/web/fireworks/search/fallback/SearchPanel.css";
 
         String searchPanel();
     }
