@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.fireworks.controls.top.search.SearchLauncher;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.search.fallback.suggester.SuggestionPanel;
+import org.reactome.web.fireworks.search.searchonfire.SolrSuggestionPanel;
 
 
 /**
@@ -30,25 +31,41 @@ public class SearchPanel extends FlowPanel {
         final SearchLauncher launcher = new SearchLauncher(eventBus, graph);
         this.add(launcher);
 
-        SuggestionPanel suggestions = new SuggestionPanel();
-        suggestions.addSuggestionSelectedHandler(launcher);
-        suggestions.addSuggestionHoveredHandler(launcher);
-        // Listen to click events on suggestions and return focus on SearchBox
-        suggestions.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                launcher.setFocus(true);
-            }
-        });
+        if(false) {
+            SuggestionPanel suggestions = new SuggestionPanel();
+            suggestions.addSuggestionSelectedHandler(launcher);
+            suggestions.addSuggestionHoveredHandler(launcher);
+            // Listen to click events on suggestions and return focus on SearchBox
+            suggestions.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    launcher.setFocus(true);
+                }
+            });
 
-        launcher.addSearchPerformedHandler(suggestions);
-        launcher.addPanelCollapsedHandler(suggestions);
-        launcher.addPanelExpandedHandler(suggestions);
-        launcher.addSearchBoxArrowKeysHandler(suggestions);
-        this.add(suggestions);
+            launcher.addSearchPerformedHandler(suggestions);
+            launcher.addPanelCollapsedHandler(suggestions);
+            launcher.addPanelExpandedHandler(suggestions);
+            launcher.addSearchBoxArrowKeysHandler(suggestions);
+            this.add(suggestions);
+        } else {
+            SolrSuggestionPanel suggestions = new SolrSuggestionPanel();
+            suggestions.addSuggestionSelectedHandler(launcher);
+            suggestions.addSuggestionHoveredHandler(launcher);
+            // Listen to click events on suggestions and return focus on SearchBox
+            suggestions.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    launcher.setFocus(true);
+                }
+            });
 
-
-
+            launcher.addSearchPerformedHandler(suggestions);
+            launcher.addPanelCollapsedHandler(suggestions);
+            launcher.addPanelExpandedHandler(suggestions);
+            launcher.addSearchBoxArrowKeysHandler(suggestions);
+            this.add(suggestions);
+        }
     }
 
     /**
@@ -70,7 +87,7 @@ public class SearchPanel extends FlowPanel {
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/search/SearchPanel.css";
+        String CSS = "org/reactome/web/fireworks/search/fallback/SearchPanel.css";
 
         String searchPanel();
     }

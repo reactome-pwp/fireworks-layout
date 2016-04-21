@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.search.fallback.suggester;
+package org.reactome.web.fireworks.search.searchonfire;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
@@ -9,8 +9,10 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -26,25 +28,25 @@ import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHan
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
 import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysEvent;
 import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysHandler;
+import org.reactome.web.fireworks.search.fallback.suggester.SuggestionCell;
+import org.reactome.web.fireworks.search.searchonfire.facets.FacetsPanel;
+import org.reactome.web.fireworks.util.Console;
 
 import java.util.List;
 
 /**
- * @author Antonio Fabregat <fabregat@ebi.ac.uk>
+ * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 @SuppressWarnings("Duplicates")
-public class SuggestionPanel extends AbstractAccordionPanel implements SearchPerformedHandler, SearchBoxArrowKeysHandler,
-        SelectionChangeEvent.Handler, DoubleClickHandler {
+public class SolrSuggestionPanel extends AbstractAccordionPanel implements SearchPerformedHandler, SearchBoxArrowKeysHandler,
+        SelectionChangeEvent.Handler, DoubleClickHandler, FacetsPanel.Handler{
+
     private final SingleSelectionModel<Node> selectionModel;
     private CellList<Node> suggestions;
     private ListDataProvider<Node> dataProvider;
-
-    public static SuggestionResources RESOURCES;
-
-    static {
-        RESOURCES = GWT.create(SuggestionResources.class);
-        RESOURCES.getCSS().ensureInjected();
-    }
+    private SimplePager pager;
+    private FlowPanel pagingPanel;
+    private FacetsPanel facetsPanel;
 
     /**
      * The key provider that provides the unique ID of a DatabaseObject.
@@ -56,30 +58,14 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         }
     };
 
-    public SuggestionPanel() {
+    public SolrSuggestionPanel() {
         this.sinkEvents(Event.ONCLICK);
 
         // Add a selection model so we can select cells.
         selectionModel = new SingleSelectionModel<>(KEY_PROVIDER);
         selectionModel.addSelectionChangeHandler(this);
 
-        SuggestionCell suggestionCell = new SuggestionCell();
-
-        suggestions = new CellList<>(suggestionCell, KEY_PROVIDER);
-        suggestions.sinkEvents(Event.FOCUSEVENTS);
-        suggestions.setSelectionModel(selectionModel);
-
-        suggestions.addDomHandler(this, DoubleClickEvent.getType());
-
-        suggestions.setKeyboardPagingPolicy(HasKeyboardPagingPolicy.KeyboardPagingPolicy.INCREASE_RANGE);
-        suggestions.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
-
-        dataProvider = new ListDataProvider<>();
-        dataProvider.addDataDisplay(this.suggestions);
-
-        this.add(suggestions);
-        //Setting the legend style
-        setStyleName(RESOURCES.getCSS().suggestionPanel());
+        init();
     }
 
     public HandlerRegistration addClickHandler(ClickHandler handler){
@@ -102,6 +88,12 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         if (selected != null) {
             fireEvent(new SuggestionSelectedEvent(selected, Boolean.TRUE));
         }
+    }
+
+
+    @Override
+    public void onFacetSelected(String facet) {
+        Console.info("Facet Selected: " + facet); //TODO implement this
     }
 
     @Override
@@ -129,7 +121,10 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
     public void onSearchPerformed(SearchPerformedEvent event) {
         Node sel = selectionModel.getSelectedObject();
         List<Node> searchResult = event.getSuggestions();
-        if(!searchResult.isEmpty() && !searchResult.contains(sel)) {
+        if(!searchResult.isEmpty()) {
+            pagingPanel.setVisible(true);
+            facetsPanel.setVisible(true);
+        } else if(!searchResult.isEmpty() && !searchResult.contains(sel)) {
             selectionModel.clear();
         } else if (searchResult.isEmpty() && !event.getTerm().isEmpty()){
             suggestions.setEmptyListWidget(new HTML("No results found for '" + event.getTerm() +"'"));
@@ -139,7 +134,7 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
 
         dataProvider.getList().clear();
         dataProvider.getList().addAll(searchResult);
-        suggestions.setVisibleRange(0, searchResult.size()); //configure list paging
+        suggestions.setVisibleRange(0, 4); //configure list paging
         suggestions.setRowCount(searchResult.size());
 
         if (dataProvider.getList().isEmpty()) {
@@ -160,31 +155,76 @@ public class SuggestionPanel extends AbstractAccordionPanel implements SearchPer
         clickTimer.schedule(500);
     }
 
+    private void init(){
+        //Setting the legend style
+        setStyleName(RESOURCES.getCSS().mainPanel());
+
+        SuggestionCell suggestionCell = new SuggestionCell();
+
+        suggestions = new CellList<>(suggestionCell, KEY_PROVIDER);
+        suggestions.sinkEvents(Event.FOCUSEVENTS);
+        suggestions.setSelectionModel(selectionModel);
+        suggestions.addStyleName(RESOURCES.getCSS().list());
+        suggestions.addDomHandler(this, DoubleClickEvent.getType());
+        suggestions.setKeyboardPagingPolicy(HasKeyboardPagingPolicy.KeyboardPagingPolicy.INCREASE_RANGE);
+        suggestions.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
+
+        dataProvider = new ListDataProvider<>();
+        dataProvider.addDataDisplay(this.suggestions);
+
+        pager = new SimplePager();
+        pager.setDisplay(suggestions);
+        pagingPanel = new FlowPanel();
+        pagingPanel.setStyleName(RESOURCES.getCSS().pagingPanel());
+        pagingPanel.setVisible(false);
+        pagingPanel.add(pager);
+
+        facetsPanel = new FacetsPanel(this);
+        facetsPanel.addStyleName(RESOURCES.getCSS().facetsPanel());
+        facetsPanel.setVisible(false);
+
+        add(suggestions);
+        add(pagingPanel);
+        add(facetsPanel);
+    }
+
+
+    public static Resources RESOURCES;
+    static {
+        RESOURCES = GWT.create(Resources.class);
+        RESOURCES.getCSS().ensureInjected();
+    }
+
     /**
      * A ClientBundle of resources used by this widget.
      */
-    public interface SuggestionResources extends ClientBundle {
+    public interface Resources extends ClientBundle {
         /**
          * The styles used in this widget.
          */
         @Source(SuggestionPanelCSS.CSS)
         SuggestionPanelCSS getCSS();
 
-        @Source("images/pathway.png")
+        @Source("../fallback/suggester/images/pathway.png")
         ImageResource pathway();
     }
 
     /**
      * Styles used by this widget.
      */
-    @CssResource.ImportedWithPrefix("fireworks-SuggestionPanel")
+    @CssResource.ImportedWithPrefix("fireworks-SolrSuggestionPanel")
     public interface SuggestionPanelCSS extends CssResource {
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/search/fallback/suggester/SuggestionPanel.css";
+        String CSS = "org/reactome/web/fireworks/search/searchonfire/SolrSuggestionPanel.css";
 
-        String suggestionPanel();
+        String mainPanel();
+
+        String list();
+
+        String pagingPanel();
+
+        String facetsPanel();
     }
-
 }
