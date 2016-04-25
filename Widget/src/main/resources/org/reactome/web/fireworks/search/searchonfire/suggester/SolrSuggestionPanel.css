@@ -7,7 +7,7 @@
 
     float: left;
     width: 100%; /* grows and shrinks with the parent */
-    max-height: 160px;
+    max-height: 190px;
     overflow: auto !important;
     outline: none;
     font-size: small;
@@ -22,7 +22,7 @@
 }
 
 .list {
-    max-height: 80px;
+    max-height: 120px;
 }
 
 .pagingPanel {
@@ -32,5 +32,5 @@
 
 .facetsPanel {
     background-color: red;
-    height: 50px;
+    height: 40px;
 }
