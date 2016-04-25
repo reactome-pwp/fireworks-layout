@@ -35,11 +35,11 @@ public class SolrSuggestionCell extends AbstractCell<Entry> {
 //        @SafeHtmlTemplates.Template("<div style=\"{0}\">{1}</div>")
 //        SafeHtml _cell(SafeStyles styles, SafeHtml value);
 
-        @Template("<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis;\">&nbsp;&nbsp;{0}&nbsp;&nbsp;<span>{1}</span></div>")
-        SafeHtml minCell(SafeHtml image, SafeHtml value);
+        @Template("<div title=\"{2}\" style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis;\">&nbsp;&nbsp;{0}&nbsp;&nbsp;<span>{1}</span></div>")
+        SafeHtml minCell(SafeHtml image, SafeHtml value, String tooltip);
 
         @SafeHtmlTemplates.Template("" +
-                "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis;\">" +
+                "<div title=\"{3}\" style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis;\">" +
                     "<div style=\"float:left;margin: 7px 0 0 5px\">{0}</div>" +
                     "<div style=\"float:left;margin-left:10px; width:260px\">" +
                         "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:small\">" +
@@ -50,7 +50,7 @@ public class SolrSuggestionCell extends AbstractCell<Entry> {
                         "</div>" +
                     "</div>" +
                 "</div>")
-        SafeHtml cell(SafeHtml image, SafeHtml primary, SafeHtml secondary);
+        SafeHtml cell(SafeHtml image, SafeHtml primary, SafeHtml secondary,  String tooltip);
     }
 
     /**
@@ -76,10 +76,10 @@ public class SolrSuggestionCell extends AbstractCell<Entry> {
         SafeHtml primary = SafeHtmlUtils.fromTrustedString(value.getName());
 
         if(value.getStId().isEmpty()) {
-            sb.append(templates.minCell(safeImage, primary));
+            sb.append(templates.minCell(safeImage, primary, value.getName()));
         }else{
             SafeHtml secondary = SafeHtmlUtils.fromTrustedString(value.getStId());
-            sb.append(templates.cell(safeImage, primary, secondary));
+            sb.append(templates.cell(safeImage, primary, secondary, value.getName()));
         }
     }
 }
