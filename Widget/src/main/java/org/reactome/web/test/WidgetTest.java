@@ -8,9 +8,9 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.client.FireworksViewer;
-import org.reactome.web.fireworks.search.solr.SearchResultFactory;
-import org.reactome.web.fireworks.search.solr.model.Entry;
-import org.reactome.web.fireworks.search.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.SearchResultFactory;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
 import org.reactome.web.fireworks.util.Console;
 
 /**
