@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.search.searchonfire;
+package org.reactome.web.fireworks.search.searchonfire.suggester;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
@@ -9,18 +9,15 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import org.reactome.web.fireworks.controls.top.search.SearchPerformedEvent;
-import org.reactome.web.fireworks.controls.top.search.SearchPerformedHandler;
-import org.reactome.web.fireworks.model.Node;
+import org.reactome.web.fireworks.controls.common.pager.PageChangedHandler;
+import org.reactome.web.fireworks.controls.common.pager.Pager;
 import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
 import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
@@ -28,35 +25,33 @@ import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHan
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
 import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysEvent;
 import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysHandler;
-import org.reactome.web.fireworks.search.fallback.suggester.SuggestionCell;
+import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedHandler;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetsPanel;
-import org.reactome.web.fireworks.util.Console;
+import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedEvent;
+import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedHandler;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 @SuppressWarnings("Duplicates")
-public class SolrSuggestionPanel extends AbstractAccordionPanel implements SearchPerformedHandler, SearchBoxArrowKeysHandler,
-        SelectionChangeEvent.Handler, DoubleClickHandler, FacetsPanel.Handler{
+public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrSearchPerformedHandler, SearchBoxArrowKeysHandler,
+        SelectionChangeEvent.Handler, DoubleClickHandler {
 
-    private final SingleSelectionModel<Node> selectionModel;
-    private CellList<Node> suggestions;
-    private ListDataProvider<Node> dataProvider;
-    private SimplePager pager;
-    private FlowPanel pagingPanel;
+    private final SingleSelectionModel<Entry> selectionModel;
+    private CellList<Entry> suggestions;
+    private ListDataProvider<Entry> dataProvider;
+    private Pager pager;
     private FacetsPanel facetsPanel;
 
     /**
      * The key provider that provides the unique ID of a DatabaseObject.
      */
-    public static final ProvidesKey<Node> KEY_PROVIDER = new ProvidesKey<Node>() {
-        @Override
-        public Object getKey(Node item) {
-            return item == null ? null : item.getDbId();
-        }
-    };
+    public static final ProvidesKey<Entry> KEY_PROVIDER = item -> item == null ? null : item.getStId();
 
     public SolrSuggestionPanel() {
         this.sinkEvents(Event.ONCLICK);
@@ -72,6 +67,10 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements Searc
         return addHandler(handler, ClickEvent.getType());
     }
 
+    public HandlerRegistration addFacetChangedHandler(FacetChangedHandler handler) {
+        return facetsPanel.addFacetChangedHandler(handler);
+    }
+
     public HandlerRegistration addSuggestionHoveredHandler(SuggestionHoveredHandler handler) {
         return addHandler(handler, SuggestionHoveredEvent.TYPE);
     }
@@ -80,62 +79,62 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements Searc
         return addHandler(handler, SuggestionSelectedEvent.TYPE);
     }
 
+    public HandlerRegistration addPageChangedHandler(PageChangedHandler handler){
+        return pager.addPageChangedHandler(handler);
+    }
+
     @Override
     public void onDoubleClick(DoubleClickEvent event) {
         event.stopPropagation(); event.preventDefault();
         if(clickTimer !=null) clickTimer.cancel();
-        Node selected = selectionModel.getSelectedObject();
+        Entry selected = selectionModel.getSelectedObject();
         if (selected != null) {
-            fireEvent(new SuggestionSelectedEvent(selected, Boolean.TRUE));
+//            fireEvent(new SuggestionSelectedEvent(selected, Boolean.TRUE));
         }
-    }
-
-
-    @Override
-    public void onFacetSelected(String facet) {
-        Console.info("Facet Selected: " + facet); //TODO implement this
     }
 
     @Override
     public void onKeysPressed(SearchBoxArrowKeysEvent event) {
         if(suggestions.getRowCount()>0) {
-            Node current = selectionModel.getSelectedObject();
+            Entry current = selectionModel.getSelectedObject();
             int currentIndex = current == null ? -1 : dataProvider.getList().indexOf(current);
             int toIndex = currentIndex;
             if(event.getValue() == KeyCodes.KEY_ENTER){
-                fireEvent(new SuggestionSelectedEvent(current, Boolean.TRUE));
+//                fireEvent(new SuggestionSelectedEvent(current, Boolean.TRUE));
             }else if(event.getValue() == KeyCodes.KEY_DOWN) {
                 toIndex = currentIndex + 1 < dataProvider.getList().size() ? currentIndex + 1 : dataProvider.getList().size() - 1;
             }else if(event.getValue() == KeyCodes.KEY_UP) {
                 toIndex = currentIndex - 1 > 0 ? currentIndex - 1 : 0;
             }
             if(toIndex!=-1 && toIndex!=currentIndex) {
-                Node newSelection = dataProvider.getList().get(toIndex);
-                suggestions.getRowElement(toIndex).scrollIntoView();
-                selectionModel.setSelected(newSelection, true);
+//                Node newSelection = dataProvider.getList().get(toIndex);
+//                suggestions.getRowElement(toIndex).scrollIntoView();
+//                selectionModel.setSelected(newSelection, true);
             }
         }
     }
 
     @Override
-    public void onSearchPerformed(SearchPerformedEvent event) {
-        Node sel = selectionModel.getSelectedObject();
-        List<Node> searchResult = event.getSuggestions();
-        if(!searchResult.isEmpty()) {
-            pagingPanel.setVisible(true);
-            facetsPanel.setVisible(true);
-        } else if(!searchResult.isEmpty() && !searchResult.contains(sel)) {
+    public void onSolrSearchPerformed(SolrSearchPerformedEvent event) {
+        Entry sel = selectionModel.getSelectedObject();
+        FireworksResult searchResult = event.getSuggestions();
+        String term = searchResult.getTerm();
+        List<Entry> entries = searchResult.getEntries()!=null ? Arrays.asList(searchResult.getEntries()) : null;
+
+        if (!entries.isEmpty() && !entries.contains(sel)) {
             selectionModel.clear();
-        } else if (searchResult.isEmpty() && !event.getTerm().isEmpty()){
-            suggestions.setEmptyListWidget(new HTML("No results found for '" + event.getTerm() +"'"));
+        } else if (entries.isEmpty() && !term.isEmpty()){
+            suggestions.setEmptyListWidget(new HTML("No results found for '" + term +"'"));
         } else {
             suggestions.setEmptyListWidget(null);
         }
+        pager.setResults(searchResult);
+        facetsPanel.setResults(searchResult);
 
         dataProvider.getList().clear();
-        dataProvider.getList().addAll(searchResult);
-        suggestions.setVisibleRange(0, 4); //configure list paging
-        suggestions.setRowCount(searchResult.size());
+        dataProvider.getList().addAll(entries);
+        suggestions.setVisibleRange(0, entries.size()); //configure list paging
+        suggestions.setRowCount(entries.size());
 
         if (dataProvider.getList().isEmpty()) {
             fireEvent(new SuggestionSelectedEvent(null));
@@ -146,22 +145,22 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements Searc
 
     @Override
     public void onSelectionChange(SelectionChangeEvent event) {
-        clickTimer = new Timer() {
-            @Override
-            public void run() {
-                fireEvent(new SuggestionHoveredEvent(selectionModel.getSelectedObject()));
-            }
-        };
-        clickTimer.schedule(500);
+//        clickTimer = new Timer() {
+//            @Override
+//            public void run() {
+//                fireEvent(new SuggestionHoveredEvent(selectionModel.getSelectedObject()));
+//            }
+//        };
+//        clickTimer.schedule(500);
     }
 
     private void init(){
         //Setting the legend style
         setStyleName(RESOURCES.getCSS().mainPanel());
 
-        SuggestionCell suggestionCell = new SuggestionCell();
+        SolrSuggestionCell suggestionCell = new SolrSuggestionCell();
 
-        suggestions = new CellList<>(suggestionCell, KEY_PROVIDER);
+        suggestions = new CellList(suggestionCell, KEY_PROVIDER);
         suggestions.sinkEvents(Event.FOCUSEVENTS);
         suggestions.setSelectionModel(selectionModel);
         suggestions.addStyleName(RESOURCES.getCSS().list());
@@ -172,19 +171,14 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements Searc
         dataProvider = new ListDataProvider<>();
         dataProvider.addDataDisplay(this.suggestions);
 
-        pager = new SimplePager();
-        pager.setDisplay(suggestions);
-        pagingPanel = new FlowPanel();
-        pagingPanel.setStyleName(RESOURCES.getCSS().pagingPanel());
-        pagingPanel.setVisible(false);
-        pagingPanel.add(pager);
+        pager = new Pager();
+        pager.addStyleName(RESOURCES.getCSS().pager());
 
-        facetsPanel = new FacetsPanel(this);
+        facetsPanel = new FacetsPanel();
         facetsPanel.addStyleName(RESOURCES.getCSS().facetsPanel());
-        facetsPanel.setVisible(false);
 
         add(suggestions);
-        add(pagingPanel);
+        add(pager);
         add(facetsPanel);
     }
 
@@ -194,7 +188,6 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements Searc
         RESOURCES = GWT.create(Resources.class);
         RESOURCES.getCSS().ensureInjected();
     }
-
     /**
      * A ClientBundle of resources used by this widget.
      */
@@ -202,10 +195,10 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements Searc
         /**
          * The styles used in this widget.
          */
-        @Source(SuggestionPanelCSS.CSS)
-        SuggestionPanelCSS getCSS();
+        @Source(SolrSuggestionPanelCSS.CSS)
+        SolrSuggestionPanelCSS getCSS();
 
-        @Source("../fallback/suggester/images/pathway.png")
+        @Source("images/pathway.png")
         ImageResource pathway();
     }
 
@@ -213,17 +206,17 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements Searc
      * Styles used by this widget.
      */
     @CssResource.ImportedWithPrefix("fireworks-SolrSuggestionPanel")
-    public interface SuggestionPanelCSS extends CssResource {
+    public interface SolrSuggestionPanelCSS extends CssResource {
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/search/searchonfire/SolrSuggestionPanel.css";
+        String CSS = "org/reactome/web/fireworks/search/searchonfire/suggester/SolrSuggestionPanel.css";
 
         String mainPanel();
 
         String list();
 
-        String pagingPanel();
+        String pager();
 
         String facetsPanel();
     }

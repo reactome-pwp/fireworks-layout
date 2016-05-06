@@ -39,9 +39,9 @@ public class SolrSuggestionCell extends AbstractCell<Entry> {
         SafeHtml minCell(SafeHtml image, SafeHtml value, String tooltip);
 
         @SafeHtmlTemplates.Template("" +
-                "<div title=\"{3}\" style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis;\">" +
+                "<div title=\"{3}\" style=\"overflow:hidden; width:100%;\">" +
                     "<div style=\"float:left;margin: 7px 0 0 5px\">{0}</div>" +
-                    "<div style=\"float:left;margin-left:10px; width:260px\">" +
+                    "<div style=\"float:left;margin-left:10px; max-width:260px\">" +
                         "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:small\">" +
                             "{1}" +
                         "</div>" +

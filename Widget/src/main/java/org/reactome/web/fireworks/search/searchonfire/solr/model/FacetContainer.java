@@ -1,4 +1,5 @@
-package org.reactome.web.fireworks.search.solr.model;
+package org.reactome.web.fireworks.search.searchonfire.solr.model;
+
 
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
@@ -7,18 +8,12 @@ import jsinterop.annotations.JsType;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 @JsType(isNative = true)
-public interface Entry {
+public interface FacetContainer {
 
     @JsProperty
-    String getStId();
-
-    @JsProperty
-    String getId();
+    Integer getCount();
 
     @JsProperty
     String getName();
-
-    @JsProperty
-    String getExactType();
 
 }

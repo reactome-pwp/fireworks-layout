@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.controls.top.search;
+package org.reactome.web.fireworks.search.fallback.launcher;
 
 import com.google.gwt.event.shared.EventHandler;
 

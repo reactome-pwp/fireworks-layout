@@ -1,9 +1,9 @@
-package org.reactome.web.fireworks.search.solr;
+package org.reactome.web.fireworks.search.searchonfire.solr;
 
 
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.http.client.*;
-import org.reactome.web.fireworks.search.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -30,6 +30,11 @@ public abstract class SearchResultFactory {
                     switch (response.getStatusCode()){
                         case Response.SC_OK:
                             FireworksResult result = JsonUtils.safeEval(response.getText());
+                            result.setTerm(term);
+                            result.setSelectedFacet(facet);
+                            result.setSpecies(species);
+                            result.setPage(page);
+                            result.setRows(rows);
                             handler.onSearchResult(result);
                             break;
                         default:
