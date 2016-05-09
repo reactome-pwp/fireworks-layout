@@ -19,14 +19,14 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import org.reactome.web.fireworks.controls.common.pager.PageChangedHandler;
 import org.reactome.web.fireworks.controls.common.pager.Pager;
 import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
-import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
-import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
 import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysEvent;
 import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysHandler;
+import org.reactome.web.fireworks.search.searchonfire.events.SolrSuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedHandler;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetsPanel;
+import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedEvent;
 import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedHandler;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
@@ -75,8 +75,8 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         return addHandler(handler, SuggestionHoveredEvent.TYPE);
     }
 
-    public HandlerRegistration addSuggestionSelectedHandler(SuggestionSelectedHandler handler) {
-        return addHandler(handler, SuggestionSelectedEvent.TYPE);
+    public HandlerRegistration addSolrSuggestionSelectedHandler(SolrSuggestionSelectedHandler handler) {
+        return addHandler(handler, SolrSuggestionSelectedEvent.TYPE);
     }
 
     public HandlerRegistration addPageChangedHandler(PageChangedHandler handler){
@@ -137,7 +137,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         suggestions.setRowCount(entries.size());
 
         if (dataProvider.getList().isEmpty()) {
-            fireEvent(new SuggestionSelectedEvent(null));
+            fireEvent(new SolrSuggestionSelectedEvent(null));
         }
     }
 
@@ -152,6 +152,8 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
 //            }
 //        };
 //        clickTimer.schedule(500);
+
+        fireEvent(new SolrSuggestionSelectedEvent(selectionModel.getSelectedObject()));
     }
 
     private void init(){

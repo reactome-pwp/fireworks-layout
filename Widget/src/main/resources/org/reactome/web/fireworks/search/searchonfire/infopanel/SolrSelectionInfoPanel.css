@@ -1,4 +1,6 @@
 .container{
     overflow: scroll;
     max-height: 380px;
+
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
 }

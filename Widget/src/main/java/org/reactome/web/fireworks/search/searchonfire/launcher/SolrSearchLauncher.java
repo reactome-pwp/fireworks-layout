@@ -20,14 +20,14 @@ import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.search.fallback.events.PanelCollapsedEvent;
 import org.reactome.web.fireworks.search.fallback.events.PanelExpandedEvent;
 import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
-import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.fallback.handlers.PanelCollapsedHandler;
 import org.reactome.web.fireworks.search.fallback.handlers.PanelExpandedHandler;
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
-import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.fallback.searchbox.*;
+import org.reactome.web.fireworks.search.searchonfire.events.SolrSuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedEvent;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedHandler;
+import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.solr.SearchResultFactory;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
 import org.reactome.web.fireworks.util.Console;
@@ -36,7 +36,7 @@ import org.reactome.web.fireworks.util.Console;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, SearchBoxUpdatedHandler,
-        SuggestionHoveredHandler, SuggestionSelectedHandler, SearchBoxArrowKeysHandler,
+        SuggestionHoveredHandler, SolrSuggestionSelectedHandler, SearchBoxArrowKeysHandler,
         SearchKeyPressedHandler, SearchResultFactory.SearchResultHandler,
         PageChangedHandler, FacetChangedHandler {
 
@@ -158,8 +158,8 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     }
 
     @Override
-    public void onSuggestionSelected(SuggestionSelectedEvent event) {
-        eventBus.fireEventFromSource(event, this);
+    public void onSuggestionSelected(SolrSuggestionSelectedEvent event) {
+//        eventBus.fireEventFromSource(event, this);
     }
 
     @Override

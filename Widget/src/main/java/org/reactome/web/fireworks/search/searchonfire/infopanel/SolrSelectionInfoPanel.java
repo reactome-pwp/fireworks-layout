@@ -4,16 +4,21 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
-import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
-import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
+import org.reactome.web.fireworks.search.searchonfire.events.SolrSuggestionSelectedEvent;
+import org.reactome.web.fireworks.search.searchonfire.graph.GraphSearchResultFactory;
+import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
+import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
 
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements SuggestionSelectedHandler {
+public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements SolrSuggestionSelectedHandler,
+        GraphSearchResultFactory.GraphSearchResultHandler {
     private EventBus eventBus;
+    private Entry selectedSuggestion;
 
     public SolrSelectionInfoPanel(EventBus eventBus) {
         this.eventBus = eventBus;
@@ -21,12 +26,30 @@ public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements Su
     }
 
     @Override
-    public void onSuggestionSelected(SuggestionSelectedEvent event) {
+    public void onSuggestionSelected(SolrSuggestionSelectedEvent event) {
         this.clear();
-
-//        SearchResultObject obj = event.getSearchResultObject();
-
+        selectedSuggestion = event.getSelectedEntry();
+        if(selectedSuggestion!=null) {
+            performGraphSearch();
+        }
     }
+
+    private void performGraphSearch(){
+        GraphSearchResultFactory.searchForPathways(selectedSuggestion.getStId(), 48887L, this);
+    }
+
+    @Override
+    public void onGraphSearchResult(GraphEntry[] result) {
+        if(result!=null) {
+            this.add(new DetailsInfoPanel(selectedSuggestion, result));
+        }
+    }
+
+    @Override
+    public void onGraphSearchError() {
+        //TODO to implement this
+    }
+
 
     public static Resources RESOURCES;
     static {
