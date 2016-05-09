@@ -89,7 +89,7 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
     }
 
     private void init() {
-        titleLabel = new Label("Filter by facet:");
+        titleLabel = new Label("Filter by type:");
         Style style = titleLabel.getElement().getStyle();
         style.setFontSize(1.20, Style.Unit.EM);
         style.setFontWeight(Style.FontWeight.BOLD);
