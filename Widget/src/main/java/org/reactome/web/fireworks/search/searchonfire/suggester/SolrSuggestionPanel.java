@@ -1,7 +1,9 @@
 package org.reactome.web.fireworks.search.searchonfire.suggester;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
@@ -10,7 +12,6 @@ import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -40,7 +41,7 @@ import java.util.List;
  */
 @SuppressWarnings("Duplicates")
 public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrSearchPerformedHandler, SearchBoxArrowKeysHandler,
-        SelectionChangeEvent.Handler, DoubleClickHandler {
+        SelectionChangeEvent.Handler {
 
     private final SingleSelectionModel<Entry> selectionModel;
     private CellList<Entry> suggestions;
@@ -84,16 +85,6 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
     }
 
     @Override
-    public void onDoubleClick(DoubleClickEvent event) {
-        event.stopPropagation(); event.preventDefault();
-        if(clickTimer !=null) clickTimer.cancel();
-        Entry selected = selectionModel.getSelectedObject();
-        if (selected != null) {
-//            fireEvent(new SuggestionSelectedEvent(selected, Boolean.TRUE));
-        }
-    }
-
-    @Override
     public void onKeysPressed(SearchBoxArrowKeysEvent event) {
         if(suggestions.getRowCount()>0) {
             Entry current = selectionModel.getSelectedObject();
@@ -107,9 +98,8 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
                 toIndex = currentIndex - 1 > 0 ? currentIndex - 1 : 0;
             }
             if(toIndex!=-1 && toIndex!=currentIndex) {
-//                Node newSelection = dataProvider.getList().get(toIndex);
-//                suggestions.getRowElement(toIndex).scrollIntoView();
-//                selectionModel.setSelected(newSelection, true);
+                Entry newSelection = dataProvider.getList().get(toIndex);
+                selectionModel.setSelected(newSelection, true);
             }
         }
     }
@@ -141,18 +131,8 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         }
     }
 
-    Timer clickTimer;
-
     @Override
     public void onSelectionChange(SelectionChangeEvent event) {
-//        clickTimer = new Timer() {
-//            @Override
-//            public void run() {
-//                fireEvent(new SuggestionHoveredEvent(selectionModel.getSelectedObject()));
-//            }
-//        };
-//        clickTimer.schedule(500);
-
         fireEvent(new SolrSuggestionSelectedEvent(selectionModel.getSelectedObject()));
     }
 
@@ -166,7 +146,6 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         suggestions.sinkEvents(Event.FOCUSEVENTS);
         suggestions.setSelectionModel(selectionModel);
         suggestions.addStyleName(RESOURCES.getCSS().list());
-        suggestions.addDomHandler(this, DoubleClickEvent.getType());
         suggestions.setKeyboardPagingPolicy(HasKeyboardPagingPolicy.KeyboardPagingPolicy.INCREASE_RANGE);
         suggestions.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
 
