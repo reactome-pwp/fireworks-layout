@@ -3,6 +3,7 @@ package org.reactome.web.fireworks.model;
 import org.reactome.web.analysis.client.model.PathwayBase;
 import org.reactome.web.analysis.client.model.SpeciesFilteredResult;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +63,36 @@ public class FireworksData {
             if(node!=null){
                 node.setAnalysisResultData(result, pathway.getEntities());
             }
+        }
+    }
+
+    public void setPathwaysFilteredResult(Collection<Node> nodes){
+        for (Node node : graph.getNodes()) {
+            node.setTransparency(0.1);
+        }
+        for (Edge edge : graph.getEdges()) {
+            edge.setTransparency(0.1);
+        }
+        for (Node node : nodes) {
+            node.setTransparency(1.0);
+            for (Edge edge : node.getEdgesTo()) {
+                edge.setTransparency(1.0);
+            }
+            for (Node ancestor : node.getAncestors()) {
+                ancestor.setTransparency(1.0);
+                for (Edge edge : ancestor.getEdgesTo()) {
+                    edge.setTransparency(1.0);
+                }
+            }
+        }
+    }
+
+    public void resetPathwaysFiltered(){
+        for (Node node : graph.getNodes()) {
+            node.setTransparency(1.0);
+        }
+        for (Edge edge : graph.getEdges()) {
+            edge.setTransparency(1.0);
         }
     }
 

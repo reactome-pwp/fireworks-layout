@@ -30,7 +30,6 @@ import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
-import org.reactome.web.fireworks.util.Console;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
 
@@ -48,7 +47,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         ControlActionHandler, ProfileChangedHandler,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
         IllustrationSelectedHandler, CanvasExportRequestedHandler,
-        KeyDownHandler, SearchFilterHandler {
+        KeyDownHandler, SearchFilterHandler, SearchResetHandler {
 
     EventBus eventBus;
 
@@ -93,6 +92,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(SuggestionSelectedEvent.TYPE, this);
         this.eventBus.addHandler(SuggestionHoveredEvent.TYPE, this);
         this.eventBus.addHandler(SearchFilterEvent.TYPE, this);
+        this.eventBus.addHandler(SearchResetEvent.TYPE, this);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -333,8 +333,16 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         for (GraphEntry graphEntry : event.getResult()) {
             filteredNodes.add(data.getNode(graphEntry.getStableIdentifier()));
         }
+        data.setPathwaysFilteredResult(filteredNodes);
         manager.displayNodesAndParents(filteredNodes);
-        Console.info(filteredNodes.size() + " to be filtered out");
+        this.forceFireworksDraw = true;
+    }
+
+    @Override
+    public void onSearchReset(SearchResetEvent event) {
+        data.resetPathwaysFiltered();
+        manager.displayAllNodes(true);
+        this.forceFireworksDraw = true;
     }
 
     @Override
