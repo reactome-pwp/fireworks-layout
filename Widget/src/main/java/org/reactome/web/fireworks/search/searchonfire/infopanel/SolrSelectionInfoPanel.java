@@ -42,7 +42,7 @@ public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements So
     @Override
     public void onGraphSearchResult(GraphEntry[] result) {
         if(result!=null) {
-            this.add(new DetailsInfoPanel(selectedSuggestion, result));
+            this.add(new DetailsInfoPanel(eventBus, selectedSuggestion, result));
         }
         eventBus.fireEventFromSource(new SearchFilterEvent(result), this);
     }

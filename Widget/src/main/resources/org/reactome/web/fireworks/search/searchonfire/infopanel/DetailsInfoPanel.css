@@ -33,11 +33,10 @@
 
 .identifierLabel {
     float: left;
-    /*width: 50px;*/
 }
 
 .identifierLink {
-    float: left;
+    margin-left: 3px;
 }
 
 .databaseObjectListPanel {

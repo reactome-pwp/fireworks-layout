@@ -1,21 +1,28 @@
 package org.reactome.web.fireworks.search.searchonfire.infopanel;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
+import org.reactome.web.pwp.model.factory.SchemaClass;
+
+import java.util.Arrays;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class DetailsInfoPanel extends Composite {
+    private EventBus eventBus;
+
     private Entry selectedSuggestion;
     private GraphEntry[] result;
     private FlowPanel mainPanel;
 
-    public DetailsInfoPanel(Entry selectedSuggestion, GraphEntry[] result) {
+    public DetailsInfoPanel(EventBus eventBus, Entry selectedSuggestion, GraphEntry[] result) {
+        this.eventBus = eventBus;
         this.selectedSuggestion = selectedSuggestion;
         this.result = result;
         init();
@@ -26,7 +33,7 @@ public class DetailsInfoPanel extends Composite {
         header.setStyleName(RESOURCES.getCSS().infoHeader());
         header.add(new InlineLabel(selectedSuggestion.getName()));
 
-        Label typeLb = new Label("Type: " + selectedSuggestion.getExactType());
+        Label typeLb = new Label("Type: " + SchemaClass.getSchemaClass(selectedSuggestion.getExactType()));
         Label identifierLb = new Label("Identifier: ");
         identifierLb.setStyleName(RESOURCES.getCSS().identifierLabel());
 
@@ -40,11 +47,8 @@ public class DetailsInfoPanel extends Composite {
         mainPanel.add(identifierLb);
         mainPanel.add(identifierLink);
 
-        FlowPanel d = new FlowPanel();
-        for (GraphEntry entry : result) {
-            d.add(new Label(entry.getDisplayName()));
-        }
-        mainPanel.add(d);
+        String title = "Present in " + result.length + (result.length > 1 ? " pathways" : " pathway");
+        mainPanel.add( new GraphEntryListPanel(title, Arrays.asList(result), eventBus));
 
         SimplePanel sp = new SimplePanel();
         sp.setStyleName(RESOURCES.getCSS().objectInfoPanel());
