@@ -18,7 +18,7 @@ public class Pager extends FlowPanel {
     private static String MSG = "Page: ";
 
     private SolrSearchResult searchResult;
-    private int currentPage;
+    private int currentRow;
     private int totalPages;
 
     private IconButton startBtn;
@@ -38,8 +38,8 @@ public class Pager extends FlowPanel {
 
     public void setResults(SolrSearchResult searchResult) {
         this.searchResult = searchResult;
-        this.totalPages = (int) (searchResult.getFound()/4 + 0.5);
-        currentPage = searchResult.getPage();
+        this.totalPages  = (int) Math.ceil(searchResult.getFound()/(double)searchResult.getRows());
+        currentRow = searchResult.getStartRow();
 
         setVisible(totalPages>1);
         updateText();
@@ -52,8 +52,8 @@ public class Pager extends FlowPanel {
         startBtn.setStyleName(RESOURCES.getCSS().leftBtn());
         startBtn.setTitle("Go to first page");
         startBtn.addClickHandler(event -> {
-            currentPage = 0;
-            changePage(currentPage);
+            currentRow = 0;
+            changePage(currentRow);
             updateText();
         });
 
@@ -61,8 +61,8 @@ public class Pager extends FlowPanel {
         previousBtn.setStyleName(RESOURCES.getCSS().leftBtn());
         previousBtn.setTitle("Go to previous page");
         previousBtn.addClickHandler( event -> {
-            currentPage--;
-            changePage(currentPage);
+            currentRow = currentRow - searchResult.getRows();
+            changePage(currentRow);
             updateText();
         });
 
@@ -70,8 +70,8 @@ public class Pager extends FlowPanel {
         nextBtn.setStyleName(RESOURCES.getCSS().rightBtn());
         nextBtn.setTitle("Go to next page");
         nextBtn.addClickHandler(event -> {
-            currentPage++;
-            changePage(currentPage);
+            currentRow = currentRow + searchResult.getRows();
+            changePage(currentRow);
             updateText();
         });
 
@@ -79,8 +79,8 @@ public class Pager extends FlowPanel {
         endBtn.setStyleName(RESOURCES.getCSS().rightBtn());
         endBtn.setTitle("Go to last page");
         endBtn.addClickHandler(event -> {
-            currentPage = totalPages - 1;
-            changePage(currentPage);
+            currentRow = searchResult.getFound() - searchResult.getFound()%4 ;
+            changePage(currentRow);
             updateText();
         });
 
@@ -96,16 +96,16 @@ public class Pager extends FlowPanel {
 
     private void updateText(){
         if(title != null) {
-            title.setText(MSG + (currentPage + 1) + "/" + totalPages);
+            title.setText(MSG + (currentRow/4 + 1) + "/" + totalPages);
         }
-        startBtn.setEnabled(currentPage > 0);
-        previousBtn.setEnabled(currentPage > 0);
-        nextBtn.setEnabled(currentPage < totalPages - 1);
-        endBtn.setEnabled(currentPage < totalPages - 1);
+        startBtn.setEnabled(currentRow > 0);
+        previousBtn.setEnabled(currentRow > 0);
+        nextBtn.setEnabled(currentRow < (searchResult.getFound() - searchResult.getFound()%4) - 1);
+        endBtn.setEnabled(currentRow < (searchResult.getFound() - searchResult.getFound()%4) - 1);
     }
 
-    private void changePage(int newPage) {
-        searchResult.setPage(newPage);
+    private void changePage(int newStartRow) {
+        searchResult.setStartRow(newStartRow);
         fireEvent(new PageChangedEvent(searchResult));
     }
 

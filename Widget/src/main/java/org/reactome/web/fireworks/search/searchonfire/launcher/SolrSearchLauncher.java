@@ -58,7 +58,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     private static String SEARCH_TERM = "";
     private static String FACET = "";
     private static String SPECIES = "Homo+sapiens";
-    private static int CURRENT_PAGE = 0;
+    private static int START_ROW = 0;
     private static final int ROWS = 4;
 
 
@@ -118,14 +118,14 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     @Override
     public void onFacetChanged(FacetChangedEvent event) {
         FACET = event.getResults().getSelectedFacet();
-        CURRENT_PAGE = 0; //Go to the first page
+        START_ROW = 0; //Go to the first page
         performSearch();
     }
 
     @Override
     public void onSearchUpdated(SearchBoxUpdatedEvent event) {
         SEARCH_TERM = input.getText().trim();
-        CURRENT_PAGE = 0; //Go to the first page
+        START_ROW = 0; //Go to the first page
         performSearch();
     }
 
@@ -181,7 +181,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
 
     @Override
     public void onPageChanged(PageChangedEvent event) {
-        CURRENT_PAGE = event.getResults().getPage();
+        START_ROW = event.getResults().getStartRow();
         performSearch();
     }
 
@@ -214,7 +214,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     }
 
     private void performSearch() {
-        SearchResultFactory.searchForTerm(SEARCH_TERM, FACET, SPECIES, CURRENT_PAGE, ROWS, this);
+        SearchResultFactory.searchForTerm(SEARCH_TERM, FACET, SPECIES, START_ROW, ROWS, this);
     }
 
 

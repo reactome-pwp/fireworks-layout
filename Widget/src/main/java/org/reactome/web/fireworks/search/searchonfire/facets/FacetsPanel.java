@@ -113,6 +113,6 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
         for(FacetTag facet : facetsMap.values()) {
             tagsContainer.add(facet);
         }
-        setVisible(!facetsMap.isEmpty());
+        setVisible(!facetsMap.isEmpty() && facetsMap.size()>1);
     }
 }

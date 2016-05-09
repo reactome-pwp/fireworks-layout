@@ -33,7 +33,7 @@ public abstract class SearchResultFactory {
                             result.setTerm(term);
                             result.setSelectedFacet(facet);
                             result.setSpecies(species);
-                            result.setPage(page);
+                            result.setStartRow(page);
                             result.setRows(rows);
                             handler.onSearchResult(result);
                             break;

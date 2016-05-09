@@ -19,10 +19,10 @@ public interface SolrSearchResult {
     int getFound();
 
     @JsProperty
-    void setPage(Integer page);
+    void setStartRow(Integer page);
 
     @JsProperty
-    Integer getPage();
+    Integer getStartRow();
 
     @JsProperty
     void setRows(Integer rows);
