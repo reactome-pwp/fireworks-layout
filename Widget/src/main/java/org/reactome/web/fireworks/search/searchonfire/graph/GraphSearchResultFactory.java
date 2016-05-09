@@ -29,8 +29,6 @@ public abstract class GraphSearchResultFactory {
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){
                         case Response.SC_OK:
-                            //TODO this is a temporary solution until we decide on the format of the JSON: Do we go for a wrapper object (like FireworksResult) or simply the collection of objects
-//                            GraphResult result = JsonUtils.safeEval(response.getText());
                             GraphEntry[] result =  (GraphEntry[])(Object) JsonUtils.safeEval(response.getText());
                             handler.onGraphSearchResult(result);
                             break;
