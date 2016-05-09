@@ -333,6 +333,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         for (GraphEntry graphEntry : event.getResult()) {
             filteredNodes.add(data.getNode(graphEntry.getStableIdentifier()));
         }
+        manager.displayNodesAndParents(filteredNodes);
         Console.info(filteredNodes.size() + " to be filtered out");
     }
 

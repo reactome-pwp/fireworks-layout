@@ -13,9 +13,7 @@ import uk.ac.ebi.pwp.structures.quadtree.client.Box;
 import uk.ac.ebi.pwp.structures.quadtree.client.QuadTree;
 import uk.ac.ebi.pwp.structures.quadtree.client.QuadTreeBox;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -111,7 +109,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         this.eventBus.fireEventFromSource(new FireworksZoomEvent(this.currentStatus, this.width / factor, this.height / factor, canvas), this);
     }
 
-    protected void displayNodeAndParents(Node node) {
+    void displayNodeAndParents(Node node) {
         if (this.currentStatus.getFactor() > ZOOM_MAX) {
             reduceNode(node);
         } else {
@@ -119,7 +117,31 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         }
     }
 
-    protected void displayAllNodes(boolean animation) {
+    void displayNodesAndParents(Collection<Node> nodes) {
+        if (nodes == null || nodes.isEmpty()) return;
+        Iterator<Node> iterator = nodes.iterator();
+        //1- Calculate the outer box containing all the nodes and all their parents
+        Node node = iterator.next();
+        double minX = node.getMinX();
+        double maxX = node.getMaxX();
+        double minY = node.getMinY();
+        double maxY = node.getMaxY();
+        do {
+            Set<Node> auxSet = node.getAncestors();
+            auxSet.add(node);
+            for (Node aux : auxSet) {
+                minX = Math.min(minX, aux.getMinX());
+                maxX = Math.max(maxX, aux.getMaxX());
+                minY = Math.min(minY, aux.getMinY());
+                maxY = Math.max(maxY, aux.getMaxY());
+            }
+        } while (iterator.hasNext() && (node = iterator.next()) != null);
+
+        //2 - Display action
+        this.displayAction(minX, minY, maxX, maxY, true);
+    }
+
+    void displayAllNodes(boolean animation) {
         //1- Calculate the outer box containing the node and all its parents
         double minX = this.graph.getMinX();
         double maxX = this.graph.getMaxX();
@@ -236,7 +258,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         animation.zoomOut(node, ZOOM_MAX / 2);
     }
 
-    protected Node getHoveredNode(Coordinate mouse) {
+    Node getHoveredNode(Coordinate mouse) {
         Coordinate c = this.currentStatus.getModelCoordinate(mouse);
         double f = 1 / this.currentStatus.getFactor();
 
@@ -256,11 +278,11 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         return null;
     }
 
-    protected Set<QuadTreeBox> getVisibleElements() {
+    Set<QuadTreeBox> getVisibleElements() {
         return this.quadTree.getItems(this.currentStatus.getVisibleModelArea(this.width, this.height));
     }
 
-    protected boolean isNodeVisible(Node node) {
+    boolean isNodeVisible(Node node) {
         if (node == null) return false;
         for (QuadTreeBox item : getVisibleElements()) {
             if (item instanceof Node) {
@@ -301,7 +323,7 @@ class FireworksViewerManager implements MovementAnimation.FireworksZoomAnimation
         }
     }
 
-    protected void setGraph(Graph graph) {
+    void setGraph(Graph graph) {
         this.graph = graph;
         double minX = this.graph.getMinX();
         double maxX = this.graph.getMaxX();
