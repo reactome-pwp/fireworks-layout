@@ -8,7 +8,8 @@
     float: left;
     width: 100%; /* grows and shrinks with the parent */
     max-height: 210px;
-    overflow: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     outline: none;
 
     -webkit-box-shadow: 3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
