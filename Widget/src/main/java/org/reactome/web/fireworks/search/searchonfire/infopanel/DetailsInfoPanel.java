@@ -33,7 +33,8 @@ public class DetailsInfoPanel extends Composite {
         header.setStyleName(RESOURCES.getCSS().infoHeader());
         header.add(new InlineLabel(selectedSuggestion.getName()));
 
-        Label typeLb = new Label("Type: " + SchemaClass.getSchemaClass(selectedSuggestion.getExactType()));
+        String type = SchemaClass.getSchemaClass(selectedSuggestion.getExactType()).name;
+        Label typeLb = new Label("Type: " + type);
         Label identifierLb = new Label("Identifier: ");
         identifierLb.setStyleName(RESOURCES.getCSS().identifierLabel());
 
@@ -47,8 +48,10 @@ public class DetailsInfoPanel extends Composite {
         mainPanel.add(identifierLb);
         mainPanel.add(identifierLink);
 
-        String title = "Present in " + result.length + (result.length > 1 ? " pathways" : " pathway");
-        mainPanel.add( new GraphEntryListPanel(title, Arrays.asList(result), eventBus));
+        if(!type.equals(SchemaClass.PATHWAY.name)) {
+            String title = "Present in " + result.length + (result.length > 1 ? " pathways" : " pathway");
+            mainPanel.add(new GraphEntryListPanel(title, Arrays.asList(result), eventBus));
+        }
 
         SimplePanel sp = new SimplePanel();
         sp.setStyleName(RESOURCES.getCSS().objectInfoPanel());
