@@ -33,7 +33,7 @@ public class SearchFilterEvent extends GwtEvent<SearchFilterHandler> {
     @Override
     public String toString() {
         return "SearchFilterEvent{" +
-                "numberOfElementsFiltered =" + graphEntries.length +
+                "numberOfElementsFiltered=" + graphEntries.length +
                 '}';
     }
 }
