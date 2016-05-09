@@ -1,6 +1,7 @@
 package org.reactome.web.fireworks.search.searchonfire.facets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -49,9 +50,10 @@ public class FacetTag extends FocusPanel {
 
     private void init() {
         setStyleName(RESOURCES.getCSS().base());
+        NumberFormat nf = NumberFormat.getDecimalFormat();
 
         Image image = new Image(Pager.RESOURCES.nextIcon());
-        Label title = new Label(name + " (" + count + ")");
+        Label title = new Label(name + " (" + nf.format(count) + ")");
         title.setStyleName(RESOURCES.getCSS().tagText());
 
         tagPanel = new FlowPanel();
