@@ -2,6 +2,7 @@ package org.reactome.web.fireworks.controls.common.pager;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
@@ -27,8 +28,11 @@ public class Pager extends FlowPanel {
     private IconButton endBtn;
     private Label title;
 
+    private final NumberFormat nf;
+
     public Pager() {
         setVisible(false);
+        nf = NumberFormat.getDecimalFormat();
         init();
     }
 
@@ -96,7 +100,7 @@ public class Pager extends FlowPanel {
 
     private void updateText(){
         if(title != null) {
-            title.setText(MSG + (currentRow/4 + 1) + "/" + totalPages);
+            title.setText(MSG + nf.format((currentRow/4 + 1)) + "/" + nf.format(totalPages));
         }
         startBtn.setEnabled(currentRow > 0);
         previousBtn.setEnabled(currentRow > 0);

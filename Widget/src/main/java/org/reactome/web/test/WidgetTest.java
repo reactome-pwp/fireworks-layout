@@ -8,10 +8,6 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.client.FireworksViewer;
-import org.reactome.web.fireworks.search.searchonfire.solr.SearchResultFactory;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
-import org.reactome.web.fireworks.util.Console;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -76,21 +72,6 @@ public class WidgetTest implements EntryPoint {
     }
 
     public void initialise(String json){
-        SearchResultFactory.searchForTerm("PTEN", "Protein", "Homo+sapiens", 1, 4, new SearchResultFactory.SearchResultHandler() {
-            @Override
-            public void onSearchResult(SolrSearchResult result) {
-                Console.info(result.getFound());
-                for (Entry entry : result.getEntries()) {
-                    Console.info(entry.getName());
-                }
-            }
-
-            @Override
-            public void onSearchError() {
-                Console.error("Search error");
-            }
-        });
-
         final FireworksViewer fireworks = FireworksFactory.createFireworksViewer(json);
 
         VerticalPanel vp = new VerticalPanel();
