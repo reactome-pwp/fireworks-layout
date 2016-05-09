@@ -1,7 +1,7 @@
 package org.reactome.web.fireworks.search.searchonfire.launcher;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -9,9 +9,9 @@ import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult
 public class SolrSearchPerformedEvent extends GwtEvent<SolrSearchPerformedHandler> {
     public static Type<SolrSearchPerformedHandler> TYPE = new Type<>();
 
-    private FireworksResult suggestions;
+    private SolrSearchResult suggestions;
 
-    public SolrSearchPerformedEvent(FireworksResult suggestions) {
+    public SolrSearchPerformedEvent(SolrSearchResult suggestions) {
         this.suggestions = suggestions;
     }
 
@@ -25,7 +25,7 @@ public class SolrSearchPerformedEvent extends GwtEvent<SolrSearchPerformedHandle
         handler.onSolrSearchPerformed(this);
     }
 
-    public FireworksResult getSuggestions() {
+    public SolrSearchResult getSuggestions() {
         return suggestions;
     }
 

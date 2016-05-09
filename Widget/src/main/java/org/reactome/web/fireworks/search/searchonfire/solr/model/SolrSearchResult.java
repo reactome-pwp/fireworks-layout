@@ -7,7 +7,7 @@ import jsinterop.annotations.JsType;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 @JsType(isNative = true)
-public interface FireworksResult {
+public interface SolrSearchResult {
 
     @JsProperty
     Entry[] getEntries();

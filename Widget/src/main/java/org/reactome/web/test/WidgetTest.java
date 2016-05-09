@@ -10,7 +10,7 @@ import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.client.FireworksViewer;
 import org.reactome.web.fireworks.search.searchonfire.solr.SearchResultFactory;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 import org.reactome.web.fireworks.util.Console;
 
 /**
@@ -78,7 +78,7 @@ public class WidgetTest implements EntryPoint {
     public void initialise(String json){
         SearchResultFactory.searchForTerm("PTEN", "Protein", "Homo+sapiens", 1, 4, new SearchResultFactory.SearchResultHandler() {
             @Override
-            public void onSearchResult(FireworksResult result) {
+            public void onSearchResult(SolrSearchResult result) {
                 Console.info(result.getFound());
                 for (Entry entry : result.getEntries()) {
                     Console.info(entry.getName());

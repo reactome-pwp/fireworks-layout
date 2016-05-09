@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import org.reactome.web.fireworks.events.SearchFilterEvent;
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
 import org.reactome.web.fireworks.search.searchonfire.events.SolrSuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.searchonfire.graph.GraphSearchResultFactory;
@@ -43,6 +44,7 @@ public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements So
         if(result!=null) {
             this.add(new DetailsInfoPanel(selectedSuggestion, result));
         }
+        eventBus.fireEventFromSource(new SearchFilterEvent(result), this);
     }
 
     @Override

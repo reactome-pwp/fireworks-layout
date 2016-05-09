@@ -8,7 +8,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import org.reactome.web.fireworks.controls.common.IconButton;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
 
 /**
@@ -17,7 +17,7 @@ import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult
 public class Pager extends FlowPanel {
     private static String MSG = "Page: ";
 
-    private FireworksResult searchResult;
+    private SolrSearchResult searchResult;
     private int currentPage;
     private int totalPages;
 
@@ -36,7 +36,7 @@ public class Pager extends FlowPanel {
         return addHandler(handler, PageChangedEvent.TYPE);
     }
 
-    public void setResults(FireworksResult searchResult) {
+    public void setResults(SolrSearchResult searchResult) {
         this.searchResult = searchResult;
         this.totalPages = (int) (searchResult.getFound()/4 + 0.5);
         currentPage = searchResult.getPage();

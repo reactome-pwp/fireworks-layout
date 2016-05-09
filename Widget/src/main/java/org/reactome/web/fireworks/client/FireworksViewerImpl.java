@@ -29,10 +29,14 @@ import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
 import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
+import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
+import org.reactome.web.fireworks.util.Console;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -44,7 +48,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         ControlActionHandler, ProfileChangedHandler,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
         IllustrationSelectedHandler, CanvasExportRequestedHandler,
-        KeyDownHandler {
+        KeyDownHandler, SearchFilterHandler {
 
     EventBus eventBus;
 
@@ -88,6 +92,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         }
         this.eventBus.addHandler(SuggestionSelectedEvent.TYPE, this);
         this.eventBus.addHandler(SuggestionHoveredEvent.TYPE, this);
+        this.eventBus.addHandler(SearchFilterEvent.TYPE, this);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -323,6 +328,15 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public void onSearchFilterEvent(SearchFilterEvent event) {
+        Set<Node> filteredNodes = new HashSet<>();
+        for (GraphEntry graphEntry : event.getResult()) {
+            filteredNodes.add(data.getNode(graphEntry.getStableIdentifier()));
+        }
+        Console.info(filteredNodes.size() + " to be filtered out");
+    }
+
+    @Override
     public void resetHighlight() {
         this.setHoveredNode(null);
     }
@@ -530,7 +544,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void onKeyDown(KeyDownEvent keyDownEvent) {
-        if(isVisible()){
+        if (isVisible()) {
             int keyCode = keyDownEvent.getNativeKeyCode();
             String platform = Window.Navigator.getPlatform();
             // If this is a Mac, check for the cmd key. In case of any other platform, check for the ctrl key

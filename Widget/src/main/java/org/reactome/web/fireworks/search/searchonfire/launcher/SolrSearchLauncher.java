@@ -29,7 +29,7 @@ import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedEvent;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedHandler;
 import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.solr.SearchResultFactory;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 import org.reactome.web.fireworks.util.Console;
 
 /**
@@ -130,7 +130,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     }
 
     @Override
-    public void onSearchResult(FireworksResult result) {
+    public void onSearchResult(SolrSearchResult result) {
         fireEvent(new SolrSearchPerformedEvent(result));
     }
 

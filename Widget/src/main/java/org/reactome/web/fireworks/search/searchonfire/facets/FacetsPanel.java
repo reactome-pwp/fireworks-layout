@@ -7,7 +7,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.FacetContainer;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ import java.util.*;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class FacetsPanel extends FlowPanel implements ClickHandler {
-    private FireworksResult searchResult;
+    private SolrSearchResult searchResult;
     private Map<String, FacetTag> facetsMap;
 
     private Label titleLabel;
@@ -32,7 +32,7 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
         return addHandler(handler, FacetChangedEvent.TYPE);
     }
 
-    public void setResults(FireworksResult searchResult) {
+    public void setResults(SolrSearchResult searchResult) {
         this.searchResult = searchResult;
 
         List<String> selectedFacets = new ArrayList<>();

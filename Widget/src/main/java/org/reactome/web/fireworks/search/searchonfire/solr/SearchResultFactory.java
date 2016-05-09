@@ -3,7 +3,7 @@ package org.reactome.web.fireworks.search.searchonfire.solr;
 
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.http.client.*;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -13,7 +13,7 @@ public abstract class SearchResultFactory {
     private static final String SEARCH = "/ContentService/search/fireworks?query=##term##&species=##species##&types=##facet##&page=##page##&rows=##rows##";
 
     public interface SearchResultHandler {
-        void onSearchResult(FireworksResult result);
+        void onSearchResult(SolrSearchResult result);
         void onSearchError();
     }
 
@@ -29,7 +29,7 @@ public abstract class SearchResultFactory {
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){
                         case Response.SC_OK:
-                            FireworksResult result = JsonUtils.safeEval(response.getText());
+                            SolrSearchResult result = JsonUtils.safeEval(response.getText());
                             result.setTerm(term);
                             result.setSelectedFacet(facet);
                             result.setSpecies(species);

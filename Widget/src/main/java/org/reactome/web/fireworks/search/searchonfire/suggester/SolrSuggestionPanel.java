@@ -30,7 +30,7 @@ import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSel
 import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedEvent;
 import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedHandler;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
 import java.util.Arrays;
 import java.util.List;
@@ -117,7 +117,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
     @Override
     public void onSolrSearchPerformed(SolrSearchPerformedEvent event) {
         Entry sel = selectionModel.getSelectedObject();
-        FireworksResult searchResult = event.getSuggestions();
+        SolrSearchResult searchResult = event.getSuggestions();
         String term = searchResult.getTerm();
         List<Entry> entries = searchResult.getEntries()!=null ? Arrays.asList(searchResult.getEntries()) : null;
 

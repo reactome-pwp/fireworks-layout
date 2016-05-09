@@ -1,7 +1,7 @@
 package org.reactome.web.fireworks.controls.common.pager;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult;
+import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -9,9 +9,9 @@ import org.reactome.web.fireworks.search.searchonfire.solr.model.FireworksResult
 public class PageChangedEvent extends GwtEvent<PageChangedHandler> {
     public static Type<PageChangedHandler> TYPE = new Type<>();
 
-    private FireworksResult results;
+    private SolrSearchResult results;
 
-    public PageChangedEvent(FireworksResult results) {
+    public PageChangedEvent(SolrSearchResult results) {
         this.results = results;
     }
 
@@ -25,7 +25,7 @@ public class PageChangedEvent extends GwtEvent<PageChangedHandler> {
         handler.onPageChanged(this);
     }
 
-    public FireworksResult getResults() {
+    public SolrSearchResult getResults() {
         return results;
     }
 }
