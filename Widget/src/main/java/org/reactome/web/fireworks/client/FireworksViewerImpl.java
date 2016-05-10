@@ -47,7 +47,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         ControlActionHandler, ProfileChangedHandler,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
         IllustrationSelectedHandler, CanvasExportRequestedHandler,
-        KeyDownHandler, SearchFilterHandler, SearchResetHandler {
+        KeyDownHandler, SearchFilterHandler, SearchResetHandler,
+        GraphEntryHoveredHandler {
 
     EventBus eventBus;
 
@@ -89,10 +90,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             initWidget(new Label(e.getMessage()));
             e.printStackTrace();
         }
-        this.eventBus.addHandler(SuggestionSelectedEvent.TYPE, this);
-        this.eventBus.addHandler(SuggestionHoveredEvent.TYPE, this);
-        this.eventBus.addHandler(SearchFilterEvent.TYPE, this);
-        this.eventBus.addHandler(SearchResetEvent.TYPE, this);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -495,6 +492,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(IllustrationSelectedEvent.TYPE, this);
         this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
         this.eventBus.addHandler(CanvasExportRequestedEvent.TYPE, this);
+
+        this.eventBus.addHandler(SuggestionSelectedEvent.TYPE, this);
+        this.eventBus.addHandler(SuggestionHoveredEvent.TYPE, this);
+        this.eventBus.addHandler(SearchFilterEvent.TYPE, this);
+        this.eventBus.addHandler(SearchResetEvent.TYPE, this);
+        this.eventBus.addHandler(GraphEntryHoveredEvent.TYPE, this);
     }
 
     protected void openNode(Node node){
@@ -563,6 +566,15 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 keyDownEvent.stopPropagation();
                 eventBus.fireEventFromSource(new SearchKeyPressedEvent(), this);
             }
+        }
+    }
+
+    @Override
+    public void onGraphEntryHovered(GraphEntryHoveredEvent event) {
+        if(event.getHoveredEntry()!=null) {
+            highlightNode(event.getHoveredEntry().getStableIdentifier());
+        } else {
+            resetHighlight();
         }
     }
 }

@@ -39,8 +39,8 @@ public class GraphEntryListPanel extends FlowPanel {
             listItemLink.setTitle(object.getDisplayName());
             //TODO add the handlers for different actions
 //            listItemLink.addClickHandler(InfoActionsHelper.getLinkClickHandler(object, eventBus, this));
-//            listItemLink.addMouseOverHandler(InfoActionsHelper.getLinkMouseOver(object, eventBus, this));
-//            listItemLink.addMouseOutHandler(InfoActionsHelper.getLinkMouseOut(eventBus, this));
+            listItemLink.addMouseOverHandler(InfoActionsHelper.getLinkMouseOver(object, eventBus, this));
+            listItemLink.addMouseOutHandler(InfoActionsHelper.getLinkMouseOut(eventBus, this));
             listItem.add(listItemLink);
 
             listPanel.add(listItem);

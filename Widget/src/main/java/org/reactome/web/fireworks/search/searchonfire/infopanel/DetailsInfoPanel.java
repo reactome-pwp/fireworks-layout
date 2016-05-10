@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
@@ -40,6 +41,11 @@ public class DetailsInfoPanel extends Composite {
 
         Anchor identifierLink = new Anchor(selectedSuggestion.getStId());
         identifierLink.setStyleName(RESOURCES.getCSS().identifierLink());
+        identifierLink.setTitle("Click to find out more");
+        identifierLink.addClickHandler(event -> {
+            String url = "http://www.reactome.org/content/detail/" + selectedSuggestion.getStId();
+            Window.open(url, "_blank", "");
+        });
 
         mainPanel = new FlowPanel();
         mainPanel.setStyleName(RESOURCES.getCSS().objectInfoContent());

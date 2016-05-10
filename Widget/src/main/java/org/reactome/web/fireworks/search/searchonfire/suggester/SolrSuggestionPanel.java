@@ -33,6 +33,7 @@ import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerform
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -109,7 +110,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         Entry sel = selectionModel.getSelectedObject();
         SolrSearchResult searchResult = event.getSuggestions();
         String term = searchResult.getTerm();
-        List<Entry> entries = searchResult.getEntries()!=null ? Arrays.asList(searchResult.getEntries()) : null;
+        List<Entry> entries = searchResult.getEntries()!=null ? Arrays.asList(searchResult.getEntries()) : new ArrayList<>();
 
         if (!entries.isEmpty() && !entries.contains(sel)) {
             selectionModel.clear();

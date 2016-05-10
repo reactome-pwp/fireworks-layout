@@ -37,11 +37,11 @@ public class SearchPanel extends FlowPanel {
             launcher.addSearchBoxArrowKeysHandler(suggestions);
             this.add(suggestions);
         } else {
-            final SolrSearchLauncher launcher = new SolrSearchLauncher(eventBus, graph);
+            final SolrSearchLauncher launcher = new SolrSearchLauncher(eventBus);
             this.add(launcher);
             SolrSuggestionPanel suggestions = new SolrSuggestionPanel();
-            suggestions.addSolrSuggestionSelectedHandler(launcher);
-            suggestions.addSuggestionHoveredHandler(launcher);
+//            suggestions.addSolrSuggestionSelectedHandler(launcher);
+//            suggestions.addSuggestionHoveredHandler(launcher);
             suggestions.addPageChangedHandler(launcher);
             suggestions.addFacetChangedHandler(launcher);
             // Listen to click events on suggestions and return focus on SearchBox
