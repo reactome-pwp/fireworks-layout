@@ -16,7 +16,6 @@ import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResul
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class Pager extends FlowPanel {
-    private static String MSG = "Page: ";
 
     private SolrSearchResult searchResult;
     private int currentRow;
@@ -41,12 +40,15 @@ public class Pager extends FlowPanel {
     }
 
     public void setResults(SolrSearchResult searchResult) {
-        this.searchResult = searchResult;
-        this.totalPages  = (int) Math.ceil(searchResult.getFound()/(double)searchResult.getRows());
-        currentRow = searchResult.getStartRow();
-
-        setVisible(totalPages>1);
-        updateText();
+        if(searchResult!=null && searchResult.getFound()>0) {
+            this.searchResult = searchResult;
+            this.totalPages = (int) Math.ceil(searchResult.getFound() / (double) searchResult.getRows());
+            currentRow = searchResult.getStartRow();
+            updateText();
+        } else {
+            this.totalPages = 0;
+        }
+        setVisible(totalPages > 1);
     }
 
     private void init() {
@@ -83,12 +85,12 @@ public class Pager extends FlowPanel {
         endBtn.setStyleName(RESOURCES.getCSS().rightBtn());
         endBtn.setTitle("Go to last page");
         endBtn.addClickHandler(event -> {
-            currentRow = searchResult.getFound() - searchResult.getFound()%4 ;
+            currentRow = searchResult.getFound() - searchResult.getFound()%searchResult.getRows() ;
             changePage(currentRow);
             updateText();
         });
 
-        title = new Label(MSG);
+        title = new Label();
         title.setStyleName(RESOURCES.getCSS().label());
 
         add(startBtn);
@@ -100,12 +102,15 @@ public class Pager extends FlowPanel {
 
     private void updateText(){
         if(title != null) {
-            title.setText(MSG + nf.format((currentRow/4 + 1)) + "/" + nf.format(totalPages));
+            String found = nf.format(searchResult.getFound()) + " results - ";
+            String pages = " Page: " + nf.format((currentRow/4 + 1)) + "/" + nf.format(totalPages);
+            title.setText(found + pages);
         }
         startBtn.setEnabled(currentRow > 0);
         previousBtn.setEnabled(currentRow > 0);
-        nextBtn.setEnabled(currentRow < (searchResult.getFound() - searchResult.getFound()%4) - 1);
-        endBtn.setEnabled(currentRow < (searchResult.getFound() - searchResult.getFound()%4) - 1);
+        int maxRows = (searchResult.getFound() - searchResult.getFound()%searchResult.getRows()) - 1;
+        nextBtn.setEnabled(currentRow < maxRows);
+        endBtn.setEnabled(currentRow < maxRows);
     }
 
     private void changePage(int newStartRow) {

@@ -33,23 +33,27 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
     }
 
     public void setResults(SolrSearchResult searchResult) {
-        this.searchResult = searchResult;
+        if(searchResult!=null && searchResult.getFacets()!=null) {
+            this.searchResult = searchResult;
 
-        List<String> selectedFacets = new ArrayList<>();
-        String aux = searchResult.getSelectedFacet();
-        if(aux!=null && !aux.isEmpty()) {
-            selectedFacets = Arrays.asList(aux.split(","));
-        }
-
-        FacetContainer[] facets = searchResult.getFacets();
-        facetsMap = new HashMap<>();
-        if(facets != null) {
-            for (final FacetContainer fac : facets) {
-                FacetTag facetTag = new FacetTag(fac.getName(), fac.getCount());
-                facetTag.setSelected(selectedFacets.isEmpty() || selectedFacets.contains(facetTag.getName()));
-                facetTag.addClickHandler(this);
-                facetsMap.put(facetTag.getName(), facetTag);
+            List<String> selectedFacets = new ArrayList<>();
+            String aux = searchResult.getSelectedFacet();
+            if (aux != null && !aux.isEmpty()) {
+                selectedFacets = Arrays.asList(aux.split(","));
             }
+
+            FacetContainer[] facets = searchResult.getFacets();
+            facetsMap = new HashMap<>();
+            if (facets != null) {
+                for (final FacetContainer fac : facets) {
+                    FacetTag facetTag = new FacetTag(fac.getName(), fac.getCount());
+                    facetTag.setSelected(selectedFacets.isEmpty() || selectedFacets.contains(facetTag.getName()));
+                    facetTag.addClickHandler(this);
+                    facetsMap.put(facetTag.getName(), facetTag);
+                }
+            }
+        } else {
+            facetsMap.clear();  // Results are null or no facets are provided
         }
         updateView();
     }
@@ -91,7 +95,7 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
     private void init() {
         titleLabel = new Label("Filter by type:");
         Style style = titleLabel.getElement().getStyle();
-        style.setFontSize(1.20, Style.Unit.EM);
+        style.setFontSize(1.10, Style.Unit.EM);
         style.setFontWeight(Style.FontWeight.BOLD);
         style.setColor("rgb(30, 148, 208)");
         style.setMarginLeft(5, Style.Unit.PX);
