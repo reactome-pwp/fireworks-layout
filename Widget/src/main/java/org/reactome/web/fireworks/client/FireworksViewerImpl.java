@@ -368,6 +368,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onSearchReset(SearchResetEvent event) {
         data.resetPathwaysFiltered();
         manager.displayAllNodes(true);
+        resetHighlight();
+        resetSelection();
         this.forceFireworksDraw = true;
     }
 
