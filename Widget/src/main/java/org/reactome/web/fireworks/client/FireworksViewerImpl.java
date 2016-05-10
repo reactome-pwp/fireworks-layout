@@ -48,7 +48,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
         IllustrationSelectedHandler, CanvasExportRequestedHandler,
         KeyDownHandler, SearchFilterHandler, SearchResetHandler,
-        GraphEntryHoveredHandler {
+        GraphEntryHoveredHandler, GraphEntrySelectedHandler {
 
     EventBus eventBus;
 
@@ -247,8 +247,37 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public void onGraphEntryHovered(GraphEntryHoveredEvent event) {
+        if(event.getHoveredEntry()!=null) {
+            highlightNode(event.getHoveredEntry().getStableIdentifier());
+        } else {
+            resetHighlight();
+        }
+    }
+
+    @Override
+    public void onGraphEntrySelected(GraphEntrySelectedEvent event) {
+        selectNode(event.getSelectedEntry().getStableIdentifier());
+    }
+
+    @Override
     public void onIllustrationSelected(IllustrationSelectedEvent event) {
         this.canvases.setIllustration(event.getUrl());
+    }
+
+    @Override
+    public void onKeyDown(KeyDownEvent keyDownEvent) {
+        if (isVisible()) {
+            int keyCode = keyDownEvent.getNativeKeyCode();
+            String platform = Window.Navigator.getPlatform();
+            // If this is a Mac, check for the cmd key. In case of any other platform, check for the ctrl key
+            boolean isModifierKeyPressed = platform.toLowerCase().contains("mac") ? keyDownEvent.isMetaKeyDown() : keyDownEvent.isControlKeyDown();
+            if (keyCode == KeyCodes.KEY_F && isModifierKeyPressed) {
+                keyDownEvent.preventDefault();
+                keyDownEvent.stopPropagation();
+                eventBus.fireEventFromSource(new SearchKeyPressedEvent(), this);
+            }
+        }
     }
 
     @Override
@@ -498,6 +527,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(SearchFilterEvent.TYPE, this);
         this.eventBus.addHandler(SearchResetEvent.TYPE, this);
         this.eventBus.addHandler(GraphEntryHoveredEvent.TYPE, this);
+        this.eventBus.addHandler(GraphEntrySelectedEvent.TYPE, this);
     }
 
     protected void openNode(Node node){
@@ -551,30 +581,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 this.hovered = null;
                 this.eventBus.fireEventFromSource(new NodeHoverResetEvent(), this);
             }
-        }
-    }
-
-    @Override
-    public void onKeyDown(KeyDownEvent keyDownEvent) {
-        if (isVisible()) {
-            int keyCode = keyDownEvent.getNativeKeyCode();
-            String platform = Window.Navigator.getPlatform();
-            // If this is a Mac, check for the cmd key. In case of any other platform, check for the ctrl key
-            boolean isModifierKeyPressed = platform.toLowerCase().contains("mac") ? keyDownEvent.isMetaKeyDown() : keyDownEvent.isControlKeyDown();
-            if (keyCode == KeyCodes.KEY_F && isModifierKeyPressed) {
-                keyDownEvent.preventDefault();
-                keyDownEvent.stopPropagation();
-                eventBus.fireEventFromSource(new SearchKeyPressedEvent(), this);
-            }
-        }
-    }
-
-    @Override
-    public void onGraphEntryHovered(GraphEntryHoveredEvent event) {
-        if(event.getHoveredEntry()!=null) {
-            highlightNode(event.getHoveredEntry().getStableIdentifier());
-        } else {
-            resetHighlight();
         }
     }
 }
