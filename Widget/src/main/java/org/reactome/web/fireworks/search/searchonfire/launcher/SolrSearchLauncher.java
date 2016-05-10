@@ -11,23 +11,20 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import org.reactome.web.fireworks.controls.common.IconButton;
 import org.reactome.web.fireworks.controls.common.pager.PageChangedEvent;
 import org.reactome.web.fireworks.controls.common.pager.PageChangedHandler;
 import org.reactome.web.fireworks.events.SearchKeyPressedEvent;
+import org.reactome.web.fireworks.events.SearchResetEvent;
 import org.reactome.web.fireworks.handlers.SearchKeyPressedHandler;
 import org.reactome.web.fireworks.legends.ControlButton;
-import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.search.fallback.events.PanelCollapsedEvent;
 import org.reactome.web.fireworks.search.fallback.events.PanelExpandedEvent;
-import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
 import org.reactome.web.fireworks.search.fallback.handlers.PanelCollapsedHandler;
 import org.reactome.web.fireworks.search.fallback.handlers.PanelExpandedHandler;
-import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.search.fallback.searchbox.*;
-import org.reactome.web.fireworks.search.searchonfire.events.SolrSuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedEvent;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedHandler;
-import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.solr.SearchResultFactory;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 import org.reactome.web.fireworks.util.Console;
@@ -36,8 +33,7 @@ import org.reactome.web.fireworks.util.Console;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, SearchBoxUpdatedHandler,
-        SuggestionHoveredHandler, SolrSuggestionSelectedHandler, SearchBoxArrowKeysHandler,
-        SearchKeyPressedHandler, SearchResultFactory.SearchResultHandler,
+        SearchBoxArrowKeysHandler, SearchKeyPressedHandler, SearchResultFactory.SearchResultHandler,
         PageChangedHandler, FacetChangedHandler {
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -53,7 +49,6 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     private Boolean isExpanded = false;
 
     private Timer focusTimer;
-    private Timer focusOnPathwayTimer;
 
     private static String SEARCH_TERM = "";
     private static String FACET = "";
@@ -62,7 +57,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     private static final int ROWS = 4;
 
 
-    public SolrSearchLauncher(EventBus eventBus, Graph graph) {
+    public SolrSearchLauncher(EventBus eventBus) {
 
         //Setting the search style
         setStyleName(RESOURCES.getCSS().launchPanel());
@@ -76,6 +71,12 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         this.input.setStyleName(RESOURCES.getCSS().input());
         this.input.getElement().setPropertyString("placeholder", OPENING_TEXT);
         this.add(input);
+
+        IconButton clearBtn = new IconButton("", RESOURCES.clear());
+        clearBtn.setStyleName(RESOURCES.getCSS().clearBtn());
+        clearBtn.setTitle("Clear search");
+        clearBtn.addClickHandler(event -> clearSearch());
+        this.add(clearBtn);
 
         this.initHandlers();
         this.searchBtn.setEnabled(true);
@@ -124,13 +125,19 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
 
     @Override
     public void onSearchUpdated(SearchBoxUpdatedEvent event) {
-        SEARCH_TERM = input.getText().trim();
+        SEARCH_TERM = event.getValue();
         START_ROW = 0; //Go to the first page
         performSearch();
     }
 
     @Override
     public void onSearchResult(SolrSearchResult result) {
+        //TODO: Consider changing the behaviour of the server-side so that it does not return anything in this case
+        if(result.getTerm().trim().isEmpty()){
+            result.setEntries(null);
+            result.setFound(0);
+            result.setFacets(null);
+        }
         fireEvent(new SolrSearchPerformedEvent(result));
     }
 
@@ -138,28 +145,6 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     public void onSearchError() {
         //TODO show error
         Console.error("Search error");
-    }
-
-    @Override
-    public void onSuggestionHovered(final SuggestionHoveredEvent event) {
-        eventBus.fireEventFromSource(event, this);
-
-        if(focusOnPathwayTimer!=null && focusOnPathwayTimer.isRunning()) {
-            focusOnPathwayTimer.cancel();
-        }
-
-        focusOnPathwayTimer = new Timer() {
-            @Override
-            public void run() {
-                eventBus.fireEventFromSource(new SuggestionHoveredEvent(event.getHoveredObject(), Boolean.TRUE), this);
-            }
-        };
-        focusOnPathwayTimer.schedule(FOCUS_IN_PATHWAY_DELAY);
-    }
-
-    @Override
-    public void onSuggestionSelected(SolrSuggestionSelectedEvent event) {
-//        eventBus.fireEventFromSource(event, this);
     }
 
     @Override
@@ -189,6 +174,14 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         this.input.setFocus(focused);
     }
 
+    private void clearSearch() {
+        if (!input.getValue().isEmpty()) {
+            input.setValue("");
+            setFocus(true);
+            eventBus.fireEventFromSource(new SearchResetEvent(), this);
+        }
+    }
+
     private void collapsePanel(){
         if(focusTimer.isRunning()){
             focusTimer.cancel();
@@ -213,16 +206,16 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         eventBus.addHandler(SearchKeyPressedEvent.TYPE, this);
     }
 
+
     private void performSearch() {
         SearchResultFactory.searchForTerm(SEARCH_TERM, FACET, SPECIES, START_ROW, ROWS, this);
     }
-
-
     public static Resources RESOURCES;
     static {
         RESOURCES = GWT.create(Resources.class);
         RESOURCES.getCSS().ensureInjected();
     }
+
 
     /**
      * A ClientBundle of resources used by this widget.
@@ -257,6 +250,9 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
 
         @Source("../../images/search_normal.png")
         ImageResource clearNormal();
+
+        @Source("../../images/cancel.png")
+        ImageResource clear();
     }
 
     /**
@@ -278,6 +274,8 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         String input();
 
         String inputActive();
+
+        String clearBtn();
     }
 
 }

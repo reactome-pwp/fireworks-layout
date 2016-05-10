@@ -13,10 +13,19 @@ public interface SolrSearchResult {
     Entry[] getEntries();
 
     @JsProperty
+    void setEntries(Entry[] entries);
+
+    @JsProperty
     FacetContainer[] getFacets();
 
     @JsProperty
+    void setFacets(FacetContainer[] facets);
+
+    @JsProperty
     int getFound();
+
+    @JsProperty
+    void setFound(Integer found);
 
     @JsProperty
     void setStartRow(Integer page);
