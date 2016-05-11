@@ -19,6 +19,7 @@ public class Pager extends FlowPanel {
 
     private SolrSearchResult searchResult;
     private int currentRow;
+    private int maxStartRow;
     private int totalPages;
 
     private IconButton startBtn;
@@ -43,6 +44,7 @@ public class Pager extends FlowPanel {
         if(searchResult!=null && searchResult.getFound()>0) {
             this.searchResult = searchResult;
             this.totalPages = (int) Math.ceil(searchResult.getFound() / (double) searchResult.getRows());
+            this.maxStartRow = (searchResult.getFound() - searchResult.getFound()%searchResult.getRows());
             currentRow = searchResult.getStartRow();
             updateText();
         } else {
@@ -57,38 +59,22 @@ public class Pager extends FlowPanel {
         startBtn = new IconButton("", RESOURCES.startIcon());
         startBtn.setStyleName(RESOURCES.getCSS().leftBtn());
         startBtn.setTitle("Go to first page");
-        startBtn.addClickHandler(event -> {
-            currentRow = 0;
-            changePage(currentRow);
-            updateText();
-        });
+        startBtn.addClickHandler(event -> loadFirstPage());
 
         previousBtn = new IconButton("", RESOURCES.previousIcon());
         previousBtn.setStyleName(RESOURCES.getCSS().leftBtn());
         previousBtn.setTitle("Go to previous page");
-        previousBtn.addClickHandler( event -> {
-            currentRow = currentRow - searchResult.getRows();
-            changePage(currentRow);
-            updateText();
-        });
+        previousBtn.addClickHandler( event -> loadPreviousPage());
 
         nextBtn = new IconButton("", RESOURCES.nextIcon());
         nextBtn.setStyleName(RESOURCES.getCSS().rightBtn());
         nextBtn.setTitle("Go to next page");
-        nextBtn.addClickHandler(event -> {
-            currentRow = currentRow + searchResult.getRows();
-            changePage(currentRow);
-            updateText();
-        });
+        nextBtn.addClickHandler(event -> loadNextPage());
 
         endBtn = new IconButton("", RESOURCES.endIcon());
         endBtn.setStyleName(RESOURCES.getCSS().rightBtn());
         endBtn.setTitle("Go to last page");
-        endBtn.addClickHandler(event -> {
-            currentRow = searchResult.getFound() - searchResult.getFound()%searchResult.getRows() ;
-            changePage(currentRow);
-            updateText();
-        });
+        endBtn.addClickHandler(event -> loadLastPage());
 
         title = new Label();
         title.setStyleName(RESOURCES.getCSS().label());
@@ -100,17 +86,46 @@ public class Pager extends FlowPanel {
         add(title);
     }
 
+    public void loadNextPage(){
+        int aux = currentRow + searchResult.getRows();
+        if(aux <= maxStartRow) {
+            currentRow = aux;
+            changePage(currentRow);
+            updateText();
+        }
+    }
+
+    public void loadPreviousPage(){
+        int aux = currentRow - searchResult.getRows();
+        if(aux >= 0) {
+            currentRow = aux;
+            changePage(currentRow);
+            updateText();
+        }
+    }
+
+    private void loadFirstPage() {
+        currentRow = 0;
+        changePage(currentRow);
+        updateText();
+    }
+
+    private void loadLastPage() {
+        currentRow = searchResult.getFound() - searchResult.getFound()%searchResult.getRows() ;
+        changePage(currentRow);
+        updateText();
+    }
+
     private void updateText(){
         if(title != null) {
             String found = nf.format(searchResult.getFound()) + " results - ";
-            String pages = " Page: " + nf.format((currentRow/4 + 1)) + "/" + nf.format(totalPages);
+            String pages = " Page: " + nf.format((currentRow/searchResult.getRows() + 1)) + "/" + nf.format(totalPages);
             title.setText(found + pages);
         }
         startBtn.setEnabled(currentRow > 0);
         previousBtn.setEnabled(currentRow > 0);
-        int maxRows = (searchResult.getFound() - searchResult.getFound()%searchResult.getRows()) - 1;
-        nextBtn.setEnabled(currentRow < maxRows);
-        endBtn.setEnabled(currentRow < maxRows);
+        nextBtn.setEnabled(currentRow < maxStartRow - 1);
+        endBtn.setEnabled(currentRow < maxStartRow - 1);
     }
 
     private void changePage(int newStartRow) {

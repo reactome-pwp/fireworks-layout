@@ -17,8 +17,6 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
-import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
 import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysEvent;
 import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysHandler;
@@ -50,6 +48,10 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
     private Pager pager;
     private FacetsPanel facetsPanel;
 
+    private boolean selectFirstRow;
+    private boolean selectLastRow;
+
+
     /**
      * The key provider that provides the unique ID of a DatabaseObject.
      */
@@ -73,10 +75,6 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         return facetsPanel.addFacetChangedHandler(handler);
     }
 
-    public HandlerRegistration addSuggestionHoveredHandler(SuggestionHoveredHandler handler) {
-        return addHandler(handler, SuggestionHoveredEvent.TYPE);
-    }
-
     public HandlerRegistration addSolrSuggestionSelectedHandler(SolrSuggestionSelectedHandler handler) {
         return addHandler(handler, SolrSuggestionSelectedEvent.TYPE);
     }
@@ -91,12 +89,25 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
             Entry current = selectionModel.getSelectedObject();
             int currentIndex = current == null ? -1 : dataProvider.getList().indexOf(current);
             int toIndex = currentIndex;
-            if(event.getValue() == KeyCodes.KEY_ENTER){
-//                fireEvent(new SuggestionSelectedEvent(current, Boolean.TRUE));
-            }else if(event.getValue() == KeyCodes.KEY_DOWN) {
-                toIndex = currentIndex + 1 < dataProvider.getList().size() ? currentIndex + 1 : dataProvider.getList().size() - 1;
+
+            if(event.getValue() == KeyCodes.KEY_DOWN) {
+                if(currentIndex + 1 < dataProvider.getList().size()) {
+                    toIndex = currentIndex + 1;
+                } else {
+                    // Go to next page
+                    selectFirstRow = true;
+                    selectLastRow = false;
+                    pager.loadNextPage();
+                }
             }else if(event.getValue() == KeyCodes.KEY_UP) {
-                toIndex = currentIndex - 1 > 0 ? currentIndex - 1 : 0;
+                if(currentIndex - 1 >= 0) {
+                    toIndex = currentIndex - 1;
+                } else {
+                    // Go to previous page
+                    selectFirstRow = false;
+                    selectLastRow = true;
+                    pager.loadPreviousPage();
+                }
             }
             if(toIndex!=-1 && toIndex!=currentIndex) {
                 Entry newSelection = dataProvider.getList().get(toIndex);
@@ -129,6 +140,16 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
 
         if (dataProvider.getList().isEmpty()) {
             fireEvent(new SolrSuggestionSelectedEvent(null));
+        }
+
+        if(selectFirstRow) {
+            Entry newSelection = dataProvider.getList().get(0);
+            selectionModel.setSelected(newSelection, true);
+            selectFirstRow = false;
+        } else if (selectLastRow) {
+            Entry newSelection = dataProvider.getList().get(dataProvider.getList().size()-1);
+            selectionModel.setSelected(newSelection, true);
+            selectLastRow = false;
         }
     }
 
