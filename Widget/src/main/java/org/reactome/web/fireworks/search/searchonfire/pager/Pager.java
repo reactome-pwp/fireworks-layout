@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.controls.common.pager;
+package org.reactome.web.fireworks.search.searchonfire.pager;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -155,7 +155,7 @@ public class Pager extends FlowPanel {
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/controls/common/pager/Pager.css";
+        String CSS = "org/reactome/web/fireworks/search/searchonfire/pager/Pager.css";
 
         String mainPanel();
 

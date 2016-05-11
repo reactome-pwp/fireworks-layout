@@ -16,6 +16,8 @@ public abstract class FireworksFactory {
     public static boolean SHOW_DIAGRAM_BTN = true;
     public static boolean OPEN_NODE_ACTION = true;
 
+    public static boolean SOLR_SEARCH = true;
+
     public static String SERVER = "";
     public static String ILLUSTRATION_SERVER = "";
 

@@ -5,6 +5,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlowPanel;
+import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.search.fallback.launcher.SearchLauncher;
 import org.reactome.web.fireworks.search.fallback.suggester.SuggestionPanel;
@@ -22,7 +23,7 @@ public class SearchPanel extends FlowPanel {
         //Setting the legend style
         setStyleName(RESOURCES.getCSS().searchPanel());
 
-        if(false) {
+        if(!FireworksFactory.SOLR_SEARCH) {
             final SearchLauncher launcher = new SearchLauncher(eventBus, graph);
             this.add(launcher);
             SuggestionPanel suggestions = new SuggestionPanel();
@@ -39,9 +40,8 @@ public class SearchPanel extends FlowPanel {
         } else {
             final SolrSearchLauncher launcher = new SolrSearchLauncher(eventBus);
             this.add(launcher);
+
             SolrSuggestionPanel suggestions = new SolrSuggestionPanel();
-//            suggestions.addSolrSuggestionSelectedHandler(launcher);
-//            suggestions.addSuggestionHoveredHandler(launcher);
             suggestions.addPageChangedHandler(launcher);
             suggestions.addFacetChangedHandler(launcher);
             // Listen to click events on suggestions and return focus on SearchBox

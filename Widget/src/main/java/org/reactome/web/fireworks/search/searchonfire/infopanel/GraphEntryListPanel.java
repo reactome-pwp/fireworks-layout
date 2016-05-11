@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
-import org.reactome.web.fireworks.search.searchonfire.suggester.SolrSuggestionPanel;
+import org.reactome.web.pwp.model.images.DatabaseObjectImages;
 
 import java.util.Collection;
 
@@ -31,7 +31,9 @@ public class GraphEntryListPanel extends FlowPanel {
             FlowPanel listItem = new FlowPanel();
             listItem.setStyleName(css.listItem());
 
-            Image icon = new Image(SolrSuggestionPanel.RESOURCES.pathway());
+            Image icon = new Image(DatabaseObjectImages.INSTANCE.pathway());
+            icon.setHeight("12px");
+            icon.setWidth("12px");
             listItem.add(icon);
 
             Anchor listItemLink = new Anchor(object.getDisplayName());

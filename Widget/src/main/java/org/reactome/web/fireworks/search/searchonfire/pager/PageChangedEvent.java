@@ -1,4 +1,4 @@
-package org.reactome.web.fireworks.controls.common.pager;
+package org.reactome.web.fireworks.search.searchonfire.pager;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;

@@ -12,8 +12,6 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import org.reactome.web.fireworks.controls.common.IconButton;
-import org.reactome.web.fireworks.controls.common.pager.PageChangedEvent;
-import org.reactome.web.fireworks.controls.common.pager.PageChangedHandler;
 import org.reactome.web.fireworks.events.SearchKeyPressedEvent;
 import org.reactome.web.fireworks.events.SearchResetEvent;
 import org.reactome.web.fireworks.handlers.SearchKeyPressedHandler;
@@ -25,6 +23,8 @@ import org.reactome.web.fireworks.search.fallback.handlers.PanelExpandedHandler;
 import org.reactome.web.fireworks.search.fallback.searchbox.*;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedEvent;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedHandler;
+import org.reactome.web.fireworks.search.searchonfire.pager.PageChangedEvent;
+import org.reactome.web.fireworks.search.searchonfire.pager.PageChangedHandler;
 import org.reactome.web.fireworks.search.searchonfire.solr.SearchResultFactory;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 import org.reactome.web.fireworks.util.Console;
@@ -39,7 +39,6 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     @SuppressWarnings("FieldCanBeLocal")
     private static String OPENING_TEXT = "Search for any term ...";
     private static int FOCUS_IN_TEXTBOX_DELAY = 300;
-    private static int FOCUS_IN_PATHWAY_DELAY = 500;
 
     private EventBus eventBus;
 
@@ -206,10 +205,11 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         eventBus.addHandler(SearchKeyPressedEvent.TYPE, this);
     }
 
-
     private void performSearch() {
         SearchResultFactory.searchForTerm(SEARCH_TERM, FACET, SPECIES, START_ROW, ROWS, this);
     }
+
+
     public static Resources RESOURCES;
     static {
         RESOURCES = GWT.create(Resources.class);

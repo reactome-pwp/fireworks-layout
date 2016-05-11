@@ -17,8 +17,6 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import org.reactome.web.fireworks.controls.common.pager.PageChangedHandler;
-import org.reactome.web.fireworks.controls.common.pager.Pager;
 import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
@@ -30,6 +28,8 @@ import org.reactome.web.fireworks.search.searchonfire.facets.FacetsPanel;
 import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedEvent;
 import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedHandler;
+import org.reactome.web.fireworks.search.searchonfire.pager.PageChangedHandler;
+import org.reactome.web.fireworks.search.searchonfire.pager.Pager;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
@@ -180,8 +180,8 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         @Source(SolrSuggestionPanelCSS.CSS)
         SolrSuggestionPanelCSS getCSS();
 
-        @Source("images/pathway.png")
-        ImageResource pathway();
+        @Source("images/interactor.png")
+        ImageResource interactor();
     }
 
     /**
