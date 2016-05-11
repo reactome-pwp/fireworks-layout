@@ -30,6 +30,7 @@ import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
 import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
+import org.reactome.web.fireworks.util.Console;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
 
@@ -357,7 +358,13 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     public void onSearchFilterEvent(SearchFilterEvent event) {
         Set<Node> filteredNodes = new HashSet<>();
         for (GraphEntry graphEntry : event.getResult()) {
-            filteredNodes.add(data.getNode(graphEntry.getStableIdentifier()));
+            Node node = data.getNode(graphEntry.getStableIdentifier());
+            if(node!=null) {
+                filteredNodes.add(node);
+            } else {
+                //TODO: Check why this is happening.
+                Console.error(graphEntry.getStableIdentifier() + " was not found in the pathways overview graph");
+            }
         }
         data.setPathwaysFilteredResult(filteredNodes);
         manager.displayNodesAndParents(filteredNodes);
