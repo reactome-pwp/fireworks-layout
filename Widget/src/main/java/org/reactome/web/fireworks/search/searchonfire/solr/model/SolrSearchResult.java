@@ -25,7 +25,7 @@ public interface SolrSearchResult {
     int getFound();
 
     @JsProperty
-    void setFound(Integer found);
+    void setFound(int found);
 
     @JsProperty
     void setStartRow(Integer page);
