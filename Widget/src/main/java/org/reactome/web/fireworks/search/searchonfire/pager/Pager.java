@@ -111,7 +111,7 @@ public class Pager extends FlowPanel {
     }
 
     private void loadLastPage() {
-        currentRow = searchResult.getFound() - searchResult.getFound()%searchResult.getRows() ;
+        currentRow = maxStartRow;
         changePage(currentRow);
         updateText();
     }
