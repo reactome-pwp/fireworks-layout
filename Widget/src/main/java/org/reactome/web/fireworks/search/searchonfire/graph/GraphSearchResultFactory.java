@@ -10,7 +10,7 @@ import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
  */
 public abstract class GraphSearchResultFactory {
 
-    private static final String SEARCH = "/ContentService/data/pathwaysFor/##stableId##?speciesId=##speciesId##";
+    private static final String SEARCH = "/ContentService/data/pathwaysForInstance/##stableId##?speciesId=##speciesId##";
 
     public interface GraphSearchResultHandler {
         void onGraphSearchResult(GraphEntry[] result);
