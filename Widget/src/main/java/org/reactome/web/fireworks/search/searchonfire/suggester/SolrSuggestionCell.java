@@ -10,7 +10,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Image;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
-import org.reactome.web.fireworks.util.ImageResolver;
+import org.reactome.web.fireworks.util.SearchResultImageMapper;
 
 /**
  * A custom {@link Cell} used to render the suggestion for a {@link Node}
@@ -71,7 +71,7 @@ public class SolrSuggestionCell extends AbstractCell<Entry> {
             return;
         }
 
-        Image image = new Image(ImageResolver.getImage(value.getExactType()));
+        Image image = new Image(SearchResultImageMapper.getImage(value.getExactType()));
         SafeHtml safeImage = SafeHtmlUtils.fromTrustedString(image.toString());
 
         SafeHtml primary = SafeHtmlUtils.fromTrustedString(value.getName());

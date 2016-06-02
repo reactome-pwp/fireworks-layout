@@ -31,11 +31,17 @@ public class OptionsPanel extends FlowPanel implements ClickHandler{
         return addHandler(handler, IncludeAllFormsEvent.TYPE);
     }
 
+    public void setEnable(boolean enable) {
+        showAllBtn.setEnabled(enable);
+    }
+
     @Override
     public void onClick(ClickEvent event) {
-        includeAllForms = !includeAllForms;
-        updateView();
-        fireEvent(new IncludeAllFormsEvent(includeAllForms));
+        if(showAllBtn.isEnabled()) {
+            includeAllForms = !includeAllForms;
+            updateView();
+            fireEvent(new IncludeAllFormsEvent(includeAllForms));
+        }
     }
 
     private void init() {

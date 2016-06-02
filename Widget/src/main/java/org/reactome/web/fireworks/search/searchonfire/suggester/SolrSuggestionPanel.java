@@ -32,6 +32,9 @@ import org.reactome.web.fireworks.search.searchonfire.pager.PageChangedHandler;
 import org.reactome.web.fireworks.search.searchonfire.pager.Pager;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
+import org.reactome.web.pwp.model.classes.DatabaseObject;
+import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
+import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -163,7 +166,19 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
 
     @Override
     public void onSelectionChange(SelectionChangeEvent event) {
-        fireEvent(new SolrSuggestionSelectedEvent(selectionModel.getSelectedObject()));
+        Entry selection = selectionModel.getSelectedObject();
+        DatabaseObjectFactory.get(selection.getStId(), new DatabaseObjectCreatedHandler() {
+            @Override
+            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                optionsPanel.setEnable(!(databaseObject instanceof org.reactome.web.pwp.model.classes.Event));
+                fireEvent(new SolrSuggestionSelectedEvent(databaseObject));
+            }
+
+            @Override
+            public void onDatabaseObjectError(Throwable throwable) {
+                //TODO
+            }
+        });
     }
 
     private void init(){

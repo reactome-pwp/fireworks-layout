@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.FacetContainer;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 
@@ -101,10 +102,19 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
         style.setMarginLeft(5, Style.Unit.PX);
         tagsContainer = new FlowPanel();
         style = tagsContainer.getElement().getStyle();
-        style.setWidth(3500, Style.Unit.PX); //this is to achieve the horizontal scrolling effect
+        style.setWidth(100, Style.Unit.PCT);
+        style.setHeight(40, Style.Unit.PX);
+        style.setOverflow(Style.Overflow.VISIBLE);
+        style.setWhiteSpace(Style.WhiteSpace.NOWRAP);
+
+        SimplePanel sp = new SimplePanel();
+        style = sp.getElement().getStyle();
+        style.setOverflowX(Style.Overflow.VISIBLE);
+        style.setOverflowY(Style.Overflow.HIDDEN);
+        sp.add(tagsContainer);
 
         add(titleLabel);
-        add(tagsContainer);
+        add(sp);
     }
 
     private void setSelectedForAll(boolean value) {

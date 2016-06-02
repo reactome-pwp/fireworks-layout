@@ -7,7 +7,7 @@
 
     float: left;
     width: 100%; /* grows and shrinks with the parent */
-    max-height: 218px;
+    max-height: 233px;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     outline: none;
@@ -34,9 +34,8 @@
 }
 
 .facetsPanel {
-    max-height: 45px;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    max-height: 60px;
+    overflow: hidden;
 }
 
 .optionsPanel {

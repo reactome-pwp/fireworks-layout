@@ -6,9 +6,10 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.fireworks.events.SearchFilterEvent;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
-import org.reactome.web.pwp.model.factory.SchemaClass;
+import org.reactome.web.pwp.model.classes.DatabaseObject;
+import org.reactome.web.pwp.model.classes.Pathway;
 
 import java.util.Arrays;
 
@@ -18,11 +19,11 @@ import java.util.Arrays;
 public class DetailsInfoPanel extends Composite {
     private EventBus eventBus;
 
-    private Entry selectedSuggestion;
+    private DatabaseObject selectedSuggestion;
     private GraphEntry[] result;
     private FlowPanel mainPanel;
 
-    public DetailsInfoPanel(EventBus eventBus, Entry selectedSuggestion, GraphEntry[] result) {
+    public DetailsInfoPanel(EventBus eventBus, DatabaseObject selectedSuggestion, GraphEntry[] result) {
         this.eventBus = eventBus;
         this.selectedSuggestion = selectedSuggestion;
         this.result = result;
@@ -32,18 +33,17 @@ public class DetailsInfoPanel extends Composite {
     private void init() {
         FlowPanel header = new FlowPanel();
         header.setStyleName(RESOURCES.getCSS().infoHeader());
-        header.add(new InlineLabel(selectedSuggestion.getName()));
+        header.add(new InlineLabel(selectedSuggestion.getDisplayName()));
 
-        String type = SchemaClass.getSchemaClass(selectedSuggestion.getExactType()).name;
-        Label typeLb = new Label("Type: " + type);
+        Label typeLb = new Label("Type: " + selectedSuggestion.getSchemaClass().name);
         Label identifierLb = new Label("Identifier: ");
         identifierLb.setStyleName(RESOURCES.getCSS().identifierLabel());
 
-        Anchor identifierLink = new Anchor(selectedSuggestion.getStId());
+        Anchor identifierLink = new Anchor(selectedSuggestion.getIdentifier());
         identifierLink.setStyleName(RESOURCES.getCSS().identifierLink());
         identifierLink.setTitle("Click to find out more");
         identifierLink.addClickHandler(event -> {
-            String url = "http://www.reactome.org/content/detail/" + selectedSuggestion.getStId();
+            String url = "http://www.reactome.org/content/detail/" + selectedSuggestion.getIdentifier();
             Window.open(url, "_blank", "");
         });
 
@@ -54,9 +54,11 @@ public class DetailsInfoPanel extends Composite {
         mainPanel.add(identifierLb);
         mainPanel.add(identifierLink);
 
-        if(!type.equals(SchemaClass.PATHWAY.name)) {
+        if(!(selectedSuggestion instanceof Pathway)) {
             String title = "Present in " + result.length + (result.length > 1 ? " pathways" : " pathway");
             mainPanel.add(new GraphEntryListPanel(title, Arrays.asList(result), eventBus));
+        } else {
+            eventBus.fireEventFromSource(new SearchFilterEvent(result), this);
         }
 
         SimplePanel sp = new SimplePanel();

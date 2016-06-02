@@ -3,6 +3,8 @@ package org.reactome.web.fireworks.search.searchonfire.graph;
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.http.client.*;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
+import org.reactome.web.pwp.model.classes.DatabaseObject;
+import org.reactome.web.pwp.model.classes.Event;
 
 
 /**
@@ -11,21 +13,23 @@ import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 public abstract class GraphSearchResultFactory {
 
     private static final String SEARCH = "/ContentService/data/##method##/##stableId##?speciesId=##speciesId##";
+    private static Request request;
 
     public interface GraphSearchResultHandler {
         void onGraphSearchResult(GraphEntry[] result);
         void onGraphSearchError();
     }
 
-    public static void searchForPathways(String stableId, Long speciesId, boolean includeAllForms, final GraphSearchResultFactory.GraphSearchResultHandler handler) {
+    public static void searchForPathways(DatabaseObject selection, Long speciesId, boolean includeAllForms, final GraphSearchResultFactory.GraphSearchResultHandler handler) {
 
-        String url = SEARCH.replace("##stableId##", stableId).replace("##speciesId##", speciesId.toString());
-        url = (includeAllForms) ? url.replace("##method##", "pathwaysForAllFormsOf") : url.replace("##method##", "pathwaysForInstance");
+        String url = SEARCH.replace("##stableId##", selection.getIdentifier()).replace("##speciesId##", speciesId.toString());
+        url = (!(selection instanceof Event) && includeAllForms) ? url.replace("##method##", "pathwaysForAllFormsOf") : url.replace("##method##", "pathwaysForInstance");
 
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
         try {
-            requestBuilder.sendRequest(null, new RequestCallback() {
+            if (request != null && request.isPending()) request.cancel();
+            request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){

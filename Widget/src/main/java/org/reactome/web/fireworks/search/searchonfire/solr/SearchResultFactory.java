@@ -11,6 +11,7 @@ import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResul
 public abstract class SearchResultFactory {
 
     private static final String SEARCH = "/ContentService/search/fireworks?query=##term##&species=##species##&types=##facet##&start=##start##&rows=##rows##";
+    private static Request request;
 
     public interface SearchResultHandler {
         void onSearchResult(SolrSearchResult result);
@@ -24,7 +25,8 @@ public abstract class SearchResultFactory {
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
         try {
-            requestBuilder.sendRequest(null, new RequestCallback() {
+            if (request != null && request.isPending()) request.cancel();
+            request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){

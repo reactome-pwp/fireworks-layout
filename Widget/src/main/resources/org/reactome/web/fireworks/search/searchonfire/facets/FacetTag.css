@@ -1,5 +1,6 @@
 .base {
     outline: none;
+    display: inline-block;
 }
 
 .tag {
@@ -13,9 +14,7 @@
     overflow: auto !important;
     max-width: 200px;
     outline: none;
-    float: left;
     cursor: pointer;
-
 
     font-family: Arial Unicode MS, Arial, sans-serif !important;
     font-size: 0.95em !important;

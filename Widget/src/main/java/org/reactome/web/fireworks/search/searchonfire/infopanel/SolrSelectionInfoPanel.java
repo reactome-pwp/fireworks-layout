@@ -12,7 +12,7 @@ import org.reactome.web.fireworks.search.searchonfire.graph.GraphSearchResultFac
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 import org.reactome.web.fireworks.search.searchonfire.handlers.IncludeAllFormsHandler;
 import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
-import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
+import org.reactome.web.pwp.model.classes.DatabaseObject;
 
 
 /**
@@ -21,7 +21,7 @@ import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
 public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements SolrSuggestionSelectedHandler,
         GraphSearchResultFactory.GraphSearchResultHandler, IncludeAllFormsHandler {
     private EventBus eventBus;
-    private Entry selectedSuggestion;
+    private DatabaseObject selectedSuggestion;
     private boolean includeAllForms;
 
     public SolrSelectionInfoPanel(EventBus eventBus) {
@@ -39,7 +39,7 @@ public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements So
     }
 
     private void performGraphSearch(){
-        GraphSearchResultFactory.searchForPathways(selectedSuggestion.getStId(), 48887L, includeAllForms, this);
+        GraphSearchResultFactory.searchForPathways(selectedSuggestion, 48887L, includeAllForms, this);
     }
 
     @Override
