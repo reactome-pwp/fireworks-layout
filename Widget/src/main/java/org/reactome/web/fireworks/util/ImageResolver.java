@@ -14,6 +14,10 @@ public abstract class ImageResolver {
         if (type != null) {
             switch (type.toLowerCase()) {
                 case "reaction":
+                case "failedreaction":
+                case "blackboxevent":
+                case "polimerisation":
+                case "depolimerisation":
                     rtn = DatabaseObjectImages.INSTANCE.reaction();
                     break;
                 case "protein":
@@ -45,7 +49,7 @@ public abstract class ImageResolver {
                     break;
                 default:
                     //TODO: :)
-                    rtn = DatabaseObjectImages.INSTANCE.pathway();
+                    rtn = DatabaseObjectImages.INSTANCE.exclamation();
                     break;
             }
         } else {
