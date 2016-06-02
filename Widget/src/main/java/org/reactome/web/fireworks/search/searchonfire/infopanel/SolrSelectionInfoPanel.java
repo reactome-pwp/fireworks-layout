@@ -6,9 +6,11 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import org.reactome.web.fireworks.events.SearchFilterEvent;
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
+import org.reactome.web.fireworks.search.searchonfire.events.IncludeAllFormsEvent;
 import org.reactome.web.fireworks.search.searchonfire.events.SolrSuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.searchonfire.graph.GraphSearchResultFactory;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
+import org.reactome.web.fireworks.search.searchonfire.handlers.IncludeAllFormsHandler;
 import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
 
@@ -17,9 +19,10 @@ import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements SolrSuggestionSelectedHandler,
-        GraphSearchResultFactory.GraphSearchResultHandler {
+        GraphSearchResultFactory.GraphSearchResultHandler, IncludeAllFormsHandler {
     private EventBus eventBus;
     private Entry selectedSuggestion;
+    private boolean includeAllForms;
 
     public SolrSelectionInfoPanel(EventBus eventBus) {
         this.eventBus = eventBus;
@@ -36,7 +39,7 @@ public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements So
     }
 
     private void performGraphSearch(){
-        GraphSearchResultFactory.searchForPathways(selectedSuggestion.getStId(), 48887L, this);
+        GraphSearchResultFactory.searchForPathways(selectedSuggestion.getStId(), 48887L, includeAllForms, this);
     }
 
     @Override
@@ -50,6 +53,15 @@ public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements So
     @Override
     public void onGraphSearchError() {
         //TODO to implement this
+    }
+
+    @Override
+    public void onIncludeAllForms(IncludeAllFormsEvent event) {
+        this.clear();
+        includeAllForms = event.getIncludeAllForms();
+        if(selectedSuggestion!=null) {
+            performGraphSearch();
+        }
     }
 
 

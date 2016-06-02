@@ -55,6 +55,7 @@ public class SearchPanel extends FlowPanel {
 
             SolrSelectionInfoPanel infoPanel = new SolrSelectionInfoPanel(eventBus);
             suggestions.addSolrSuggestionSelectedHandler(infoPanel);
+            suggestions.addIncludeAllInstancesHandler(infoPanel);
             launcher.addPanelCollapsedHandler(infoPanel);
             launcher.addPanelExpandedHandler(infoPanel);
             this.add(infoPanel);

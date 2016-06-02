@@ -127,6 +127,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     @Override
     public void onSearchUpdated(SearchBoxUpdatedEvent event) {
         SEARCH_TERM = event.getValue();
+        FACET = ""; // By default search for all facets
         START_ROW = 0; //Go to the first page
         performSearch();
         showHideClearBtn();
