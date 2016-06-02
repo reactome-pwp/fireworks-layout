@@ -44,7 +44,7 @@ public class Pager extends FlowPanel {
         if(searchResult!=null && searchResult.getFound()>0) {
             this.searchResult = searchResult;
             this.totalPages = (int) Math.ceil(searchResult.getFound() / (double) searchResult.getRows());
-            this.maxStartRow = (searchResult.getFound() - searchResult.getFound()%searchResult.getRows());
+            this.maxStartRow = (totalPages - 1) * searchResult.getRows();
             currentRow = searchResult.getStartRow();
             updateText();
         } else {
@@ -111,7 +111,7 @@ public class Pager extends FlowPanel {
     }
 
     private void loadLastPage() {
-        currentRow = searchResult.getFound() - searchResult.getFound()%searchResult.getRows() ;
+        currentRow = maxStartRow;
         changePage(currentRow);
         updateText();
     }

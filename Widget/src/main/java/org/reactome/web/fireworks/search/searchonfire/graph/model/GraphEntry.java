@@ -12,7 +12,7 @@ public interface GraphEntry {
     String getDbId();
 
     @JsProperty
-    String getStableIdentifier();
+    String getStId();
 
     @JsProperty
     String getDisplayName();

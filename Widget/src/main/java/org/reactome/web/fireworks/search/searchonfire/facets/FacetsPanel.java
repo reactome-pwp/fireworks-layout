@@ -100,6 +100,9 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
         style.setColor("rgb(30, 148, 208)");
         style.setMarginLeft(5, Style.Unit.PX);
         tagsContainer = new FlowPanel();
+        style = tagsContainer.getElement().getStyle();
+        style.setWidth(3500, Style.Unit.PX); //this is to achieve the horizontal scrolling effect
+
         add(titleLabel);
         add(tagsContainer);
     }

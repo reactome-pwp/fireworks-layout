@@ -44,6 +44,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
 
     private SearchBox input = null;
     private ControlButton searchBtn = null;
+    private IconButton clearBtn;
 
     private Boolean isExpanded = false;
 
@@ -71,8 +72,9 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         this.input.getElement().setPropertyString("placeholder", OPENING_TEXT);
         this.add(input);
 
-        IconButton clearBtn = new IconButton("", RESOURCES.clear());
+        clearBtn = new IconButton("", RESOURCES.clear());
         clearBtn.setStyleName(RESOURCES.getCSS().clearBtn());
+        clearBtn.setVisible(false);
         clearBtn.setTitle("Clear search");
         clearBtn.addClickHandler(event -> clearSearch());
         this.add(clearBtn);
@@ -125,8 +127,10 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     @Override
     public void onSearchUpdated(SearchBoxUpdatedEvent event) {
         SEARCH_TERM = event.getValue();
+        FACET = ""; // By default search for all facets
         START_ROW = 0; //Go to the first page
         performSearch();
+        showHideClearBtn();
     }
 
     @Override
@@ -207,6 +211,10 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
 
     private void performSearch() {
         SearchResultFactory.searchForTerm(SEARCH_TERM, FACET, SPECIES, START_ROW, ROWS, this);
+    }
+
+    private void showHideClearBtn() {
+        clearBtn.setVisible(!input.getText().isEmpty());
     }
 
 

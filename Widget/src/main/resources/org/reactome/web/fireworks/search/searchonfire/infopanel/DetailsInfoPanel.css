@@ -27,10 +27,6 @@
     font-size: medium;
 }
 
-.infoHeader span{
-    /*margin-left: 20px;*/
-}
-
 .identifierLabel {
     float: left;
 }
@@ -40,14 +36,13 @@
 }
 
 .databaseObjectListPanel {
-    margin-top: 10px;
+    margin-top: 7px;
 }
 
 .databaseObjectListTitle {
     font-weight: bolder;
     margin-top: 5px;
     background-color: rgba(165, 226, 249, 0.8);
-    /*border-radius: 10px;*/
 }
 
 .databaseObjectList {

@@ -33,7 +33,7 @@ public class GraphEntrySelectedEvent extends GwtEvent<GraphEntrySelectedHandler>
     @Override
     public String toString() {
         return "GraphEntrySelectedEvent{" +
-                "selectedEntry=" + selectedEntry.getStableIdentifier() +
+                "selectedEntry=" + selectedEntry.getStId() +
                 '}';
     }
 }

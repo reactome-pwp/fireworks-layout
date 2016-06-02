@@ -23,9 +23,11 @@ import org.reactome.web.fireworks.search.fallback.searchbox.SearchBoxArrowKeysHa
 import org.reactome.web.fireworks.search.searchonfire.events.SolrSuggestionSelectedEvent;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetChangedHandler;
 import org.reactome.web.fireworks.search.searchonfire.facets.FacetsPanel;
+import org.reactome.web.fireworks.search.searchonfire.handlers.IncludeAllFormsHandler;
 import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
 import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedEvent;
 import org.reactome.web.fireworks.search.searchonfire.launcher.SolrSearchPerformedHandler;
+import org.reactome.web.fireworks.search.searchonfire.options.OptionsPanel;
 import org.reactome.web.fireworks.search.searchonfire.pager.PageChangedHandler;
 import org.reactome.web.fireworks.search.searchonfire.pager.Pager;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
@@ -47,6 +49,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
     private ListDataProvider<Entry> dataProvider;
     private Pager pager;
     private FacetsPanel facetsPanel;
+    private OptionsPanel optionsPanel;
 
     private boolean selectFirstRow;
     private boolean selectLastRow;
@@ -73,6 +76,10 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
 
     public HandlerRegistration addFacetChangedHandler(FacetChangedHandler handler) {
         return facetsPanel.addFacetChangedHandler(handler);
+    }
+
+    public HandlerRegistration addIncludeAllInstancesHandler(IncludeAllFormsHandler handler) {
+        return optionsPanel.addIncludeAllInstancesHandler(handler);
     }
 
     public HandlerRegistration addSolrSuggestionSelectedHandler(SolrSuggestionSelectedHandler handler) {
@@ -132,6 +139,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         }
         pager.setResults(searchResult);
         facetsPanel.setResults(searchResult);
+        optionsPanel.setVisible(!entries.isEmpty());
 
         dataProvider.getList().clear();
         dataProvider.getList().addAll(entries);
@@ -180,9 +188,13 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         facetsPanel = new FacetsPanel();
         facetsPanel.addStyleName(RESOURCES.getCSS().facetsPanel());
 
+        optionsPanel = new OptionsPanel();
+        optionsPanel.addStyleName(RESOURCES.getCSS().optionsPanel());
+
         add(suggestions);
         add(pager);
         add(facetsPanel);
+        add(optionsPanel);
     }
 
 
@@ -222,5 +234,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         String pager();
 
         String facetsPanel();
+
+        String optionsPanel();
     }
 }

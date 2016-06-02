@@ -10,16 +10,16 @@ import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResul
  */
 public abstract class SearchResultFactory {
 
-    private static final String SEARCH = "/ContentService/search/fireworks?query=##term##&species=##species##&types=##facet##&page=##page##&rows=##rows##";
+    private static final String SEARCH = "/ContentService/search/fireworks?query=##term##&species=##species##&types=##facet##&start=##start##&rows=##rows##";
 
     public interface SearchResultHandler {
         void onSearchResult(SolrSearchResult result);
         void onSearchError();
     }
 
-    public static void searchForTerm(String term, String facet, String species, int page, int rows, final SearchResultHandler handler) {
+    public static void searchForTerm(String term, String facet, String species, int start, int rows, final SearchResultHandler handler) {
 
-        String url = SEARCH.replace("##term##", term).replace("##facet##", facet).replace("##species##", species).replace("##page##", page + "").replace("##rows##", rows + "");
+        String url = SEARCH.replace("##term##", term).replace("##facet##", facet).replace("##species##", species).replace("##start##", start + "").replace("##rows##", rows + "");
 
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
@@ -33,7 +33,7 @@ public abstract class SearchResultFactory {
                             result.setTerm(term);
                             result.setSelectedFacet(facet);
                             result.setSpecies(species);
-                            result.setStartRow(page);
+                            result.setStartRow(start);
                             result.setRows(rows);
                             handler.onSearchResult(result);
                             break;

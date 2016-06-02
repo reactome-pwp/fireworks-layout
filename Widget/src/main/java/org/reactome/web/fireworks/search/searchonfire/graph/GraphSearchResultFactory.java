@@ -10,16 +10,17 @@ import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
  */
 public abstract class GraphSearchResultFactory {
 
-    private static final String SEARCH = "/ContentService/data/pathwaysFor/##stableId##?speciesId=##speciesId##";
+    private static final String SEARCH = "/ContentService/data/##method##/##stableId##?speciesId=##speciesId##";
 
     public interface GraphSearchResultHandler {
         void onGraphSearchResult(GraphEntry[] result);
         void onGraphSearchError();
     }
 
-    public static void searchForPathways(String stableId, Long speciesId, final GraphSearchResultFactory.GraphSearchResultHandler handler) {
+    public static void searchForPathways(String stableId, Long speciesId, boolean includeAllForms, final GraphSearchResultFactory.GraphSearchResultHandler handler) {
 
         String url = SEARCH.replace("##stableId##", stableId).replace("##speciesId##", speciesId.toString());
+        url = (includeAllForms) ? url.replace("##method##", "pathwaysForAllFormsOf") : url.replace("##method##", "pathwaysForInstance");
 
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
