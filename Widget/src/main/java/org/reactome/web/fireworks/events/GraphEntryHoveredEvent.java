@@ -33,7 +33,7 @@ public class GraphEntryHoveredEvent extends GwtEvent<GraphEntryHoveredHandler> {
     @Override
     public String toString() {
         return "GraphEntryHoveredEvent{" +
-                "hovered=" + (hoveredEntry!= null ? hoveredEntry.getStableIdentifier():null) +
+                "hovered=" + (hoveredEntry!= null ? hoveredEntry.getStId():null) +
                 '}';
     }
 }
