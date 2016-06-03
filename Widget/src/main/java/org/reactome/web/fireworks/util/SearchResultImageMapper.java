@@ -46,6 +46,9 @@ public abstract class SearchResultImageMapper {
                 case "positiveregulation":
                 case "negativeregulation":
                     return DatabaseObjectImages.INSTANCE.regulator();
+                case "chemical compound":
+                case "referencemolecule":
+                    return DatabaseObjectImages.INSTANCE.simpleEntity();
                 default:
                     return DatabaseObjectImages.INSTANCE.exclamation();
             }
