@@ -37,7 +37,6 @@ import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -131,7 +130,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         Entry sel = selectionModel.getSelectedObject();
         SolrSearchResult searchResult = event.getSuggestions();
         String term = searchResult.getTerm();
-        List<Entry> entries = searchResult.getEntries()!=null ? Arrays.asList(searchResult.getEntries()) : new ArrayList<>();
+        List<Entry> entries = searchResult.getEntries()!=null ? searchResult.getEntries() : new ArrayList<>();
 
         if (!entries.isEmpty() && !entries.contains(sel)) {
             selectionModel.clear();
@@ -228,7 +227,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
         @Source(SolrSuggestionPanelCSS.CSS)
         SolrSuggestionPanelCSS getCSS();
 
-        @Source("images/interactor.png")
+        @Source("images/Interactor.png")
         ImageResource interactor();
     }
 
