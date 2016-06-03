@@ -1,5 +1,6 @@
 package org.reactome.web.fireworks.search.fallback.searchbox;
 
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
@@ -49,6 +50,11 @@ public class SearchBox extends TextBox implements KeyUpHandler, KeyDownHandler {
     @Override
     public void onKeyDown(KeyDownEvent event) {
         int keyCode = event.getNativeKeyCode();
+
+        // If one of the special buttons are pressed avoid firing any event
+        NativeEvent nEvent = event.getNativeEvent();
+        if(nEvent.getMetaKey() || nEvent.getAltKey() ||  nEvent.getCtrlKey()) return;
+
         switch (keyCode){
             case KeyCodes.KEY_UP:
                 event.stopPropagation(); event.preventDefault();
