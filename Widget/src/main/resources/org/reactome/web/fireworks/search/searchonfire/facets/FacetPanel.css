@@ -8,11 +8,12 @@
 .tagContainer {
     width: 100%;
     height: 40px;
-    overflow: auto;
+    overflow-x: visible;
+    overflow-y: hidden;
     white-space: nowrap;
 }
 
 .outerContainer {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
