@@ -1,9 +1,11 @@
 package org.reactome.web.fireworks.search.searchonfire.facets;
 
-import com.google.gwt.dom.client.Style;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -95,22 +97,14 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
 
     private void init() {
         titleLabel = new Label("Filter by type:");
-        Style style = titleLabel.getElement().getStyle();
-        style.setFontSize(1.10, Style.Unit.EM);
-        style.setFontWeight(Style.FontWeight.BOLD);
-        style.setColor("rgb(30, 148, 208)");
-        style.setMarginLeft(5, Style.Unit.PX);
+        titleLabel.setStyleName(RESOURCES.getCSS().title());
+
         tagsContainer = new FlowPanel();
-        style = tagsContainer.getElement().getStyle();
-        style.setWidth(100, Style.Unit.PCT);
-        style.setHeight(40, Style.Unit.PX);
-        style.setOverflow(Style.Overflow.VISIBLE);
-        style.setWhiteSpace(Style.WhiteSpace.NOWRAP);
+        tagsContainer.setStyleName(RESOURCES.getCSS().tagContainer());
+
 
         SimplePanel sp = new SimplePanel();
-        style = sp.getElement().getStyle();
-        style.setOverflowX(Style.Overflow.VISIBLE);
-        style.setOverflowY(Style.Overflow.HIDDEN);
+        sp.setStyleName(RESOURCES.getCSS().outerContainer());
         sp.add(tagsContainer);
 
         add(titleLabel);
@@ -131,5 +125,40 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
             tagsContainer.add(facet);
         }
         setVisible(!facetsMap.isEmpty() && facetsMap.size()>1);
+    }
+
+
+    public static Resources RESOURCES;
+    static {
+        RESOURCES = GWT.create(Resources.class);
+        RESOURCES.getCSS().ensureInjected();
+    }
+
+    /**
+     * A ClientBundle of resources used by this widget.
+     */
+    public interface Resources extends ClientBundle {
+        /**
+         * The styles used in this widget.
+         */
+        @Source(ResourceCSS.CSS)
+        ResourceCSS getCSS();
+    }
+
+    /**
+     * Styles used by this widget.
+     */
+    @CssResource.ImportedWithPrefix("fireworks-FacetPanel")
+    public interface ResourceCSS extends CssResource {
+        /**
+         * The path to the default CSS styles used by this resource.
+         */
+        String CSS = "org/reactome/web/fireworks/search/searchonfire/facets/FacetPanel.css";
+
+        String title();
+
+        String outerContainer();
+
+        String tagContainer();
     }
 }
