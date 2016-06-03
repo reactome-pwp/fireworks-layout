@@ -7,7 +7,7 @@
 
     float: left;
     width: 100%; /* grows and shrinks with the parent */
-    max-height: 233px;
+    max-height: 235px;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     outline: none;
