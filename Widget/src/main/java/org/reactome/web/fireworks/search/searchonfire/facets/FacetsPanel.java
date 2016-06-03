@@ -43,7 +43,7 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
                 selectedFacets = Arrays.asList(aux.split(","));
             }
 
-            FacetContainer[] facets = searchResult.getFacets();
+            List<FacetContainer> facets = searchResult.getFacets();
             facetsMap = new HashMap<>();
             if (facets != null) {
                 for (final FacetContainer fac : facets) {
