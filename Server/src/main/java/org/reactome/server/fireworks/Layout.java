@@ -67,7 +67,7 @@ public class Layout {
                 config.getString("username"),
                 config.getString("password")
         );
-        ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("file:config.xml");
         GKInstance2ModelObject converter = context.getBean(GKInstance2ModelObject.class);
         DatabaseObjectFactory.initializeFactory(dba, converter);
 
