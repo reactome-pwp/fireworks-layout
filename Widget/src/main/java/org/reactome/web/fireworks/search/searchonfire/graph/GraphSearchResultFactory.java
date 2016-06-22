@@ -12,7 +12,8 @@ import org.reactome.web.pwp.model.classes.Event;
  */
 public abstract class GraphSearchResultFactory {
 
-    private static final String SEARCH = "/ContentService/data/##method##/##stableId##?speciesId=##speciesId##";
+    private static final String SEARCH_ENTITY    = "/ContentService/data/pathways/low/entity/##id##?speciesId=##speciesId##";
+    private static final String SEARCH_ALL_FORMS = "/ContentService/data/pathways/low/entity/##id##/allForms?speciesId=##speciesId##";
     private static Request request;
 
     public interface GraphSearchResultHandler {
@@ -22,8 +23,8 @@ public abstract class GraphSearchResultFactory {
 
     public static void searchForPathways(DatabaseObject selection, Long speciesId, boolean includeAllForms, final GraphSearchResultFactory.GraphSearchResultHandler handler) {
 
-        String url = SEARCH.replace("##stableId##", selection.getIdentifier()).replace("##speciesId##", speciesId.toString());
-        url = (!(selection instanceof Event) && includeAllForms) ? url.replace("##method##", "pathwaysForAllFormsOf") : url.replace("##method##", "pathwaysForInstance");
+        String url = (!(selection instanceof Event) && includeAllForms) ? SEARCH_ALL_FORMS : SEARCH_ENTITY;
+        url = url.replace("##id##", selection.getIdentifier()).replace("##speciesId##", speciesId.toString());
 
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
