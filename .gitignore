@@ -29,3 +29,7 @@ local.properties
 
 # Locally stored "Eclipse launch configurations"
 *.launch
+
+#OS files
+.DS_Store
+.DS_Store?
