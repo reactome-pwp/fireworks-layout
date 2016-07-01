@@ -26,10 +26,11 @@ public abstract class GraphSearchResultFactory {
         String url = (!(selection instanceof Event) && includeAllForms) ? SEARCH_ALL_FORMS : SEARCH_ENTITY;
         url = url.replace("##id##", selection.getIdentifier()).replace("##speciesId##", speciesId.toString());
 
+        if (request != null && request.isPending()) request.cancel();
+
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
         try {
-            if (request != null && request.isPending()) request.cancel();
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
