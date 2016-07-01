@@ -43,6 +43,7 @@ public abstract class SearchResultImageMapper {
                 case "referencernasequence":
                     return DatabaseObjectImages.INSTANCE.referenceRNASequence();
                 case "regulation":
+                case "requirement":
                 case "positiveregulation":
                 case "negativeregulation":
                     return DatabaseObjectImages.INSTANCE.regulator();
