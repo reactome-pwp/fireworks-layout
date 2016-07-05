@@ -76,7 +76,7 @@ public class SolrSuggestionCell extends AbstractCell<Entry> {
 
         SafeHtml primary = SafeHtmlUtils.fromTrustedString(value.getName());
 
-        if(value.getStId().isEmpty()) {
+        if(value.getStId()==null || value.getStId().isEmpty()) {
             sb.append(templates.minCell(safeImage, primary, value.getName()));
         }else{
             SafeHtml secondary = SafeHtmlUtils.fromTrustedString(value.getStId());
