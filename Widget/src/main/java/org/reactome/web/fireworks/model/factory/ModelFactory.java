@@ -46,7 +46,7 @@ public abstract class ModelFactory {
             edges.add(from.addChild(to));
         }
 
-        return new Graph(graph.getSpeciesId(), nodes, edges);
+        return new Graph(graph.getSpeciesId(), graph.getSpeciesName() , nodes, edges);
     }
 
 }
