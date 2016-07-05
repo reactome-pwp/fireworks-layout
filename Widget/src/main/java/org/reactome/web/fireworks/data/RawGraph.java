@@ -7,6 +7,7 @@ import java.util.List;
  */
 public interface RawGraph {
     Long getSpeciesId();
+    String getSpeciesName();
     List<RawNode> getNodes();
     List<RawEdge> getEdges();
 }
