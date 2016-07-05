@@ -5,6 +5,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import org.reactome.web.fireworks.events.SearchFilterEvent;
+import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.search.fallback.panels.AbstractAccordionPanel;
 import org.reactome.web.fireworks.search.searchonfire.events.IncludeAllFormsEvent;
 import org.reactome.web.fireworks.search.searchonfire.events.SolrSuggestionSelectedEvent;
@@ -21,11 +22,13 @@ import org.reactome.web.pwp.model.classes.DatabaseObject;
 public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements SolrSuggestionSelectedHandler,
         GraphSearchResultFactory.GraphSearchResultHandler, IncludeAllFormsHandler {
     private EventBus eventBus;
+    private Graph graph;
     private DatabaseObject selectedSuggestion;
     private boolean includeAllForms;
 
-    public SolrSelectionInfoPanel(EventBus eventBus) {
+    public SolrSelectionInfoPanel(EventBus eventBus, Graph graph) {
         this.eventBus = eventBus;
+        this.graph = graph;
         this.setStyleName(RESOURCES.getCSS().container());
     }
 
@@ -39,7 +42,7 @@ public class SolrSelectionInfoPanel extends AbstractAccordionPanel implements So
     }
 
     private void performGraphSearch(){
-        GraphSearchResultFactory.searchForPathways(selectedSuggestion, 48887L, includeAllForms, this);
+        GraphSearchResultFactory.searchForPathways(selectedSuggestion, graph.getSpeciesId(), includeAllForms, this);
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.reactome.web.fireworks.events.SearchKeyPressedEvent;
 import org.reactome.web.fireworks.events.SearchResetEvent;
 import org.reactome.web.fireworks.handlers.SearchKeyPressedHandler;
 import org.reactome.web.fireworks.legends.ControlButton;
+import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.search.fallback.events.PanelCollapsedEvent;
 import org.reactome.web.fireworks.search.fallback.events.PanelExpandedEvent;
 import org.reactome.web.fireworks.search.fallback.handlers.PanelCollapsedHandler;
@@ -32,6 +33,7 @@ import org.reactome.web.fireworks.util.Console;
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
+@SuppressWarnings("Duplicates")
 public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, SearchBoxUpdatedHandler,
         SearchBoxArrowKeysHandler, SearchKeyPressedHandler, SearchResultFactory.SearchResultHandler,
         PageChangedHandler, FacetChangedHandler {
@@ -50,19 +52,15 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
 
     private Timer focusTimer;
 
-    private static String SEARCH_TERM = "";
-    private static String FACET = "";
-    private static String SPECIES = "Homo+sapiens";
-    private static int START_ROW = 0;
-    private static final int ROWS = 4;
+    private SearchParameters searchParameters;
 
-
-    public SolrSearchLauncher(EventBus eventBus) {
-
+    public SolrSearchLauncher(EventBus eventBus, Graph graph) {
         //Setting the search style
         setStyleName(RESOURCES.getCSS().launchPanel());
 
         this.eventBus = eventBus;
+
+        searchParameters = new SearchParameters(graph.getSpeciesName());
 
         this.searchBtn = new ControlButton("Search reactome", RESOURCES.getCSS().launch(), this);
         this.add(searchBtn);
@@ -119,16 +117,16 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
 
     @Override
     public void onFacetChanged(FacetChangedEvent event) {
-        FACET = event.getResults().getSelectedFacet();
-        START_ROW = 0; //Go to the first page
+        searchParameters.setFacet(event.getResults().getSelectedFacet());
+        searchParameters.setStartRow(0); //Go to the first page
         performSearch();
     }
 
     @Override
     public void onSearchUpdated(SearchBoxUpdatedEvent event) {
-        SEARCH_TERM = event.getValue();
-        FACET = ""; // By default search for all facets
-        START_ROW = 0; //Go to the first page
+        searchParameters.setSearchTerm(event.getValue());
+        searchParameters.setFacet(""); // By default search for all facets
+        searchParameters.setStartRow(0); //Go to the first page
         performSearch();
         showHideClearBtn();
     }
@@ -169,7 +167,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
 
     @Override
     public void onPageChanged(PageChangedEvent event) {
-        START_ROW = event.getResults().getStartRow();
+        searchParameters.setStartRow(event.getResults().getStartRow());
         performSearch();
     }
 
@@ -210,7 +208,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     }
 
     private void performSearch() {
-        SearchResultFactory.searchForTerm(SEARCH_TERM, FACET, SPECIES, START_ROW, ROWS, this);
+        SearchResultFactory.searchForTerm(searchParameters, this);
     }
 
     private void showHideClearBtn() {

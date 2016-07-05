@@ -60,7 +60,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
     /**
      * The key provider that provides the unique ID of a DatabaseObject.
      */
-    public static final ProvidesKey<Entry> KEY_PROVIDER = item -> item == null ? null : item.getStId();
+    public static final ProvidesKey<Entry> KEY_PROVIDER = item -> item == null ? null : item.getId();
 
     public SolrSuggestionPanel() {
         this.sinkEvents(Event.ONCLICK);
@@ -134,7 +134,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
 
         if (!entries.isEmpty() && !entries.contains(sel)) {
             selectionModel.clear();
-        } else if (entries.isEmpty() && !term.isEmpty()){
+        } else if (entries.isEmpty() && !term.isEmpty() && term.length()>3){
             suggestions.setEmptyListWidget(new HTML("No results found for '" + term +"'"));
         } else {
             suggestions.setEmptyListWidget(null);
@@ -166,18 +166,20 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
     @Override
     public void onSelectionChange(SelectionChangeEvent event) {
         Entry selection = selectionModel.getSelectedObject();
-        DatabaseObjectFactory.get(selection.getStId(), new DatabaseObjectCreatedHandler() {
-            @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
-                optionsPanel.setEnable(!(databaseObject instanceof org.reactome.web.pwp.model.classes.Event));
-                fireEvent(new SolrSuggestionSelectedEvent(databaseObject));
-            }
+        if(selection!=null) {
+            DatabaseObjectFactory.get(selection.getId(), new DatabaseObjectCreatedHandler() {
+                @Override
+                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                    optionsPanel.setEnable(!(databaseObject instanceof org.reactome.web.pwp.model.classes.Event));
+                    fireEvent(new SolrSuggestionSelectedEvent(databaseObject));
+                }
 
-            @Override
-            public void onDatabaseObjectError(Throwable throwable) {
-                //TODO
-            }
-        });
+                @Override
+                public void onDatabaseObjectError(Throwable throwable) {
+                    //TODO
+                }
+            });
+        }
     }
 
     private void init(){

@@ -38,7 +38,7 @@ public class SearchPanel extends FlowPanel {
             launcher.addSearchBoxArrowKeysHandler(suggestions);
             this.add(suggestions);
         } else {
-            final SolrSearchLauncher launcher = new SolrSearchLauncher(eventBus);
+            final SolrSearchLauncher launcher = new SolrSearchLauncher(eventBus, graph);
             this.add(launcher);
 
             SolrSuggestionPanel suggestions = new SolrSuggestionPanel();
@@ -53,7 +53,7 @@ public class SearchPanel extends FlowPanel {
             launcher.addSearchBoxArrowKeysHandler(suggestions);
             this.add(suggestions);
 
-            SolrSelectionInfoPanel infoPanel = new SolrSelectionInfoPanel(eventBus);
+            SolrSelectionInfoPanel infoPanel = new SolrSelectionInfoPanel(eventBus, graph);
             suggestions.addSolrSuggestionSelectedHandler(infoPanel);
             suggestions.addIncludeAllInstancesHandler(infoPanel);
             launcher.addPanelCollapsedHandler(infoPanel);

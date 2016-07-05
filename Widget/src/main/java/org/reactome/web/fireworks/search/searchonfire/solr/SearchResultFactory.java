@@ -2,6 +2,7 @@ package org.reactome.web.fireworks.search.searchonfire.solr;
 
 
 import com.google.gwt.http.client.*;
+import org.reactome.web.fireworks.search.searchonfire.launcher.SearchParameters;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.factory.SolrSearchException;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.factory.SolrSearchResultFactory;
@@ -20,9 +21,13 @@ public abstract class SearchResultFactory {
         void onSearchError();
     }
 
-    public static void searchForTerm(String term, String facet, String species, int start, int rows, SearchResultHandler handler) {
+    public static void searchForTerm(SearchParameters params, SearchResultHandler handler) {
 
-        String url = SEARCH.replace("##term##", term).replace("##facet##", facet).replace("##species##", species).replace("##start##", start + "").replace("##rows##", rows + "");
+        String url = SEARCH.replace("##term##", params.getSearchTerm())
+                           .replace("##facet##", params.getFacet())
+                           .replace("##species##", params.getSpecies())
+                           .replace("##start##", params.getStartRow() + "")
+                           .replace("##rows##", params.getRows() + "");
 
         if (request != null && request.isPending()) request.cancel();
 
@@ -34,14 +39,13 @@ public abstract class SearchResultFactory {
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){
                         case Response.SC_OK:
-//                            SolrSearchResult result = JsonUtils.safeEval(response.getText());
                             try {
                                 SolrSearchResult result = SolrSearchResultFactory.getSolrSearchObject(SolrSearchResult.class, response.getText());
-                                result.setTerm(term);
-                                result.setSelectedFacet(facet);
-                                result.setSpecies(species);
-                                result.setStartRow(start);
-                                result.setRows(rows);
+                                result.setTerm(params.getSearchTerm());
+                                result.setSelectedFacet(params.getFacet());
+                                result.setSpecies(params.getSpecies());
+                                result.setStartRow(params.getStartRow());
+                                result.setRows(params.getRows());
                                 handler.onSearchResult(result);
                             } catch (SolrSearchException e) {
                                 Console.error(e.getCause());
