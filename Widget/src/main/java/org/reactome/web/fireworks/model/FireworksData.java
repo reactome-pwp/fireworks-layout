@@ -20,8 +20,8 @@ public class FireworksData {
 
     public FireworksData(Graph graph) {
         this.graph = graph;
-        this.id2Node = new HashMap<Long, Node>();
-        this.stId2Node = new HashMap<String, Node>();
+        this.id2Node = new HashMap<>();
+        this.stId2Node = new HashMap<>();
         for (Node node : graph.getNodes()) {
             this.id2Node.put(node.getDbId(), node);
             this.stId2Node.put(node.getStId(), node);
@@ -40,6 +40,10 @@ public class FireworksData {
 
     public Long getSpeciesId(){
         return this.graph.getSpeciesId();
+    }
+
+    public String getSpeciesName(){
+        return this.graph.getSpeciesName();
     }
 
     public void resetPathwaysAnalysisResult(){
