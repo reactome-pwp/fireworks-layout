@@ -63,6 +63,8 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
 
     @Override
     public void onClick(ClickEvent event) {
+        if(facetsMap.size() == 1)  return;
+
         FacetTag clickedFacet = (FacetTag) event.getSource();
         Set<FacetTag> selectedFacets = getSelectedFacets();
         if(selectedFacets.size()>1 || !clickedFacet.isSelected()) {
@@ -70,7 +72,7 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
             setSelectedForAll(false);
             facetsMap.get(clickedFacet.getName()).setSelected(true);
         } else {
-            // select all
+            // select all facets
             setSelectedForAll(true);
         }
         updateView();
@@ -124,7 +126,7 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
         for(FacetTag facet : facetsMap.values()) {
             tagsContainer.add(facet);
         }
-        setVisible(!facetsMap.isEmpty() && facetsMap.size()>1);
+        setVisible(!facetsMap.isEmpty());
     }
 
 
