@@ -11,7 +11,7 @@ public class SearchBoxUpdatedEvent extends GwtEvent<SearchBoxUpdatedHandler> {
     private String value;
 
     public SearchBoxUpdatedEvent(String value) {
-        this.value = value.trim();
+        this.value = value != null ? value.trim() : value;
     }
 
     @Override
