@@ -10,10 +10,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import org.reactome.web.fireworks.events.*;
-import org.reactome.web.fireworks.handlers.AnalysisPerformedHandler;
-import org.reactome.web.fireworks.handlers.AnalysisResetHandler;
-import org.reactome.web.fireworks.handlers.ExpressionColumnChangedHandler;
-import org.reactome.web.fireworks.handlers.ProfileChangedHandler;
+import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.fireworks.model.AnalysisInfo;
 import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.Graph;
@@ -27,7 +24,8 @@ import java.util.Set;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler,
-        AnalysisPerformedHandler, AnalysisResetHandler, ExpressionColumnChangedHandler, ProfileChangedHandler {
+        AnalysisPerformedHandler, AnalysisResetHandler, ExpressionColumnChangedHandler, ProfileChangedHandler,
+        SearchFilterHandler {
 
     private static final int HEIGHT = 75;
 
@@ -145,6 +143,16 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         });
     }
 
+    @Override
+    public void onSearchFilterEvent(SearchFilterEvent event) {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                drawThumbnail();
+            }
+        });
+    }
+
     void highlightEdges(Node node, Set<Edge> edges){
         cleanCanvas(this.highlight);
         Context2d ctx = this.highlight.getContext2d();
@@ -188,6 +196,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
         this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
         this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
+        this.eventBus.addHandler(SearchFilterEvent.TYPE, this);
     }
 
     private void drawThumbnail(){
@@ -208,7 +217,6 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
                     ctx.setStrokeStyle(edge.getExpressionColor(column));
                     edge.drawThumbnail(ctx, this.factor);
                     break;
-                case NONE:
                 default:
                     edge.drawThumbnail(ctx, this.factor);
             }

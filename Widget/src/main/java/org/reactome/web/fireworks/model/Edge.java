@@ -23,6 +23,7 @@ public class Edge implements Drawable, QuadTreeBox {
     private Coordinate control;
 
     String colour;
+    double alpha = 1.0;
     List<String> expColours;
 
     public Edge(Node from, Node to) {
@@ -34,6 +35,7 @@ public class Edge implements Drawable, QuadTreeBox {
 
     @Override
     public void draw(Context2d ctx) {
+        ctx.setGlobalAlpha(alpha);
         ctx.beginPath();
         ctx.moveTo(from.getX(), from.getY());
         ctx.quadraticCurveTo(control.getX(), control.getY(), to.getX(), to.getY());
@@ -47,6 +49,7 @@ public class Edge implements Drawable, QuadTreeBox {
 
     @Override
     public void drawThumbnail(Context2d ctx, double factor) {
+        ctx.setGlobalAlpha(alpha);
         Coordinate from = this.from.originalPosition.multiply(factor);
         Coordinate to = this.to.originalPosition.multiply(factor);
         Coordinate control = this.originalControl.multiply(factor);
@@ -127,6 +130,10 @@ public class Edge implements Drawable, QuadTreeBox {
     //Used to set a value only when it is needed.
     public void setFadeoutColour() {
         this.colour = FireworksColours.PROFILE.getEdgeFadeoutColour();
+    }
+
+    public void setTransparency(double alpha){
+        this.alpha = alpha;
     }
 
     public void setExpColours(List<String> expColours) {

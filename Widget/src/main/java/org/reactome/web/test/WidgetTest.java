@@ -93,7 +93,7 @@ public class WidgetTest implements EntryPoint {
         fp.add(new Button("OVERREPRESENTATION", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                fireworks.setAnalysisToken("MjAxNjAyMjYxMDU5MzBfNA%253D%253D", "TOTAL");
+                fireworks.setAnalysisToken("MjAxNjA1MDkxMjI2MzdfMQ==", "TOTAL");
             }
         }));
         fp.add(new Button("EXPRESSION", new ClickHandler() {

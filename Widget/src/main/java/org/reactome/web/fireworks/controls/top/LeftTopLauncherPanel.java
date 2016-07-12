@@ -6,8 +6,8 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.fireworks.controls.navigation.MainControlPanel;
+import org.reactome.web.fireworks.controls.top.search.SearchPanel;
 import org.reactome.web.fireworks.model.Graph;
-import org.reactome.web.fireworks.search.SearchPanel;
 
 
 /**

@@ -31,16 +31,17 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox, Compa
     double originalSize;
 
     String colour;
+    double alpha = 1.0;
     List<String> expColours;
 
     private Coordinate currentPosition;
     Coordinate originalPosition;
 
-    private Set<Edge> edgesFrom = new HashSet<Edge>();
-    private Set<Edge> edgesTo = new HashSet<Edge>();
+    private Set<Edge> edgesFrom = new HashSet<>();
+    private Set<Edge> edgesTo = new HashSet<>();
 
-    private Set<Node> children = new HashSet<Node>();
-    private Set<Node> parents = new HashSet<Node>();
+    private Set<Node> children = new HashSet<>();
+    private Set<Node> parents = new HashSet<>();
 
     public Node(RawNode raw){
         this.dbId = raw.getDbId();
@@ -48,7 +49,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox, Compa
         this.name = raw.getName();
         this.ratio = raw.getRatio();
         this.angle = raw.getAngle();
-        this.currentSize = this.originalSize = (raw.getRatio() + 0.01) * 15;
+        this.currentSize = this.originalSize = (ratio + 0.025) * 15;
         this.currentPosition = this.originalPosition = new Coordinate(raw.getX(), raw.getY());
         initStatistics(); //Colour is set in initStatistics method
     }
@@ -69,10 +70,11 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox, Compa
 
     @Override
     public void draw(Context2d ctx) {
+        ctx.setGlobalAlpha(alpha);
         ctx.beginPath();
         ctx.arc(this.getX(), this.getY(), this.getSize(), 0, 2 * Math.PI, true);
         ctx.closePath();
-        ctx.fill(); ctx.stroke();
+        ctx.fill(); //ctx.stroke();
     }
 
     @Override
@@ -115,6 +117,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox, Compa
 
     @Override
     public void drawThumbnail(Context2d ctx, double factor) {
+//        ctx.setGlobalAlpha(alpha);
         ctx.beginPath();
         double x = originalPosition.getX() * factor;
         double y = originalPosition.getY() * factor;
@@ -135,6 +138,7 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox, Compa
 
     @Override
     public void highlight(Context2d ctx, double auraSize) {
+        ctx.setGlobalAlpha(alpha);
         ctx.beginPath();
         ctx.arc(this.getX(), this.getY(), this.getSize() + auraSize, 0, 2 * Math.PI, true);
         ctx.closePath();
@@ -330,6 +334,10 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox, Compa
 
     public void setFadeoutColour(){
         this.colour = FireworksColours.PROFILE.getNodeFadeoutColour();
+    }
+
+    public void setTransparency(double alpha){
+        this.alpha = alpha;
     }
 
     // ####################################

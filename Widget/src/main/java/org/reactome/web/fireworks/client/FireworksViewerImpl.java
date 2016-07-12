@@ -25,14 +25,17 @@ import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.model.factory.ModelException;
 import org.reactome.web.fireworks.model.factory.ModelFactory;
-import org.reactome.web.fireworks.search.events.SuggestionHoveredEvent;
-import org.reactome.web.fireworks.search.events.SuggestionSelectedEvent;
-import org.reactome.web.fireworks.search.handlers.SuggestionHoveredHandler;
-import org.reactome.web.fireworks.search.handlers.SuggestionSelectedHandler;
+import org.reactome.web.fireworks.search.fallback.events.SuggestionHoveredEvent;
+import org.reactome.web.fireworks.search.fallback.events.SuggestionSelectedEvent;
+import org.reactome.web.fireworks.search.fallback.handlers.SuggestionHoveredHandler;
+import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHandler;
+import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -44,7 +47,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         ControlActionHandler, ProfileChangedHandler,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
         IllustrationSelectedHandler, CanvasExportRequestedHandler,
-        KeyDownHandler {
+        KeyDownHandler, SearchFilterHandler, SearchResetHandler,
+        GraphEntryHoveredHandler, GraphEntrySelectedHandler {
 
     EventBus eventBus;
 
@@ -86,8 +90,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             initWidget(new Label(e.getMessage()));
             e.printStackTrace();
         }
-        this.eventBus.addHandler(SuggestionSelectedEvent.TYPE, this);
-        this.eventBus.addHandler(SuggestionHoveredEvent.TYPE, this);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -245,8 +247,37 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public void onGraphEntryHovered(GraphEntryHoveredEvent event) {
+        if(event.getHoveredEntry()!=null) {
+            highlightNode(event.getHoveredEntry().getStId());
+        } else {
+            resetHighlight();
+        }
+    }
+
+    @Override
+    public void onGraphEntrySelected(GraphEntrySelectedEvent event) {
+        selectNode(event.getSelectedEntry().getStId());
+    }
+
+    @Override
     public void onIllustrationSelected(IllustrationSelectedEvent event) {
         this.canvases.setIllustration(event.getUrl());
+    }
+
+    @Override
+    public void onKeyDown(KeyDownEvent keyDownEvent) {
+        if (isVisible()) {
+            int keyCode = keyDownEvent.getNativeKeyCode();
+            String platform = Window.Navigator.getPlatform();
+            // If this is a Mac, check for the cmd key. In case of any other platform, check for the ctrl key
+            boolean isModifierKeyPressed = platform.toLowerCase().contains("mac") ? keyDownEvent.isMetaKeyDown() : keyDownEvent.isControlKeyDown();
+            if (keyCode == KeyCodes.KEY_F && isModifierKeyPressed) {
+                keyDownEvent.preventDefault();
+                keyDownEvent.stopPropagation();
+                eventBus.fireEventFromSource(new SearchKeyPressedEvent(), this);
+            }
+        }
     }
 
     @Override
@@ -320,6 +351,29 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 this.openNode(event.getSelectedObject());
             }
         }
+    }
+
+    @Override
+    public void onSearchFilterEvent(SearchFilterEvent event) {
+        Set<Node> filteredNodes = new HashSet<>();
+        for (GraphEntry graphEntry : event.getResult()) {
+            Node node = data.getNode(graphEntry.getStId());
+            if(node!=null) {
+                filteredNodes.add(node);
+            }
+        }
+        data.setPathwaysFilteredResult(filteredNodes);
+        manager.displayNodesAndParents(filteredNodes);
+        this.forceFireworksDraw = true;
+    }
+
+    @Override
+    public void onSearchReset(SearchResetEvent event) {
+        data.resetPathwaysFiltered();
+        manager.displayAllNodes(true);
+        resetHighlight();
+        resetSelection();
+        this.forceFireworksDraw = true;
     }
 
     @Override
@@ -472,6 +526,13 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(IllustrationSelectedEvent.TYPE, this);
         this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
         this.eventBus.addHandler(CanvasExportRequestedEvent.TYPE, this);
+
+        this.eventBus.addHandler(SuggestionSelectedEvent.TYPE, this);
+        this.eventBus.addHandler(SuggestionHoveredEvent.TYPE, this);
+        this.eventBus.addHandler(SearchFilterEvent.TYPE, this);
+        this.eventBus.addHandler(SearchResetEvent.TYPE, this);
+        this.eventBus.addHandler(GraphEntryHoveredEvent.TYPE, this);
+        this.eventBus.addHandler(GraphEntrySelectedEvent.TYPE, this);
     }
 
     protected void openNode(Node node){
@@ -524,21 +585,6 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             if(this.hovered!=null){
                 this.hovered = null;
                 this.eventBus.fireEventFromSource(new NodeHoverResetEvent(), this);
-            }
-        }
-    }
-
-    @Override
-    public void onKeyDown(KeyDownEvent keyDownEvent) {
-        if(isVisible()){
-            int keyCode = keyDownEvent.getNativeKeyCode();
-            String platform = Window.Navigator.getPlatform();
-            // If this is a Mac, check for the cmd key. In case of any other platform, check for the ctrl key
-            boolean isModifierKeyPressed = platform.toLowerCase().contains("mac") ? keyDownEvent.isMetaKeyDown() : keyDownEvent.isControlKeyDown();
-            if (keyCode == KeyCodes.KEY_F && isModifierKeyPressed) {
-                keyDownEvent.preventDefault();
-                keyDownEvent.stopPropagation();
-                eventBus.fireEventFromSource(new SearchKeyPressedEvent(), this);
             }
         }
     }

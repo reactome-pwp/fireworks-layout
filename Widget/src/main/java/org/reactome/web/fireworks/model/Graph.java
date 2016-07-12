@@ -9,14 +9,16 @@ import java.util.Set;
  */
 public class Graph {
     Long speciesId;
+    String speciesName;
     Set<Node> nodes;
     Set<Edge> edges;
 
     double minX; double maxX;
     double minY; double maxY;
 
-    public Graph(Long speciesId, Set<Node> nodes, Set<Edge> edges) {
+    public Graph(Long speciesId, String speciesName, Set<Node> nodes, Set<Edge> edges) {
         this.speciesId = speciesId;
+        this.speciesName = speciesName;
         this.nodes = nodes;
         this.edges = edges;
         this.initialise();
@@ -25,6 +27,8 @@ public class Graph {
     public Long getSpeciesId() {
         return speciesId;
     }
+
+    public String getSpeciesName() { return speciesName;}
 
     public Set<Node> getNodes() {
         return nodes;
