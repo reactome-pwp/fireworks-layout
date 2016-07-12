@@ -208,12 +208,16 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         ctx.setStrokeStyle(color);
         for (Edge edge : this.graph.getEdges()) {
             switch (this.analysisInfo.getType()) {
+                case SPECIES_COMPARISON:
+                case OVERREPRESENTATION:
+                    ctx.setStrokeStyle(edge.getColour());
+                    edge.drawThumbnail(ctx, this.factor);
+                    break;
                 case EXPRESSION:
                     ctx.setStrokeStyle(edge.getExpressionColor(column));
                     edge.drawThumbnail(ctx, this.factor);
                     break;
                 default:
-                    ctx.setStrokeStyle(edge.getColour());
                     edge.drawThumbnail(ctx, this.factor);
             }
         }
