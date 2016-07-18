@@ -4,6 +4,7 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.CanvasGradient;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -46,13 +47,17 @@ public class ExpressionLegend extends LegendPanel implements AnalysisPerformedHa
         fillGradient();
 
         this.topLabel = new InlineLabel("");
-        this.add(this.topLabel, 5, 5);
+        this.topLabel.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+        this.topLabel.getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
+        this.add(this.topLabel, 0, 5);
 
         this.add(this.gradient, 10, 25);
         this.add(this.flag, 0, 20);
 
         this.bottomLabel = new InlineLabel("");
-        this.add(this.bottomLabel, 5, 230);
+        this.bottomLabel.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+        this.bottomLabel.getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
+        this.add(this.bottomLabel, 0, 230);
 
         initHandlers();
 
