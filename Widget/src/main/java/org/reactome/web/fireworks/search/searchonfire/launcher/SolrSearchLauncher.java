@@ -129,6 +129,11 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         searchParameters.setStartRow(0); //Go to the first page
         performSearch();
         showHideClearBtn();
+
+        //If the inputBox is left empty then reset the view
+        if(input.getValue().isEmpty()) {
+            clearSearch();
+        }
     }
 
     @Override
@@ -179,8 +184,8 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         if (!input.getValue().isEmpty()) {
             input.setValue("");
             setFocus(true);
-            eventBus.fireEventFromSource(new SearchResetEvent(), this);
         }
+        eventBus.fireEventFromSource(new SearchResetEvent(), this);
     }
 
     private void collapsePanel(){
