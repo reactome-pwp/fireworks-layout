@@ -139,7 +139,8 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
     @Override
     public void onSearchResult(SolrSearchResult result) {
         //TODO: Consider changing the behaviour of the server-side so that it does not return anything in this case
-        if(result.getTerm().trim().isEmpty()){
+        String term = result.getTerm().trim();
+        if(term.isEmpty() || term.length()<3){
             result.setEntries(null);
             result.setFound(0);
             result.setFacets(null);
