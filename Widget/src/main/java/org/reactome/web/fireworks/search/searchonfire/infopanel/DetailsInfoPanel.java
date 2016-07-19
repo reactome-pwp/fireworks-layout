@@ -6,6 +6,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.fireworks.events.GraphEntrySelectedEvent;
 import org.reactome.web.fireworks.events.SearchFilterEvent;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
@@ -59,6 +60,7 @@ public class DetailsInfoPanel extends Composite {
             mainPanel.add(new GraphEntryListPanel(title, Arrays.asList(result), eventBus));
         } else {
             eventBus.fireEventFromSource(new SearchFilterEvent(result), this);
+            eventBus.fireEventFromSource(new GraphEntrySelectedEvent(result[0]), this); // In case of a pathway, besides highlighting, select it.
         }
 
         SimplePanel sp = new SimplePanel();
