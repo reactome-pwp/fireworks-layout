@@ -31,7 +31,7 @@ public class SuggestionsProviderImpl implements SuggestionsProvider<Node> {
         String term = inputs[0].toLowerCase();
         for (Node obj : content.getNodes()) {
             obj.clearSearchDisplayValue(); //clears the result of previous searches
-            if (obj.getName().toLowerCase().contains(term)) {
+            if (obj.getName().toLowerCase().contains(term) || obj.getIdentifier().toLowerCase().contains(term)) {
                 rtn.add(obj);
             }
         }
@@ -42,7 +42,7 @@ public class SuggestionsProviderImpl implements SuggestionsProvider<Node> {
                 term = inputs[i].toLowerCase();
                 List<Node> aux = new ArrayList<>();
                 for (Node obj : rtn) {
-                    if (obj.getName().toLowerCase().contains(term)) {
+                    if (obj.getName().toLowerCase().contains(term) || obj.getIdentifier().toLowerCase().contains(term)) {
                         aux.add(obj);
                     }
                 }
