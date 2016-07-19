@@ -167,6 +167,7 @@ public class SolrSearchLauncher extends AbsolutePanel implements ClickHandler, S
         if(event.getValue() == KeyCodes.KEY_ESCAPE) {
             setFocus(false);
             this.collapsePanel();
+            clearSearch();
         }
     }
 
