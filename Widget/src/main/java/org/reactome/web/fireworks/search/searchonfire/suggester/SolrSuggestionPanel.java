@@ -168,7 +168,7 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
     @Override
     public void onSelectionChange(SelectionChangeEvent event) {
         Entry selection = selectionModel.getSelectedObject();
-        if(selection!=null) {
+        if(selection!=null && !selection.getExactType().equalsIgnoreCase("Interactor")) { //To be removed when interactors are addressed
             DatabaseObjectFactory.get(selection.getId(), new DatabaseObjectCreatedHandler() {
                 @Override
                 public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
@@ -181,6 +181,8 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
                     //TODO
                 }
             });
+        } else {
+            fireEvent(new SolrSuggestionSelectedEvent(null)); //To be removed when interactors are addressed
         }
     }
 
