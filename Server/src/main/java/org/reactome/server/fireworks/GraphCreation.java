@@ -34,7 +34,7 @@ public class GraphCreation {
         JSAPResult config = jsap.parse(args);
         if( jsap.messagePrinted() ) System.exit( 1 );
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("file:config.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
         //Initializing Analysis Data  *** IMPORTANT ***
         String structure = config.getString("structure");
         AnalysisData analysisData = context.getBean(AnalysisData.class);
