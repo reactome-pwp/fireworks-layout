@@ -208,6 +208,10 @@ public class Node extends FireworkObject implements Drawable, QuadTreeBox, Compa
         return edgesTo;
     }
 
+    public String getIdentifier() {
+        return stId == null ? dbId + "" : stId;
+    }
+
     public String getName() {
         return name;
     }

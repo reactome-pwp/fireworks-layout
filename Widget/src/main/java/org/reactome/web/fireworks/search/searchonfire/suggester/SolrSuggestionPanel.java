@@ -134,7 +134,9 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
 
         if (!entries.isEmpty() && !entries.contains(sel)) {
             selectionModel.clear();
-        } else if (entries.isEmpty() && !term.isEmpty() && term.length()>3){
+        } else if (entries.isEmpty() && term.length()>0 && term.length()<3){
+            suggestions.setEmptyListWidget(new HTML("Please type at least 3 characters"));
+        } else if (entries.isEmpty() && term.length()>3){
             suggestions.setEmptyListWidget(new HTML("No results found for '" + term +"'"));
         } else {
             suggestions.setEmptyListWidget(null);
