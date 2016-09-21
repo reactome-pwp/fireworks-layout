@@ -290,7 +290,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
                     }
                 }
             } else if (item.isTopLevel()) {
-                double tlpFontSize = fontSize * 1.25;
+                double tlpFontSize = fontSize * 2;
                 tlp.setFont(tlpFontSize + "pt Arial");
                 item.drawText(tlp, tlpFontSize, 5, false);
             } else if (textForAll){
