@@ -130,6 +130,11 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public HandlerRegistration addNodeFlaggedResetHandler(NodeFlaggedResetHandler handler){
+        return this.eventBus.addHandler(NodeFlaggedResetEvent.TYPE, handler);
+    }
+
+    @Override
     public HandlerRegistration addNodeOpenedHandler(NodeOpenedHandler handler) {
         return this.eventBus.addHandler(NodeOpenedEvent.TYPE, handler);
     }
@@ -157,24 +162,26 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void flagItems(String identifier) {
-        Flagger.findPathwaysToFlag(identifier, data.getSpeciesId(), new Flagger.PathwaysToFlagHandler() {
-            @Override
-            public void onPathwaysToFlag(List<Pathway> result) {
-                List<Node> toFlag = new LinkedList<>();
-                for (Pathway pathway : result) {
-                    Node node = data.getNode(pathway.getDbId());
-                    if(node!=null) toFlag.add(node);
+        if (identifier == null || identifier.isEmpty()) {
+            resetFlaggedItems();
+        } else {
+            Flagger.findPathwaysToFlag(identifier, data.getSpeciesId(), new Flagger.PathwaysToFlagHandler() {
+                @Override
+                public void onPathwaysToFlag(List<Pathway> result) {
+                    List<Node> toFlag = new LinkedList<>();
+                    for (Pathway pathway : result) {
+                        Node node = data.getNode(pathway.getDbId());
+                        if (node != null) toFlag.add(node);
+                    }
+                    setFlaggedNode(identifier, toFlag);
                 }
-                setFlaggedNode(identifier, toFlag);
-            }
 
-            @Override
-            public void onPathwaysToFlagError() {
-                //TODO: Nothing to flag
-            }
-        });
-
-
+                @Override
+                public void onPathwaysToFlagError() {
+                    //TODO: Nothing to flag
+                }
+            });
+        }
     }
 
     @Override
@@ -629,10 +636,14 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     private void setFlaggedNode(String term, List<Node> toFlag){
         this.toFlag = toFlag;
         forceFireworksDraw = true;
-        if (toFlag == null || toFlag.isEmpty()) {
+        if (toFlag == null) {
             this.eventBus.fireEventFromSource(new NodeFlaggedResetEvent(), this);
         } else {
-            this.eventBus.fireEventFromSource(new NodeFlaggedEvent(term, this.toFlag), this);
+            Set<Node> flagged = new HashSet<>();
+            for (Node node : toFlag) {
+                flagged.addAll(node.getAncestors());
+            }
+            this.eventBus.fireEventFromSource(new NodeFlaggedEvent(term, flagged), this);
         }
     }
 }

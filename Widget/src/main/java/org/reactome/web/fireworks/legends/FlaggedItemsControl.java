@@ -11,7 +11,7 @@ import org.reactome.web.fireworks.handlers.NodeFlaggedHandler;
 import org.reactome.web.fireworks.handlers.NodeFlaggedResetHandler;
 import org.reactome.web.fireworks.model.Node;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -50,7 +50,7 @@ public class FlaggedItemsControl extends LegendPanel implements ClickHandler,
     @Override
     public void onNodeFlagged(NodeFlaggedEvent event) {
         String term =  event.getTerm();
-        List<Node> flaggedItems =  event.getFlagged();
+        Collection<Node> flaggedItems =  event.getFlagged();
         String msg = " - " + flaggedItems.size() + (flaggedItems.size() == 1 ? " pathway" : " pathways") + " flagged";
         this.term.setText(term + msg);
         this.setVisible(true);

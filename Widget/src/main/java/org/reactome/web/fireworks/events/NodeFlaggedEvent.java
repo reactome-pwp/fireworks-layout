@@ -4,7 +4,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.fireworks.handlers.NodeFlaggedHandler;
 import org.reactome.web.fireworks.model.Node;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -13,9 +13,9 @@ public class NodeFlaggedEvent extends GwtEvent<NodeFlaggedHandler> {
     public static final Type<NodeFlaggedHandler> TYPE = new Type<>();
 
     String term;
-    List<Node> flagged;
+    Collection<Node> flagged;
 
-    public NodeFlaggedEvent(String term, List<Node> flagged) {
+    public NodeFlaggedEvent(String term, Collection<Node> flagged) {
         this.term = term;
         this.flagged = flagged;
     }
@@ -25,7 +25,7 @@ public class NodeFlaggedEvent extends GwtEvent<NodeFlaggedHandler> {
         return TYPE;
     }
 
-    public List<Node> getFlagged() {
+    public Collection<Node> getFlagged() {
         return flagged;
     }
 

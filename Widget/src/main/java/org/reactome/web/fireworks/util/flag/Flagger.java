@@ -37,16 +37,18 @@ public class Flagger {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
+                    List<Pathway> pathways = new LinkedList<>();
                     switch (response.getStatusCode()){
                         case Response.SC_OK:
                             JSONArray list = JSONParser.parseStrict(response.getText()).isArray();
-                            List<Pathway> pathways = new LinkedList<>();
                             for(int i=0; i<list.size(); ++i){
                                 JSONObject object = list.get(i).isObject();
                                 pathways.add((Pathway) DatabaseObjectFactory.create(object));
                             }
                             handler.onPathwaysToFlag(pathways);
                             break;
+                        case Response.SC_NOT_FOUND:
+                            handler.onPathwaysToFlag(pathways);
                         default:
                             handler.onPathwaysToFlagError();
                     }

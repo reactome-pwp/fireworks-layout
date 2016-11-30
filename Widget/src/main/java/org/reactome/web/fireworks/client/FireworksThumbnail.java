@@ -18,6 +18,7 @@ import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Coordinate;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -54,8 +55,8 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         this.factor = HEIGHT / graph.getMaxY();
         int width = (int) Math.ceil((graph.getMaxX() + 25) * factor);
 
-        this.flag = this.createCanvas(width, HEIGHT);
         this.thumbnail = this.createCanvas(width, HEIGHT);
+        this.flag = this.createCanvas(width, HEIGHT);
         this.highlight = this.createCanvas(width, HEIGHT);
         this.selection = this.createCanvas(width, HEIGHT);
         this.frame = this.createCanvas(width, HEIGHT);
@@ -159,20 +160,22 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         });
     }
 
-    void flagNode(Node node, Set<Edge> edges){
+    void flagNode(List<Node> nodes, Set<Edge> edges){
         cleanCanvas(this.flag);
         Context2d ctx = this.flag.getContext2d();
         String color = FireworksColours.PROFILE.getThumbnailFlagColour();
-        ctx.setStrokeStyle(color);
-        for (Edge edge : node.getEdgesTo()) {
-            edge.drawThumbnail(ctx, this.factor);
-        }
-        ctx.setFillStyle(color);
-        node.drawThumbnail(ctx, this.factor);
-
-        if(edges.isEmpty()) {
+        for (Node node : nodes) {
+            ctx.setStrokeStyle(color);
+            for (Edge edge : node.getEdgesTo()) {
+                edge.drawThumbnail(ctx, this.factor);
+            }
             ctx.setFillStyle(color);
             node.drawThumbnail(ctx, this.factor);
+
+            if (edges.isEmpty()) {
+                ctx.setFillStyle(color);
+                node.drawThumbnail(ctx, this.factor);
+            }
         }
     }
 

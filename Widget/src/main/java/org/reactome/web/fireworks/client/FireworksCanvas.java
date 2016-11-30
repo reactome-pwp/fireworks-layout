@@ -27,10 +27,7 @@ import org.reactome.web.fireworks.util.ToolTipContainer;
 import org.reactome.web.fireworks.util.popups.ImageDownloadDialog;
 import uk.ac.ebi.pwp.structures.quadtree.client.QuadTreeBox;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -383,6 +380,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         for (Node node : nodes) {
             flagNode(node);
         }
+        this.thumbnail.flagNode(nodes, new LinkedHashSet<>());
     }
 
     private void flagNode(Node node){
@@ -411,8 +409,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
             edges.addAll(ancestor.getEdgesTo());
         }
 
-        this.thumbnail.flagNode(node, edges);
-
         color = FireworksColours.PROFILE.getEdgeFlagColour();
         ctx = this.edgesFlagged.getContext2d();
         ctx.setFillStyle(color);
@@ -421,8 +417,6 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         for (Edge edge : edges) {
             edge.highlight(ctx, aura);
         }
-
-        this.thumbnail.flagNode(node, edges);
     }
 
     public void highlightNode(Node node){
