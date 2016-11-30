@@ -21,6 +21,9 @@ public abstract class FireworksFactory {
     public static String SERVER = "";
     public static String ILLUSTRATION_SERVER = "";
 
+    public static boolean RESPOND_TO_SEARCH_SHORTCUT = true; // Listen to ctrl (or cmd) + F
+                                                             // and expand the search input
+
     public static FireworksViewer createFireworksViewer(TextResource json){
         return new FireworksViewerImpl(json.getText());
     }
