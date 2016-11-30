@@ -48,7 +48,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
         IllustrationSelectedHandler, CanvasExportRequestedHandler,
         KeyDownHandler, SearchFilterHandler, SearchResetHandler,
-        GraphEntryHoveredHandler, GraphEntrySelectedHandler {
+        GraphEntryHoveredHandler, GraphEntrySelectedHandler,
+        NodeFlaggedResetHandler {
 
     EventBus eventBus;
 
@@ -164,7 +165,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                     Node node = data.getNode(pathway.getDbId());
                     if(node!=null) toFlag.add(node);
                 }
-                setFlaggedNode(toFlag);
+                setFlaggedNode(identifier, toFlag);
             }
 
             @Override
@@ -301,6 +302,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 eventBus.fireEventFromSource(new SearchKeyPressedEvent(), this);
             }
         }
+    }
+
+    @Override
+    public void onNodeFlaggedReset() {
+        this.toFlag = null;
+        forceFireworksDraw = true;
     }
 
     @Override
@@ -467,7 +474,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void resetFlaggedItems() {
-        this.setFlaggedNode(null);
+        this.setFlaggedNode(null, null);
     }
 
     private void doUpdate(){
@@ -553,6 +560,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(FireworksVisibleAreaChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
         this.eventBus.addHandler(IllustrationSelectedEvent.TYPE, this);
+        this.eventBus.addHandler(NodeFlaggedResetEvent.TYPE, this);
         this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
         this.eventBus.addHandler(CanvasExportRequestedEvent.TYPE, this);
 
@@ -618,13 +626,13 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         }
     }
 
-    private void setFlaggedNode(List<Node> toFlag){
+    private void setFlaggedNode(String term, List<Node> toFlag){
         this.toFlag = toFlag;
         forceFireworksDraw = true;
         if (toFlag == null || toFlag.isEmpty()) {
             this.eventBus.fireEventFromSource(new NodeFlaggedResetEvent(), this);
         } else {
-            this.eventBus.fireEventFromSource(new NodeFlaggedEvent(this.toFlag), this);
+            this.eventBus.fireEventFromSource(new NodeFlaggedEvent(term, this.toFlag), this);
         }
     }
 }

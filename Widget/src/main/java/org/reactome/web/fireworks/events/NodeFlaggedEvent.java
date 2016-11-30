@@ -12,9 +12,11 @@ import java.util.List;
 public class NodeFlaggedEvent extends GwtEvent<NodeFlaggedHandler> {
     public static final Type<NodeFlaggedHandler> TYPE = new Type<>();
 
+    String term;
     List<Node> flagged;
 
-    public NodeFlaggedEvent(List<Node> flagged) {
+    public NodeFlaggedEvent(String term, List<Node> flagged) {
+        this.term = term;
         this.flagged = flagged;
     }
 
@@ -25,6 +27,10 @@ public class NodeFlaggedEvent extends GwtEvent<NodeFlaggedHandler> {
 
     public List<Node> getFlagged() {
         return flagged;
+    }
+
+    public String getTerm() {
+        return term;
     }
 
     @Override

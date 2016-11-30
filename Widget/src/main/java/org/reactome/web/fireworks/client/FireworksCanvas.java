@@ -126,6 +126,8 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         BottomContainerPanel bottomContainerPanel = new BottomContainerPanel();
         this.add(bottomContainerPanel);
 
+        //Flagged Objects control panel
+        bottomContainerPanel.add(new FlaggedItemsControl(eventBus));
 
         //Enrichment legend and control panels
         rightContainerPanel.add(new EnrichmentLegend(eventBus));
