@@ -58,10 +58,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     private double factor = 1;
     private double aura = 2;
 
+    private Canvas edgesFlagged;
     private Canvas edgesHighlight;
     private Canvas edgesSelection;
     private Canvas edges;
 
+    private Canvas nodesFlagged;
     private Canvas nodesHighlight;
     private Canvas nodesSelection;
     private Canvas nodes;
@@ -89,10 +91,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         int width = (int) Math.ceil(graph.getMaxX());
         int height = (int) Math.ceil(graph.getMaxY());
 
+        this.edgesFlagged = createCanvas(width, height);
         this.edgesHighlight = createCanvas(width, height);
         this.edgesSelection = createCanvas(width, height);
         this.edges = createCanvas(width, height);
 
+        this.nodesFlagged = createCanvas(width, height);
         this.nodesHighlight = createCanvas(width, height);
         this.nodesSelection = createCanvas(width, height);
         this.nodes = createCanvas(width, height);
@@ -290,7 +294,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
                     }
                 }
             } else if (item.isTopLevel()) {
-                double tlpFontSize = fontSize * 2;
+                double tlpFontSize = fontSize * 1.25;
                 tlp.setFont(tlpFontSize + "pt Arial");
                 item.drawText(tlp, tlpFontSize, 5, false);
             } else if (textForAll){
@@ -305,6 +309,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
     void cleanCanvas(Context2d ctx){
         ctx.clearRect(0, 0, ctx.getCanvas().getWidth(), ctx.getCanvas().getHeight());
+    }
+
+    void cleanFlaggedCanvas(){
+        this.cleanCanvas(this.nodesFlagged);
+        this.cleanCanvas(this.edgesFlagged);
+        this.thumbnail.clearFlags();
     }
 
     void cleanHighlightCanvas(){
@@ -365,6 +375,54 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         return this.canvases.get(this.canvases.size() -1 );
     }
 
+    public void flagNodes(List<Node> nodes) {
+        cleanFlaggedCanvas();
+        if (nodes == null || nodes.isEmpty()) return;
+        for (Node node : nodes) {
+            flagNode(node);
+        }
+    }
+
+    private void flagNode(Node node){
+        Context2d ctx = this.nodesFlagged.getContext2d();
+
+        double aura = this.aura * 1.5; //In this case we need it slightly bigger
+        double expandedAura = (factor > FACTOR_TEXT_THRESHOLD)? aura * 2 : aura;
+
+        String color = FireworksColours.PROFILE.getNodeFlagColour();
+        ctx.setFillStyle(color);
+        ctx.setStrokeStyle(color);
+        node.highlight(ctx, aura);
+
+        Set<Edge> edges = node.getEdgesTo();
+        //noinspection Duplicates
+        for (Node ancestor : node.getAncestors()) {
+            if(ancestor.isTopLevel()){
+                if(this.selected!=null && this.selected.getTopLevelPathways().contains(ancestor)) {
+                    ancestor.highlight(ctx, aura);
+                }else {
+                    ancestor.highlight(ctx, expandedAura);
+                }
+            }else {
+                ancestor.highlight(ctx, aura);
+            }
+            edges.addAll(ancestor.getEdgesTo());
+        }
+
+        this.thumbnail.flagNode(node, edges);
+
+        color = FireworksColours.PROFILE.getEdgeFlagColour();
+        ctx = this.edgesFlagged.getContext2d();
+        ctx.setFillStyle(color);
+        ctx.setStrokeStyle(color);
+        ctx.setLineWidth(aura);
+        for (Edge edge : edges) {
+            edge.highlight(ctx, aura);
+        }
+
+        this.thumbnail.flagNode(node, edges);
+    }
+
     public void highlightNode(Node node){
         cleanHighlightCanvas();
         if(node==null) return;
@@ -379,6 +437,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         node.highlight(ctx, aura);
 
         Set<Edge> edges = node.getEdgesTo();
+        //noinspection Duplicates
         for (Node ancestor : node.getAncestors()) {
             if(ancestor.isTopLevel()){
                 if(this.selected!=null && this.selected.getTopLevelPathways().contains(ancestor)) {

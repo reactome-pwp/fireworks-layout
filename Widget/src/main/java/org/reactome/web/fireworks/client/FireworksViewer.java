@@ -35,6 +35,8 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
 
     Node getSelected();
 
+    void flagItems(String identifier);
+
     void highlightNode(String stableIdentifier);
 
     void highlightNode(Long dbIdentifier);
@@ -44,6 +46,8 @@ public interface FireworksViewer extends IsWidget, HasHandlers, RequiresResize {
     void openPathway(Long dbIdentifier);
 
     void resetAnalysis();
+
+    void resetFlaggedItems();
 
     void resetHighlight();
 

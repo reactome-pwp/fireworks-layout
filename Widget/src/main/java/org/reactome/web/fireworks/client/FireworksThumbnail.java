@@ -37,6 +37,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
     private double factor;
 
     private Canvas thumbnail;
+    private Canvas flag;
     private Canvas highlight;
     private Canvas selection;
     private Canvas frame;
@@ -53,6 +54,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         this.factor = HEIGHT / graph.getMaxY();
         int width = (int) Math.ceil((graph.getMaxX() + 25) * factor);
 
+        this.flag = this.createCanvas(width, HEIGHT);
         this.thumbnail = this.createCanvas(width, HEIGHT);
         this.highlight = this.createCanvas(width, HEIGHT);
         this.selection = this.createCanvas(width, HEIGHT);
@@ -61,6 +63,10 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         this.setStyle(width, HEIGHT);
         this.addHandlers();
         this.drawThumbnail();
+    }
+
+    public void clearFlags(){
+        this.cleanCanvas(this.flag);
     }
 
     public void clearHighlights(){
@@ -151,6 +157,23 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
                 drawThumbnail();
             }
         });
+    }
+
+    void flagNode(Node node, Set<Edge> edges){
+        cleanCanvas(this.flag);
+        Context2d ctx = this.flag.getContext2d();
+        String color = FireworksColours.PROFILE.getThumbnailFlagColour();
+        ctx.setStrokeStyle(color);
+        for (Edge edge : node.getEdgesTo()) {
+            edge.drawThumbnail(ctx, this.factor);
+        }
+        ctx.setFillStyle(color);
+        node.drawThumbnail(ctx, this.factor);
+
+        if(edges.isEmpty()) {
+            ctx.setFillStyle(color);
+            node.drawThumbnail(ctx, this.factor);
+        }
     }
 
     void highlightEdges(Node node, Set<Edge> edges){

@@ -40,6 +40,9 @@ public final class FireworksProfile {
     public final String getNodeSelectionColour(){
         return this.profile.getNode().getSelection();
     }
+    public final String getNodeFlagColour(){
+        return this.profile.getNode().getFlag();
+    }
     public final String getNodeFadeoutColour(){
         return this.profile.getNode().getFadeout();
     }
@@ -72,6 +75,7 @@ public final class FireworksProfile {
     public final String getEdgeSelectionColour(){
         return this.profile.getEdge().getSelection();
     }
+    public final String getEdgeFlagColour() {return this.profile.getEdge().getFlag();}
     public final String getEdgeFadeoutColour(){
         return this.profile.getEdge().getFadeout();
     }
@@ -101,5 +105,7 @@ public final class FireworksProfile {
     public final String getThumbnailSelectionColour(){
         return this.profile.getThumbnail().getSelection();
     }
-
+    public final String getThumbnailFlagColour() {
+        return this.profile.getThumbnail().getFlag();
+    }
 }
