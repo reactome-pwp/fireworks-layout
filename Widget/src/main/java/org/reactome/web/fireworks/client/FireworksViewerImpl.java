@@ -51,33 +51,33 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         GraphEntryHoveredHandler, GraphEntrySelectedHandler,
         NodeFlaggedResetHandler {
 
-    EventBus eventBus;
+    private EventBus eventBus;
 
-    FireworksViewerManager manager;
+    private FireworksViewerManager manager;
 
-    FireworksCanvas canvases;
+    private FireworksCanvas canvases;
 
-    FireworksData data;
+    private FireworksData data;
 
-    String token;
+    private String token;
 
-    String resource;
+    private String resource;
 
-    boolean forceFireworksDraw = true;
+    private boolean forceFireworksDraw = true;
 
     // mouse positions relative to canvas (not the model)
     // Do not assign the same value at the beginning
-    Coordinate mouseCurrent = new Coordinate(-100, -100);
-    Coordinate mousePrevious = new Coordinate(-200, -200);
+    private Coordinate mouseCurrent = new Coordinate(-100, -100);
+    private Coordinate mousePrevious = new Coordinate(-200, -200);
 
-    Coordinate mouseDown = null;
-    boolean fireworksMoved = false;
+    private Coordinate mouseDown = null;
+    private boolean fireworksMoved = false;
 
-    Node hovered = null;
-    Node selected = null;
-    List<Node> toFlag = null;
+    private Node hovered = null;
+    private Node selected = null;
+    private List<Node> toFlag = null;
 
-    public FireworksViewerImpl(String json) {
+    FireworksViewerImpl(String json) {
         this.eventBus = new FireworksEventBus();
         try {
             Graph graph = ModelFactory.getGraph(json);
@@ -488,6 +488,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.doUpdate(false);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void doUpdate(boolean force){
         if(this.forceFireworksDraw){
             this.forceFireworksDraw = false;
@@ -527,12 +528,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     protected void initWidget(Widget widget) {
         super.initWidget(widget);
         //We need to defer the program counter to the parents in order to finish DOM tasks
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                initialize();
-            }
-        });
+        Scheduler.get().scheduleDeferred(this::initialize);
     }
 
     private void initialize(){
@@ -579,21 +575,21 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(GraphEntrySelectedEvent.TYPE, this);
     }
 
-    protected void openNode(Node node){
+    private void openNode(Node node){
         if(node!=null){
             this.manager.expandNode(node);
         }
     }
 
-    protected void setMouseDownPosition(Element element, MouseEvent event){
+    private void setMouseDownPosition(Element element, MouseEvent event){
         this.mouseDown = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
     }
 
-    protected void setMousePosition(Element element, MouseEvent event) {
+    private void setMousePosition(Element element, MouseEvent event) {
         this.mouseCurrent = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
     }
 
-    protected void translateGraphObjects(Element element, MouseEvent event){
+    private void translateGraphObjects(Element element, MouseEvent event){
         double dX = event.getRelativeX(element) - mouseDown.getX();
         double dY = event.getRelativeY(element) - mouseDown.getY();
         this.manager.translate(dX, dY);
