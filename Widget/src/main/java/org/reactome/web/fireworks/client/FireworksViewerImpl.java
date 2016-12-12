@@ -639,7 +639,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         if (toFlag == null) {
             this.eventBus.fireEventFromSource(new NodeFlaggedResetEvent(), this);
         } else {
-            Set<Node> flagged = new HashSet<>();
+            Set<Node> flagged = new HashSet<>(toFlag);
             for (Node node : toFlag) {
                 flagged.addAll(node.getAncestors());
             }
