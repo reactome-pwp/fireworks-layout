@@ -18,7 +18,6 @@ import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.fireworks.util.Coordinate;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -142,40 +141,26 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
     @Override
     public void onProfileChanged(ProfileChangedEvent event) {
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                drawThumbnail();
-            }
-        });
+        Scheduler.get().scheduleDeferred(this::drawThumbnail);
     }
 
     @Override
     public void onSearchFilterEvent(SearchFilterEvent event) {
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                drawThumbnail();
-            }
-        });
+        Scheduler.get().scheduleDeferred(this::drawThumbnail);
     }
 
-    void flagNode(List<Node> nodes, Set<Edge> edges){
+    void flagNode(Set<Node> nodes, Set<Edge> edges){
         cleanCanvas(this.flag);
         Context2d ctx = this.flag.getContext2d();
         String color = FireworksColours.PROFILE.getThumbnailFlagColour();
+        ctx.setStrokeStyle(color);
+        ctx.setFillStyle(color);
         for (Node node : nodes) {
-            ctx.setStrokeStyle(color);
-            for (Edge edge : node.getEdgesTo()) {
-                edge.drawThumbnail(ctx, this.factor);
-            }
-            ctx.setFillStyle(color);
             node.drawThumbnail(ctx, this.factor);
+        }
 
-            if (edges.isEmpty()) {
-                ctx.setFillStyle(color);
-                node.drawThumbnail(ctx, this.factor);
-            }
+        for (Edge edge : edges) {
+            edge.drawThumbnail(ctx, this.factor);
         }
     }
 

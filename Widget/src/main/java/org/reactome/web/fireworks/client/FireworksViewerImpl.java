@@ -20,6 +20,7 @@ import org.reactome.web.analysis.client.model.SpeciesFilteredResult;
 import org.reactome.web.fireworks.controls.navigation.ControlAction;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
+import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.FireworksData;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -35,7 +36,10 @@ import org.reactome.web.fireworks.util.FireworksEventBus;
 import org.reactome.web.fireworks.util.flag.Flagger;
 import org.reactome.web.pwp.model.classes.Pathway;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -75,7 +79,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     private Node hovered = null;
     private Node selected = null;
-    private List<Node> toFlag = null;
+    private Set<Node> nodesToFlag = null;
+    private Set<Edge> edgesToFlag = null;
 
     FireworksViewerImpl(String json) {
         this.eventBus = new FireworksEventBus();
@@ -168,12 +173,19 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
             Flagger.findPathwaysToFlag(identifier, data.getSpeciesId(), new Flagger.PathwaysToFlagHandler() {
                 @Override
                 public void onPathwaysToFlag(List<Pathway> result) {
-                    List<Node> toFlag = new LinkedList<>();
+                    Set<Edge> edgesToFlag = new HashSet<>();
+                    Set<Node> nodesToFlag = new HashSet<>();
                     for (Pathway pathway : result) {
                         Node node = data.getNode(pathway.getDbId());
-                        if (node != null) toFlag.add(node);
+                        if (node != null){
+                            nodesToFlag.add(node);
+                            nodesToFlag.addAll(node.getAncestors());
+                        }
                     }
-                    setFlaggedNode(identifier, toFlag);
+                    for (Node node : nodesToFlag) {
+                        edgesToFlag.addAll(node.getEdgesTo());
+                    }
+                    setFlaggedElements(identifier, nodesToFlag, edgesToFlag);
                 }
 
                 @Override
@@ -182,6 +194,16 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 }
             });
         }
+    }
+
+    @Override
+    public void flagNodes(String term, String... stIds) {
+        Set<Node> toFlag = new HashSet<>();
+        for (String stId : stIds) {
+            Node node = data.getNode(stId);
+            if (node != null) toFlag.add(node);
+        }
+        setFlaggedElements(term, toFlag, new HashSet<>());
     }
 
     @Override
@@ -313,7 +335,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void onNodeFlaggedReset() {
-        this.toFlag = null;
+        this.nodesToFlag = null;
         forceFireworksDraw = true;
     }
 
@@ -481,7 +503,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void resetFlaggedItems() {
-        this.setFlaggedNode(null, null);
+        this.setFlaggedElements(null, null, null);
     }
 
     private void doUpdate(){
@@ -521,7 +543,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.canvases.drawText(this.selected);
         this.canvases.selectNode(this.selected);
         this.canvases.highlightNode(this.hovered);
-        this.canvases.flagNodes(this.toFlag);
+        this.canvases.flagElements(this.nodesToFlag, this.edgesToFlag);
     }
 
     @Override
@@ -629,17 +651,16 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         }
     }
 
-    private void setFlaggedNode(String term, List<Node> toFlag){
-        this.toFlag = toFlag;
-        forceFireworksDraw = true;
-        if (toFlag == null) {
+    private void setFlaggedElements(String term, Set<Node> nodesToFlag, Set<Edge> edgesToFlag){
+        if (nodesToFlag == null || nodesToFlag.isEmpty()) {
+            this.nodesToFlag = null;
+            this.edgesToFlag = null;
             this.eventBus.fireEventFromSource(new NodeFlaggedResetEvent(), this);
         } else {
-            Set<Node> flagged = new HashSet<>(toFlag);
-            for (Node node : toFlag) {
-                flagged.addAll(node.getAncestors());
-            }
-            this.eventBus.fireEventFromSource(new NodeFlaggedEvent(term, flagged), this);
+            this.nodesToFlag = new HashSet<>(nodesToFlag);
+            this.edgesToFlag = new HashSet<>(edgesToFlag);
+            this.eventBus.fireEventFromSource(new NodeFlaggedEvent(term, this.nodesToFlag), this);
         }
+        forceFireworksDraw = true;
     }
 }

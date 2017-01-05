@@ -5,6 +5,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.http.client.*;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.client.FireworksViewer;
@@ -125,6 +127,7 @@ public class WidgetTest implements EntryPoint {
         RootLayoutPanel.get().add(slp);
 
         fireworks.flagItems("15422");
+        fireworks.flagNodes("DOID", getPathwaysWithDOID());
 
     }
 
@@ -151,6 +154,20 @@ public class WidgetTest implements EntryPoint {
         }catch (RequestException ex) {
             if(!GWT.isScript()) ex.printStackTrace();
         }
+
+    }
+
+    private String[] getPathwaysWithDOID(){
+        String text = TestSource.SOURCE.pathwayDOI().getText();
+        return text.split("\\n");
+    }
+
+    interface TestSource extends ClientBundle {
+
+        WidgetTest.TestSource SOURCE = GWT.create(WidgetTest.TestSource.class);
+
+        @Source("PathwayDOI.csv")
+        TextResource pathwayDOI();
 
     }
 }
