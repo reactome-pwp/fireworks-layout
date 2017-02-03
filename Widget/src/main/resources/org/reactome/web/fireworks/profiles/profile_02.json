@@ -4,6 +4,7 @@
     "initial": "#0000FF",
     "highlight": "#EEB956",
     "selection": "#FF7700",
+    "flag": "#FF00FF",
     "fadeout": "#E6E6E6",
     "hit": "#C2C2C2",
     "enrichment": {
@@ -21,6 +22,7 @@
     "initial": "#CCCCFF",
     "highlight": "#EEB956",
     "selection": "#FF7700",
+    "flag": "#FF00FF",
     "fadeout": "#E6E6E6",
     "hit": "#C6C6C6",
     "enrichment": {
@@ -38,6 +40,7 @@
     "initial": "#CCCCFF",
     "highlight": "#FF7700",
     "selection": "#FF5A00",
+    "flag": "#FF00FF",
     "fadeout": "#E6E6E6"
   }
 }

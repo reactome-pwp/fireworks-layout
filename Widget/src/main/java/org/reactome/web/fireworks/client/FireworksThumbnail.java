@@ -37,6 +37,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
     private double factor;
 
     private Canvas thumbnail;
+    private Canvas flag;
     private Canvas highlight;
     private Canvas selection;
     private Canvas frame;
@@ -54,6 +55,7 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         int width = (int) Math.ceil((graph.getMaxX() + 25) * factor);
 
         this.thumbnail = this.createCanvas(width, HEIGHT);
+        this.flag = this.createCanvas(width, HEIGHT);
         this.highlight = this.createCanvas(width, HEIGHT);
         this.selection = this.createCanvas(width, HEIGHT);
         this.frame = this.createCanvas(width, HEIGHT);
@@ -61,6 +63,10 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
         this.setStyle(width, HEIGHT);
         this.addHandlers();
         this.drawThumbnail();
+    }
+
+    public void clearFlags(){
+        this.cleanCanvas(this.flag);
     }
 
     public void clearHighlights(){
@@ -135,22 +141,27 @@ class FireworksThumbnail extends AbsolutePanel implements HasHandlers, MouseDown
 
     @Override
     public void onProfileChanged(ProfileChangedEvent event) {
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                drawThumbnail();
-            }
-        });
+        Scheduler.get().scheduleDeferred(this::drawThumbnail);
     }
 
     @Override
     public void onSearchFilterEvent(SearchFilterEvent event) {
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                drawThumbnail();
-            }
-        });
+        Scheduler.get().scheduleDeferred(this::drawThumbnail);
+    }
+
+    void flagNode(Set<Node> nodes, Set<Edge> edges){
+        cleanCanvas(this.flag);
+        Context2d ctx = this.flag.getContext2d();
+        String color = FireworksColours.PROFILE.getThumbnailFlagColour();
+        ctx.setStrokeStyle(color);
+        ctx.setFillStyle(color);
+        for (Node node : nodes) {
+            node.drawThumbnail(ctx, this.factor);
+        }
+
+        for (Edge edge : edges) {
+            edge.drawThumbnail(ctx, this.factor);
+        }
     }
 
     void highlightEdges(Node node, Set<Edge> edges){

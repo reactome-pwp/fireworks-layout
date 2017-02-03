@@ -20,6 +20,7 @@ import org.reactome.web.analysis.client.model.SpeciesFilteredResult;
 import org.reactome.web.fireworks.controls.navigation.ControlAction;
 import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
+import org.reactome.web.fireworks.model.Edge;
 import org.reactome.web.fireworks.model.FireworksData;
 import org.reactome.web.fireworks.model.Graph;
 import org.reactome.web.fireworks.model.Node;
@@ -32,8 +33,11 @@ import org.reactome.web.fireworks.search.fallback.handlers.SuggestionSelectedHan
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 import org.reactome.web.fireworks.util.Coordinate;
 import org.reactome.web.fireworks.util.FireworksEventBus;
+import org.reactome.web.fireworks.util.flag.Flagger;
+import org.reactome.web.pwp.model.classes.Pathway;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -48,34 +52,37 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         SuggestionSelectedHandler, SuggestionHoveredHandler,
         IllustrationSelectedHandler, CanvasExportRequestedHandler,
         KeyDownHandler, SearchFilterHandler, SearchResetHandler,
-        GraphEntryHoveredHandler, GraphEntrySelectedHandler {
+        GraphEntryHoveredHandler, GraphEntrySelectedHandler,
+        NodeFlaggedResetHandler {
 
-    EventBus eventBus;
+    private EventBus eventBus;
 
-    FireworksViewerManager manager;
+    private FireworksViewerManager manager;
 
-    FireworksCanvas canvases;
+    private FireworksCanvas canvases;
 
-    FireworksData data;
+    private FireworksData data;
 
-    String token;
+    private String token;
 
-    String resource;
+    private String resource;
 
-    boolean forceFireworksDraw = true;
+    private boolean forceFireworksDraw = true;
 
     // mouse positions relative to canvas (not the model)
     // Do not assign the same value at the beginning
-    Coordinate mouseCurrent = new Coordinate(-100, -100);
-    Coordinate mousePrevious = new Coordinate(-200, -200);
+    private Coordinate mouseCurrent = new Coordinate(-100, -100);
+    private Coordinate mousePrevious = new Coordinate(-200, -200);
 
-    Coordinate mouseDown = null;
-    boolean fireworksMoved = false;
+    private Coordinate mouseDown = null;
+    private boolean fireworksMoved = false;
 
-    Node hovered = null;
-    Node selected = null;
+    private Node hovered = null;
+    private Node selected = null;
+    private Set<Node> nodesToFlag = null;
+    private Set<Edge> edgesToFlag = null;
 
-    public FireworksViewerImpl(String json) {
+    FireworksViewerImpl(String json) {
         this.eventBus = new FireworksEventBus();
         try {
             Graph graph = ModelFactory.getGraph(json);
@@ -128,6 +135,11 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public HandlerRegistration addNodeFlaggedResetHandler(NodeFlaggedResetHandler handler){
+        return this.eventBus.addHandler(NodeFlaggedResetEvent.TYPE, handler);
+    }
+
+    @Override
     public HandlerRegistration addNodeOpenedHandler(NodeOpenedHandler handler) {
         return this.eventBus.addHandler(NodeOpenedEvent.TYPE, handler);
     }
@@ -151,6 +163,47 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     @Override
     public Node getSelected() {
         return this.selected;
+    }
+
+    @Override
+    public void flagItems(String identifier) {
+        if (identifier == null || identifier.isEmpty()) {
+            resetFlaggedItems();
+        } else {
+            Flagger.findPathwaysToFlag(identifier, data.getSpeciesId(), new Flagger.PathwaysToFlagHandler() {
+                @Override
+                public void onPathwaysToFlag(List<Pathway> result) {
+                    Set<Edge> edgesToFlag = new HashSet<>();
+                    Set<Node> nodesToFlag = new HashSet<>();
+                    for (Pathway pathway : result) {
+                        Node node = data.getNode(pathway.getDbId());
+                        if (node != null){
+                            nodesToFlag.add(node);
+                            nodesToFlag.addAll(node.getAncestors());
+                        }
+                    }
+                    for (Node node : nodesToFlag) {
+                        edgesToFlag.addAll(node.getEdgesTo());
+                    }
+                    setFlaggedElements(identifier, nodesToFlag, edgesToFlag);
+                }
+
+                @Override
+                public void onPathwaysToFlagError() {
+                    //TODO: Nothing to flag
+                }
+            });
+        }
+    }
+
+    @Override
+    public void flagNodes(String term, String... stIds) {
+        Set<Node> toFlag = new HashSet<>();
+        for (String stId : stIds) {
+            Node node = data.getNode(stId);
+            if (node != null) toFlag.add(node);
+        }
+        setFlaggedElements(term, toFlag, new HashSet<>());
     }
 
     @Override
@@ -278,6 +331,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 eventBus.fireEventFromSource(new SearchKeyPressedEvent(), this);
             }
         }
+    }
+
+    @Override
+    public void onNodeFlaggedReset() {
+        this.nodesToFlag = null;
+        forceFireworksDraw = true;
     }
 
     @Override
@@ -442,10 +501,16 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         eventBus.fireEventFromSource(new AnalysisResetEvent(), this);
     }
 
+    @Override
+    public void resetFlaggedItems() {
+        this.setFlaggedElements(null, null, null);
+    }
+
     private void doUpdate(){
         this.doUpdate(false);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void doUpdate(boolean force){
         if(this.forceFireworksDraw){
             this.forceFireworksDraw = false;
@@ -478,18 +543,14 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.canvases.drawText(this.selected);
         this.canvases.selectNode(this.selected);
         this.canvases.highlightNode(this.hovered);
+        this.canvases.flagElements(this.nodesToFlag, this.edgesToFlag);
     }
 
     @Override
     protected void initWidget(Widget widget) {
         super.initWidget(widget);
         //We need to defer the program counter to the parents in order to finish DOM tasks
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                initialize();
-            }
-        });
+        Scheduler.get().scheduleDeferred(this::initialize);
     }
 
     private void initialize(){
@@ -524,6 +585,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(FireworksVisibleAreaChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
         this.eventBus.addHandler(IllustrationSelectedEvent.TYPE, this);
+        this.eventBus.addHandler(NodeFlaggedResetEvent.TYPE, this);
         this.eventBus.addHandler(ProfileChangedEvent.TYPE, this);
         this.eventBus.addHandler(CanvasExportRequestedEvent.TYPE, this);
 
@@ -535,21 +597,21 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(GraphEntrySelectedEvent.TYPE, this);
     }
 
-    protected void openNode(Node node){
+    private void openNode(Node node){
         if(node!=null){
             this.manager.expandNode(node);
         }
     }
 
-    protected void setMouseDownPosition(Element element, MouseEvent event){
+    private void setMouseDownPosition(Element element, MouseEvent event){
         this.mouseDown = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
     }
 
-    protected void setMousePosition(Element element, MouseEvent event) {
+    private void setMousePosition(Element element, MouseEvent event) {
         this.mouseCurrent = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
     }
 
-    protected void translateGraphObjects(Element element, MouseEvent event){
+    private void translateGraphObjects(Element element, MouseEvent event){
         double dX = event.getRelativeX(element) - mouseDown.getX();
         double dY = event.getRelativeY(element) - mouseDown.getY();
         this.manager.translate(dX, dY);
@@ -587,5 +649,18 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
                 this.eventBus.fireEventFromSource(new NodeHoverResetEvent(), this);
             }
         }
+    }
+
+    private void setFlaggedElements(String term, Set<Node> nodesToFlag, Set<Edge> edgesToFlag){
+        if (nodesToFlag == null || nodesToFlag.isEmpty()) {
+            this.nodesToFlag = null;
+            this.edgesToFlag = null;
+            this.eventBus.fireEventFromSource(new NodeFlaggedResetEvent(), this);
+        } else {
+            this.nodesToFlag = new HashSet<>(nodesToFlag);
+            this.edgesToFlag = new HashSet<>(edgesToFlag);
+            this.eventBus.fireEventFromSource(new NodeFlaggedEvent(term, this.nodesToFlag), this);
+        }
+        forceFireworksDraw = true;
     }
 }

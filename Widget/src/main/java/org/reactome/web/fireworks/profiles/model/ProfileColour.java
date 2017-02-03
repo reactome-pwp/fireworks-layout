@@ -10,6 +10,7 @@ public interface ProfileColour extends Serializable {
     public String getInitial();
     public String getHighlight();
     public String getSelection();
+    public String getFlag();
     public String getFadeout();
     public String getHit();
 

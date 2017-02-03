@@ -40,7 +40,8 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         NodeSelectedHandler, NodeSelectedResetHandler, NodeHoverHandler, NodeHoverResetHandler,
         AnalysisPerformedHandler, AnalysisResetHandler {
 
-    class CanvasNotSupportedException extends Exception {}
+    class CanvasNotSupportedException extends Exception {
+    }
 
     static final double INITIAL_FONT = 7;
     static final double MIN_FONT_SIZE = 3;
@@ -58,10 +59,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     private double factor = 1;
     private double aura = 2;
 
+    private Canvas edgesFlagged;
     private Canvas edgesHighlight;
     private Canvas edgesSelection;
     private Canvas edges;
 
+    private Canvas nodesFlagged;
     private Canvas nodesHighlight;
     private Canvas nodesSelection;
     private Canvas nodes;
@@ -89,10 +92,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         int width = (int) Math.ceil(graph.getMaxX());
         int height = (int) Math.ceil(graph.getMaxY());
 
+        this.edgesFlagged = createCanvas(width, height);
         this.edgesHighlight = createCanvas(width, height);
         this.edgesSelection = createCanvas(width, height);
         this.edges = createCanvas(width, height);
 
+        this.nodesFlagged = createCanvas(width, height);
         this.nodesHighlight = createCanvas(width, height);
         this.nodesSelection = createCanvas(width, height);
         this.nodes = createCanvas(width, height);
@@ -105,7 +110,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.tooltipContainer = createToolTipContainer(width, height);
         createCanvas(width, height); //Top-level canvas (mouse ctrl only)
 
-        if(FireworksFactory.SHOW_INFO) {
+        if (FireworksFactory.SHOW_INFO) {
             this.info = new FireworksInfo(eventBus);
             this.add(this.info);
         }
@@ -122,6 +127,8 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         BottomContainerPanel bottomContainerPanel = new BottomContainerPanel();
         this.add(bottomContainerPanel);
 
+        //Flagged Objects control panel
+        bottomContainerPanel.add(new FlaggedItemsControl(eventBus));
 
         //Enrichment legend and control panels
         rightContainerPanel.add(new EnrichmentLegend(eventBus));
@@ -140,12 +147,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
 
         //Illustration panel
-        this.add(this.illustration = new IllustrationPanel(), 0 , 0);
+        this.add(this.illustration = new IllustrationPanel(), 0, 0);
 
         this.initialiseHandlers();
     }
 
-    private void initialiseHandlers(){
+    private void initialiseHandlers() {
         this.eventBus.addHandler(FireworksVisibleAreaChangedEvent.TYPE, this);
         this.eventBus.addHandler(FireworksZoomEvent.TYPE, this);
         this.eventBus.addHandler(NodeSelectedEvent.TYPE, this);
@@ -162,27 +169,27 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 //        return getTopCanvas().addDoubleClickHandler(handler);
 //    }
 
-    public HandlerRegistration addClickHandler(ClickHandler handler){
+    public HandlerRegistration addClickHandler(ClickHandler handler) {
         return getTopCanvas().addClickHandler(handler);
     }
 
-    public HandlerRegistration addMouseDownHandler(MouseDownHandler handler){
+    public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
         return getTopCanvas().addMouseDownHandler(handler);
     }
 
-    public HandlerRegistration addMouseOutHandler(MouseOutHandler handler){
+    public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
         return getTopCanvas().addMouseOutHandler(handler);
     }
 
-    public HandlerRegistration addMouseUpHandler(MouseUpHandler handler){
+    public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
         return getTopCanvas().addMouseUpHandler(handler);
     }
 
-    public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler){
+    public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
         return getTopCanvas().addMouseMoveHandler(handler);
     }
 
-    public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler){
+    public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
         return getTopCanvas().addMouseWheelHandler(handler);
     }
 
@@ -195,7 +202,7 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         for (QuadTreeBox item : items) {
             if (item instanceof Edge) {
                 Edge edge = (Edge) item;
-                switch (this.analysisInfo.getType()){
+                switch (this.analysisInfo.getType()) {
                     case SPECIES_COMPARISON:
                     case OVERREPRESENTATION:
                         ctx.setStrokeStyle(edge.getColour());
@@ -215,20 +222,23 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.drawnNodes = new HashSet<>();
         ctx = this.nodes.getContext2d();
         String colour = FireworksColours.PROFILE.getNodeInitialColour();
-        ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
+        ctx.setFillStyle(colour);
+        ctx.setStrokeStyle(colour);
         for (QuadTreeBox item : items) {
             if (item instanceof Node) {
                 Node node = (Node) item;
-                switch (this.analysisInfo.getType()){
+                switch (this.analysisInfo.getType()) {
                     case SPECIES_COMPARISON:
                     case OVERREPRESENTATION:
                         colour = node.getColour();
-                        ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
+                        ctx.setFillStyle(colour);
+                        ctx.setStrokeStyle(colour);
                         node.draw(ctx);
                         break;
                     case EXPRESSION:
                         colour = node.getExpressionColor(column);
-                        ctx.setFillStyle(colour); ctx.setStrokeStyle(colour);
+                        ctx.setFillStyle(colour);
+                        ctx.setStrokeStyle(colour);
                         node.draw(ctx);
                         break;
                     case NONE:
@@ -239,12 +249,12 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
             }
         }
 
-        if(this.info!=null) {
+        if (this.info != null) {
             this.info.setNodes(this.drawnNodes.size());
         }
     }
 
-    void drawText(Node node){
+    void drawText(Node node) {
         cleanTextCanvas();
 
         boolean textForAll = this.factor > FACTOR_TEXT_THRESHOLD;
@@ -256,75 +266,81 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         Context2d all = this.textAllNodes.getContext2d();
         for (Node item : this.drawnNodes) {
             if (aux.contains(item)) {
-                if(item.equals(node) && item.isTopLevel()){
+                if (item.equals(node) && item.isTopLevel()) {
                     double tlpFontSize = fontSize * 1.5;
-                    if(!node.equals(this.selected)) {
+                    if (!node.equals(this.selected)) {
                         tlp.save(); // Highlighting a top level pathway
                         tlp.setFillStyle("#003366"); //("#D11D1D");
                         tlp.setFont(tlpFontSize + "pt Arial");
                         item.drawText(tlp, tlpFontSize, 5, false);
                         tlp.restore();
-                    }else{
+                    } else {
                         sel.save(); // Selecting a top level pathway
                         sel.setFont(tlpFontSize + "pt Arial");
                         item.drawText(sel, tlpFontSize, 5, false);
                         sel.restore();
                     }
-                }else{
-                    if(item.equals(selected) && item.isTopLevel()){
+                } else {
+                    if (item.equals(selected) && item.isTopLevel()) {
                         double tlpFontSize = fontSize * 1.5;
                         sel.save(); // Selecting a top level pathway
                         sel.setFont(tlpFontSize + "pt Arial");
                         item.drawText(sel, tlpFontSize, 5, false);
                         sel.restore();
-                    }else { // Here any node in the selection list (depending on the factor)
-                        if(item.isTopLevel()) {
+                    } else { // Here any node in the selection list (depending on the factor)
+                        if (item.isTopLevel()) {
                             double tlpFontSize = fontSize * 1.25;
                             sel.save(); // Selecting a top level pathway
                             sel.setFont(tlpFontSize + "pt Arial");
                             item.drawText(sel, tlpFontSize, 5, false);
                             sel.restore();
-                        }else{
+                        } else {
                             item.drawText(sel, fontSize, 5, item.equals(this.selected));
                         }
                     }
                 }
             } else if (item.isTopLevel()) {
-                double tlpFontSize = fontSize * 2;
+                double tlpFontSize = fontSize * 1.25;
                 tlp.setFont(tlpFontSize + "pt Arial");
                 item.drawText(tlp, tlpFontSize, 5, false);
-            } else if (textForAll){
+            } else if (textForAll) {
                 item.drawText(all, fontSize, 5, false);
             }
         }
     }
 
-    void cleanCanvas(Canvas canvas){
+    void cleanCanvas(Canvas canvas) {
         canvas.getContext2d().clearRect(0, 0, canvas.getOffsetWidth(), canvas.getOffsetHeight());
     }
 
-    void cleanCanvas(Context2d ctx){
+    void cleanCanvas(Context2d ctx) {
         ctx.clearRect(0, 0, ctx.getCanvas().getWidth(), ctx.getCanvas().getHeight());
     }
 
-    void cleanHighlightCanvas(){
+    void cleanFlaggedCanvas() {
+        this.cleanCanvas(this.nodesFlagged);
+        this.cleanCanvas(this.edgesFlagged);
+        this.thumbnail.clearFlags();
+    }
+
+    void cleanHighlightCanvas() {
         this.cleanCanvas(this.nodesHighlight);
         this.cleanCanvas(this.edgesHighlight);
         this.thumbnail.clearHighlights();
     }
 
-    void cleanMainCanvas(){
+    void cleanMainCanvas() {
         this.cleanCanvas(this.nodes);
         this.cleanCanvas(this.edges);
     }
 
-    void cleanSelectionCanvas(){
+    void cleanSelectionCanvas() {
         this.cleanCanvas(this.nodesSelection);
         this.cleanCanvas(this.edgesSelection);
         this.thumbnail.clearSelection();
     }
 
-    void cleanTextCanvas(){
+    void cleanTextCanvas() {
         this.cleanCanvas(this.textAllNodes);
         this.cleanCanvas(this.textSelection);
         this.cleanCanvas(this.textTLP);
@@ -361,17 +377,54 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         }).scheduleRepeating(20);
     }
 
-    Canvas getTopCanvas(){
-        return this.canvases.get(this.canvases.size() -1 );
+    Canvas getTopCanvas() {
+        return this.canvases.get(this.canvases.size() - 1);
     }
 
-    public void highlightNode(Node node){
+    public void flagElements(Set<Node> nodes, Set<Edge> edges) {
+        cleanFlaggedCanvas();
+        if (nodes == null || nodes.isEmpty()) return;
+
+        Context2d ctx = this.nodesFlagged.getContext2d();
+        double aura = this.aura * 1.5; //In this case we need it slightly bigger
+        String color = FireworksColours.PROFILE.getNodeFlagColour();
+        ctx.setFillStyle(color);
+        ctx.setStrokeStyle(color);
+        for (Node node : nodes) {
+            node.highlight(ctx, aura);
+        }
+
+        color = FireworksColours.PROFILE.getEdgeFlagColour();
+        ctx = this.edgesFlagged.getContext2d();
+        ctx.setFillStyle(color);
+        ctx.setStrokeStyle(color);
+        ctx.setLineWidth(aura);
+        for (Edge edge : edges) {
+            edge.highlight(ctx, aura);
+        }
+
+        this.thumbnail.flagNode(nodes, edges);
+    }
+
+    private void flagNode(Node node) {
+
+
+
+    }
+
+    private void flagEdge(Edge edge) {
+        Context2d ctx = this.nodesFlagged.getContext2d();
+
+
+    }
+
+    public void highlightNode(Node node) {
         cleanHighlightCanvas();
-        if(node==null) return;
+        if (node == null) return;
 
         Context2d ctx = this.nodesHighlight.getContext2d();
 
-        double expandedAura = (factor > FACTOR_TEXT_THRESHOLD)? aura * 2 : aura;
+        double expandedAura = (factor > FACTOR_TEXT_THRESHOLD) ? aura * 2 : aura;
 
         String color = FireworksColours.PROFILE.getNodeHighlightColour();
         ctx.setFillStyle(color);
@@ -379,14 +432,15 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         node.highlight(ctx, aura);
 
         Set<Edge> edges = node.getEdgesTo();
+        //noinspection Duplicates
         for (Node ancestor : node.getAncestors()) {
-            if(ancestor.isTopLevel()){
-                if(this.selected!=null && this.selected.getTopLevelPathways().contains(ancestor)) {
+            if (ancestor.isTopLevel()) {
+                if (this.selected != null && this.selected.getTopLevelPathways().contains(ancestor)) {
                     ancestor.highlight(ctx, aura);
-                }else {
+                } else {
                     ancestor.highlight(ctx, expandedAura);
                 }
-            }else {
+            } else {
                 ancestor.highlight(ctx, aura);
             }
             edges.addAll(ancestor.getEdgesTo());
@@ -403,16 +457,16 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
 
         this.thumbnail.highlightEdges(node, edges);
 
-        if(node.isTopLevel()){
+        if (node.isTopLevel()) {
             drawText(node);
         }
     }
 
-    public void selectNode(Node node){
+    public void selectNode(Node node) {
         this.selected = node;
         cleanHighlightCanvas(); //This one is needed in case the user clicks and does not move the mouse :)
         cleanSelectionCanvas();
-        if(node==null) return;
+        if (node == null) return;
 
         String color = FireworksColours.PROFILE.getNodeSelectionColour();
         Context2d ctx = this.nodesSelection.getContext2d();
@@ -503,17 +557,17 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         this.eventBus.fireEventFromSource(new FireworksResizedEvent(width, height), this);
     }
 
-    public void setIllustration(String url){
+    public void setIllustration(String url) {
         this.illustration.setUrl(url);
     }
 
-    public void resetIllustration(){
-        if(this.illustration!=null) {
+    public void resetIllustration() {
+        if (this.illustration != null) {
             this.illustration.reset();
         }
     }
 
-    public void setColumn(int column){
+    public void setColumn(int column) {
         this.analysisInfo.setColumn(column);
     }
 
@@ -528,19 +582,19 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         return canvas;
     }
 
-    private ToolTipContainer createToolTipContainer(int width, int height){
+    private ToolTipContainer createToolTipContainer(int width, int height) {
         ToolTipContainer tooltipContainer = new ToolTipContainer(this.eventBus, width, height);
         this.add(tooltipContainer, 0, 0);
         return tooltipContainer;
     }
 
-    private Set<Node> getNodeAndAncestorsWithText(Node node, boolean textForAll){
+    private Set<Node> getNodeAndAncestorsWithText(Node node, boolean textForAll) {
         Set<Node> rtn = new HashSet<>();
-        if(node!=null){
+        if (node != null) {
             rtn.add(node);
-            if(textForAll){
+            if (textForAll) {
                 rtn.addAll(node.getAncestors());
-            }else{
+            } else {
                 rtn.addAll(node.getTopLevelPathways());
             }
         }
@@ -548,21 +602,21 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
     }
 
     //INITIALIZE THE CANVAS taking into account the CanvasProperties
-    private void setCanvasProperties(Canvas canvas, int width, int height){
+    private void setCanvasProperties(Canvas canvas, int width, int height) {
         canvas.setCoordinateSpaceWidth(width);
         canvas.setCoordinateSpaceHeight(height);
         canvas.setPixelSize(width, height);
         cleanCanvas(canvas);
     }
 
-    private void setFontParameters(){
+    private void setFontParameters() {
         this.fontSize = this.factor * MAX_FONT_SIZE / 30;
         double fontOpacity = fontSize / TRANSPARENCY_THRESHOLD;
         fontOpacity = fontOpacity > 1 ? 1 : fontOpacity;
 
-        if(fontSize < MIN_FONT_SIZE){
+        if (fontSize < MIN_FONT_SIZE) {
             fontSize = MIN_FONT_SIZE;
-        }else if(fontSize > MAX_FONT_SIZE){
+        } else if (fontSize > MAX_FONT_SIZE) {
             fontSize = MAX_FONT_SIZE;
         }
 
