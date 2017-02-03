@@ -30,6 +30,7 @@
             <id>ksidis</id>
             <name>Kostas Sidiropoulos</name>
             <email>ksidiro@ebi.ac.uk</email>
+
             <organization>http://www.ebi.ac.uk/</organization>
         </developer>
     </developers>

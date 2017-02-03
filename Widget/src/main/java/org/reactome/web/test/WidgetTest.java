@@ -126,8 +126,8 @@ public class WidgetTest implements EntryPoint {
         RootLayoutPanel.get().clear();
         RootLayoutPanel.get().add(slp);
 
-        fireworks.flagItems("15422");
-        fireworks.flagNodes("DOID", getPathwaysWithDOID());
+//        fireworks.flagItems("15422");
+        fireworks.flagNodes("Reactions and Boxes Mixed", getPathways(TestSource.SOURCE.reactionsAndBoxesMixed().getText()));
 
     }
 
@@ -157,8 +157,7 @@ public class WidgetTest implements EntryPoint {
 
     }
 
-    private String[] getPathwaysWithDOID(){
-        String text = TestSource.SOURCE.pathwayDOI().getText();
+    private String[] getPathways(String text){
         return text.split("\\n");
     }
 
@@ -168,6 +167,12 @@ public class WidgetTest implements EntryPoint {
 
         @Source("PathwayDOI.csv")
         TextResource pathwayDOI();
+
+        @Source("EHLD_targets.csv")
+        TextResource ehldTargets();
+
+        @Source("MixedReactionsGreenBoxes.csv")
+        TextResource reactionsAndBoxesMixed();
 
     }
 }
