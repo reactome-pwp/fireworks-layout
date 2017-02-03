@@ -28,6 +28,7 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
 
     public FacetsPanel() {
         setVisible(false);
+        facetsMap = new HashMap<>();
         init();
     }
 
@@ -46,7 +47,7 @@ public class FacetsPanel extends FlowPanel implements ClickHandler {
             }
 
             List<FacetContainer> facets = searchResult.getFacets();
-            facetsMap = new HashMap<>();
+            facetsMap.clear();
             if (facets != null) {
                 for (final FacetContainer fac : facets) {
                     FacetTag facetTag = new FacetTag(fac.getName(), fac.getCount());

@@ -92,7 +92,7 @@
         <servlet-class>org.reactome.server.utils.proxy.StaticFilesProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyFilePath</param-name>
-            <param-value>/Users/reactome/fireworks/static</param-value>
+            <param-value>/Users/reactome/pwp/fireworks/static</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

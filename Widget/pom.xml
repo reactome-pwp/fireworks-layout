@@ -7,7 +7,7 @@
     <groupId>org.reactome.web</groupId>
     <artifactId>fireworks</artifactId>
     <packaging>jar</packaging>
-    <version>1.3.4-SNAPSHOT</version>
+    <version>1.3.4</version>
     <name>Reactome Fireworks Viewer</name>
 
     <description>
@@ -35,12 +35,19 @@
     </developers>
 
     <properties>
+        <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.8.0</gwtVersion>
         <gwtStyle>OBF</gwtStyle> <!-- OBF | PRETTY | DETAILED -->
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+
+        <reactome.web.analysis-client>1.2.2</reactome.web.analysis-client>
+        <reactome.web.model>1.2.0</reactome.web.model>
+        <reactome.web.quadtree>1.1.0</reactome.web.quadtree>
+
+        <reactome.utils.version>1.0.3</reactome.utils.version>
 
         <appModule>org.reactome.web.fireworks.Fireworks</appModule>
         <appName>${appModule}</appName>
@@ -77,26 +84,26 @@
         <dependency>
             <groupId>org.reactome.web.pwp</groupId>
             <artifactId>model</artifactId>
-            <version>1.2.0</version>
+            <version>${reactome.web.model}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactome.web.pwp</groupId>
             <artifactId>analysis-client</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
+            <version>${reactome.web.analysis-client}</version>
         </dependency>
 
         <!-- QuadTree implementation for GWT -->
         <dependency>
             <groupId>uk.ac.ebi.pwp.widgets</groupId>
             <artifactId>quadtree</artifactId>
-            <version>1.1.0</version>
+            <version>${reactome.web.quadtree}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactome.server.utils</groupId>
             <artifactId>reactome-utils</artifactId>
-            <version>1.0.3</version>
+            <version>${reactome.utils.version}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -121,6 +128,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
                 <configuration>
                     <excludes>
                         <!-- Here we exclude the packages and files that we do NOT want to add to the jar file -->
@@ -132,7 +140,6 @@
                 </configuration>
             </plugin>
 
-            <!-- GWT Maven Plugin -->
             <plugin>
                 <groupId>net.ltgt.gwt.maven</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
@@ -197,6 +204,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -211,6 +219,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <extensions>true</extensions>
+                <version>2.8.2</version>
             </plugin>
 
         </plugins>
@@ -234,23 +243,6 @@
             </properties>
         </profile>
     </profiles>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwtVersion}</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>compile-report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 
     <repositories>
         <!-- EBI repo -->
@@ -286,12 +278,6 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>
-
-        <repository>
-            <id>smartclient</id>
-            <name>smartclient.com</name>
-            <url>http://www.smartclient.com/maven2</url>
         </repository>
     </repositories>
 
