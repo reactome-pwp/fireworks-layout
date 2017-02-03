@@ -15,9 +15,11 @@ public abstract class SearchResultImageMapper {
                 case "reaction":
                 case "failedreaction":
                 case "blackboxevent":
-                case "polimerisation":
+                case "polymerisation":
                 case "depolimerisation":
                     return DatabaseObjectImages.INSTANCE.reaction();
+                case "genomeencodedentity":
+                    return DatabaseObjectImages.INSTANCE.genomeEncodeEntity();
                 case "protein":
                 case "referencegeneproduct":
                     return DatabaseObjectImages.INSTANCE.entityWithAccessionedSequence();
@@ -31,6 +33,7 @@ public abstract class SearchResultImageMapper {
                 case "interactor":
                     return SolrSuggestionPanel.RESOURCES.interactor();
                 case "pathway":
+                case "toplevelpathway":
                     return DatabaseObjectImages.INSTANCE.pathway();
                 case "genes and transcripts":
                     return DatabaseObjectImages.INSTANCE.genomeEncodeEntity();
@@ -50,6 +53,8 @@ public abstract class SearchResultImageMapper {
                 case "chemical compound":
                 case "referencemolecule":
                     return DatabaseObjectImages.INSTANCE.simpleEntity();
+                case "otherentity":
+                    return DatabaseObjectImages.INSTANCE.otherEntity();
                 default:
                     return DatabaseObjectImages.INSTANCE.exclamation();
             }
