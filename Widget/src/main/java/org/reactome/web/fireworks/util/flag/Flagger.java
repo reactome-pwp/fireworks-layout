@@ -4,6 +4,7 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
+import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.pwp.model.classes.Pathway;
 import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
 
@@ -26,8 +27,7 @@ public class Flagger {
     }
 
     public static void findPathwaysToFlag(String term, Long speciesId, final PathwaysToFlagHandler handler) {
-        String url = SEARCH.replace("##term##", term)
-                           .replace("##species##", speciesId.toString());
+        String url = FireworksFactory.SERVER + SEARCH.replace("##term##", term).replace("##species##", speciesId.toString());
 
         if (request != null && request.isPending()) request.cancel();
 

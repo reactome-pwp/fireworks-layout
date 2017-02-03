@@ -2,6 +2,7 @@ package org.reactome.web.fireworks.search.searchonfire.solr;
 
 
 import com.google.gwt.http.client.*;
+import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.search.searchonfire.launcher.SearchParameters;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.factory.SolrSearchException;
@@ -31,7 +32,7 @@ public abstract class SearchResultFactory {
 
         if (request != null && request.isPending()) request.cancel();
 
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, FireworksFactory.SERVER + url);
         requestBuilder.setHeader("Accept", "application/json");
         try {
             request = requestBuilder.sendRequest(null, new RequestCallback() {

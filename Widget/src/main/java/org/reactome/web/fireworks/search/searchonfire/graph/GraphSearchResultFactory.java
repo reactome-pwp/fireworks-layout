@@ -2,6 +2,7 @@ package org.reactome.web.fireworks.search.searchonfire.graph;
 
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.http.client.*;
+import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Event;
@@ -24,7 +25,7 @@ public abstract class GraphSearchResultFactory {
     public static void searchForPathways(DatabaseObject selection, Long speciesId, boolean includeAllForms, final GraphSearchResultFactory.GraphSearchResultHandler handler) {
 
         String url = (!(selection instanceof Event) && includeAllForms) ? SEARCH_ALL_FORMS : SEARCH_ENTITY;
-        url = url.replace("##id##", selection.getIdentifier()).replace("##speciesId##", speciesId.toString());
+        url = FireworksFactory.SERVER + url.replace("##id##", selection.getIdentifier()).replace("##speciesId##", speciesId.toString());
 
         if (request != null && request.isPending()) request.cancel();
 
