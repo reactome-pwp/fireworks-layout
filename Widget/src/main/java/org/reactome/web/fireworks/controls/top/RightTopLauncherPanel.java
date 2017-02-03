@@ -8,6 +8,8 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
+import org.reactome.web.fireworks.controls.common.ExpandibleContainer;
+import org.reactome.web.fireworks.controls.common.PwpButton;
 import org.reactome.web.fireworks.controls.top.illustrations.Illustrations;
 import org.reactome.web.fireworks.controls.top.key.PathwayOverviewKey;
 import org.reactome.web.fireworks.events.CanvasExportRequestedEvent;
@@ -27,6 +29,8 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
     private ControlButton captureBtn;
     private ControlButton pathwayOverviewKeyBtn;
 
+    private ExpandibleContainer expContainer;
+
     public RightTopLauncherPanel(EventBus eventBus) {
         this.setStyleName(RESOURCES.getCSS().launcherPanel());
 
@@ -37,8 +41,12 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         this.illustrationsBtn = new ControlButton("Show illustrations", RESOURCES.getCSS().illustrations(), this);
         this.add(illustrationsBtn);
 
-        this.captureBtn = new ControlButton("Diagram export", RESOURCES.getCSS().camera(), this);
-        this.add(this.captureBtn);
+        this.captureBtn = new ControlButton("Export", RESOURCES.getCSS().camera(), this);
+//        this.add(this.captureBtn);
+
+        expContainer = new ExpandibleContainer(new PwpButton("Select one export option", RESOURCES.getCSS().camera(), this));
+        expContainer.addButton(captureBtn);
+        add(expContainer);
 
         this.pathwayOverviewKeyBtn = new ControlButton("Pathway overview key", RESOURCES.getCSS().key(), this);
         this.add(this.pathwayOverviewKeyBtn);
