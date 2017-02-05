@@ -13,7 +13,7 @@
 }
 
 .container:hover {
-    height: 150px;
+    height: 80px;
     -webkit-transition: all .1s linear;
     -moz-transition: all .1s linear;
     -o-transition: all .1s linear;

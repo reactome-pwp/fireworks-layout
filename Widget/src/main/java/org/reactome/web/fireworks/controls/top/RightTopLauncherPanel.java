@@ -9,7 +9,6 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.fireworks.controls.common.ExpandibleContainer;
-import org.reactome.web.fireworks.controls.common.PwpButton;
 import org.reactome.web.fireworks.controls.top.illustrations.Illustrations;
 import org.reactome.web.fireworks.controls.top.key.PathwayOverviewKey;
 import org.reactome.web.fireworks.events.CanvasExportRequestedEvent;
@@ -42,9 +41,8 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         this.add(illustrationsBtn);
 
         this.captureBtn = new ControlButton("Export", RESOURCES.getCSS().camera(), this);
-//        this.add(this.captureBtn);
 
-        expContainer = new ExpandibleContainer(new PwpButton("Select one export option", RESOURCES.getCSS().camera(), this));
+        expContainer = new ExpandibleContainer("Select one export option", RESOURCES.getCSS().export());
         expContainer.addButton(captureBtn);
         add(expContainer);
 
@@ -98,6 +96,12 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         @Source("images/camera_normal.png")
         ImageResource cameraNormal();
 
+        @Source("images/export_hovered.png")
+        ImageResource exportHovered();
+
+        @Source("images/export_normal.png")
+        ImageResource exportNormal();
+
         @Source("images/illustrations_clicked.png")
         ImageResource illustrationsClicked();
 
@@ -130,6 +134,8 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
         String launcherPanel();
 
         String camera();
+
+        String export();
 
         String illustrations();
 
