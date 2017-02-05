@@ -121,18 +121,6 @@ public class RightTopLauncherPanel extends FlowPanel implements ClickHandler {
 
         @Source("images/key_normal.png")
         ImageResource keyNormal();
-///TODO also remove the files
-//        @Source("images/settings_clicked.png")
-//        ImageResource settingsClicked();
-//
-//        @Source("images/settings_disabled.png")
-//        ImageResource settingsDisabled();
-//
-//        @Source("images/settings_hovered.png")
-//        ImageResource settingsHovered();
-//
-//        @Source("images/settings_normal.png")
-//        ImageResource settingsNormal();
     }
 
     @CssResource.ImportedWithPrefix("fireworks-LeftTopLauncher")
