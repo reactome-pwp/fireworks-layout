@@ -1,8 +1,6 @@
 package org.reactome.web.fireworks.controls.top.illustrations;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
@@ -111,27 +109,30 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
     }
 
     private Widget getIllustration(Pathway pathway, final String url) {
+        FlowPanel fp = new FlowPanel();
+        fp.setStyleName(RESOURCES.getCSS().illustration());
         if (url != null && !url.isEmpty()) {
-            FlowPanel fp = new FlowPanel();
-            fp.setStyleName(RESOURCES.getCSS().illustration());
             Image image = new Image(RESOURCES.illustration());
             fp.add(image);
             Label label = new Label(pathway.getDisplayName());
             label.setText(pathway.getDisplayName());
             fp.add(label);
             Anchor anchor = new Anchor(SafeHtmlUtils.fromTrustedString(fp.toString()), url);
-            anchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    if (!event.isMetaKeyDown() && !event.isControlKeyDown()) event.preventDefault();
-                    event.stopPropagation();
-                    hide();
-                    eventBus.fireEventFromSource(new IllustrationSelectedEvent(url), Illustrations.this);
-                }
+            anchor.addClickHandler(event -> {
+                if (!event.isMetaKeyDown() && !event.isControlKeyDown()) event.preventDefault();
+                event.stopPropagation();
+                hide();
+                eventBus.fireEventFromSource(new IllustrationSelectedEvent(url), Illustrations.this);
             });
             return anchor;
         } else {
-            return getErrorMsg("No illustrations for " + pathway.getDisplayName());
+            Image image = new Image(RESOURCES.illustrationDisabled());
+            fp.add(image);
+            Label label = new Label(pathway.getDisplayName());
+            label.setText("No illustrations for " + pathway.getDisplayName());
+            label.setStyleName(RESOURCES.getCSS().error());
+            fp.add(label);
+            return fp;
         }
     }
 
@@ -165,6 +166,9 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
 
         @Source("images/illustration.png")
         ImageResource illustration();
+
+        @Source("images/illustration_disabled.png")
+        ImageResource illustrationDisabled();
     }
 
     @CssResource.ImportedWithPrefix("fireworks-Illustrations")
@@ -172,7 +176,7 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
         /**
          * The path to the default CSS styles used by this resource.
          */
-        String CSS = "org/reactome/web/fireworks/controls/top/illustrations/DiagramIllustrations.css";
+        String CSS = "org/reactome/web/fireworks/controls/top/illustrations/Illustrations.css";
 
         String illustrations();
 
