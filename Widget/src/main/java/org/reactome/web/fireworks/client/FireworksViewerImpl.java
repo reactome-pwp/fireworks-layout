@@ -250,6 +250,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void onAnalysisReset() {
+        this.token = this.resource = null;
         this.data.resetPathwaysAnalysisResult();
         this.forceFireworksDraw = true;
     }
