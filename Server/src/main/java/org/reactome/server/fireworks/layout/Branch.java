@@ -1,5 +1,6 @@
 package org.reactome.server.fireworks.layout;
 
+import org.apache.commons.math.util.MathUtils;
 import org.reactome.server.fireworks.model.GraphNode;
 
 import java.util.Collections;
@@ -11,7 +12,7 @@ import java.util.List;
 class Branch {
     static final double RADIUS_DELTA = 12d;
 
-    double minRadius;
+    final double minRadius;
     double minAngle;
     double maxAngle;
     double angle;
@@ -61,14 +62,37 @@ class Branch {
     private void setLength(){
         length = 0;
         for (GraphNode node : nodes) {
-            length += node.getSize();
+            length += MathUtils.round(node.getSize(), 2);
         }
     }
 
-    private void setRadius(){
-        this.radius = length / angle;
-        if(this.radius < (minRadius + RADIUS_DELTA)){
-            this.radius = minRadius + RADIUS_DELTA;
+    private void setRadius() {
+        double r = length / angle;
+        this.radius = minRadius + RADIUS_DELTA;
+        if (r > radius) {
+            //When this happens the nodes are way too close in the outer levels of the ring
+            //Widening up the available range to laid them up is normally OK
+            minAngle = this.minAngle - Math.toRadians(4);
+            maxAngle = this.maxAngle + Math.toRadians(4);
+            angle = Math.abs(maxAngle - minAngle);
+
+//            double arc = angle * radius;
+//            double factor = arc / getEuclidean(minAngle, maxAngle);
+//            double neededAngle = factor * length / radius;
+//            double angleDelta = Math.abs(neededAngle - angle) / 2d;
+//            minAngle = minAngle - angleDelta;
+//            maxAngle = maxAngle + angleDelta;
+//            angle = Math.abs(maxAngle - minAngle);
         }
+    }
+
+    private double getEuclidean(double a1, double a2){
+        double x1 = this.burst.getCenterX() + this.radius * Math.cos(a1);
+        double y1 = this.burst.getCenterY() + this.radius * Math.sin(a1);
+
+        double x2 = this.burst.getCenterX() + this.radius * Math.cos(a2);
+        double y2 = this.burst.getCenterY() + this.radius * Math.sin(a2);
+
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 }
