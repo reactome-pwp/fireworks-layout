@@ -77,13 +77,13 @@ public class WidgetTest implements EntryPoint {
         final FireworksViewer fireworks = FireworksFactory.createFireworksViewer(json);
 
         VerticalPanel vp = new VerticalPanel();
-        vp.add(new TestButton("TRP", "REACT_169333", fireworks));
-        vp.add(new TestButton("RAF/MAP", "REACT_634", fireworks));
-        vp.add(new TestButton("ERK", "REACT_1482", fireworks));
-        vp.add(new TestButton("Hexose", "REACT_9441", fireworks));
-        vp.add(new TestButton("Regu..", "REACT_13648", fireworks));
-        vp.add(new TestButton("Repro..", "REACT_163848", fireworks));
-        vp.add(new TestButton("Striated", "REACT_16969", fireworks));
+        vp.add(new TestButton("TRP", "R-HSA-3295583", fireworks));
+        vp.add(new TestButton("RAF/MAP", "R-HSA-5673001", fireworks));
+        vp.add(new TestButton("ERK", "R-HSA-112409", fireworks));
+        vp.add(new TestButton("Hexose", "R-HSA-189200", fireworks));
+        vp.add(new TestButton("Regu..", "R-HSA-169911", fireworks));
+        vp.add(new TestButton("Repro..", "R-HSA-1474165", fireworks));
+        vp.add(new TestButton("Striated", "R-HSA-390522", fireworks));
 
         FlowPanel fp = new FlowPanel();
         fp.add(new Button("Reload Fireworks", new ClickHandler() {
@@ -133,7 +133,7 @@ public class WidgetTest implements EntryPoint {
 
     public void loadSpeciesFireworks(String species){
         this.currentSpecies = species;
-        String url = "/download/current/fireworks/" + species + ".json";
+        String url = "/download/current/fireworks/" + species + ".json?v=" + System.currentTimeMillis();
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
         try {
