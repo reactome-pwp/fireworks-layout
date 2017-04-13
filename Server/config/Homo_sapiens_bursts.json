@@ -2,8 +2,8 @@
   "bursts": {
     "400253": {
       "name": "Circadian Clock",
-      "centerX": 190.0,
-      "centerY": 125.0,
+      "centerX": 175.0,
+      "centerY": 100.0,
       "startAngle": 0.0,
       "direction": "CLOCKWISE"
     },
@@ -23,16 +23,16 @@
     },
     "1430728": {
       "name": "Metabolism",
-      "centerX": 650.0,
-      "centerY": 330.0,
+      "centerX": 625.0,
+      "centerY": 360.0,
       "startAngle": -125.0,
       "direction": "CLOCKWISE"
     },
     "73894": {
       "name": "DNA Repair",
-      "centerX": 580.0,
-      "centerY": 100.0,
-      "startAngle": -60.0,
+      "centerX": 730.0,
+      "centerY": 200.0,
+      "startAngle": -90.0,
       "direction": "CLOCKWISE"
     },
     "1640170": {
@@ -77,8 +77,8 @@
       "startAngle": 0.0,
       "direction": "ANTICLOCKWISE"
     },
-    "2262752": {
-      "name": "Cellular responses to stress",
+    "8953897": {
+      "name": "Cellular responses to external stimuli",
       "centerX": 1375.0,
       "centerY": 310.0,
       "startAngle": 0.0,
@@ -87,7 +87,7 @@
     "4839726": {
       "name": "Chromatin organization",
       "centerX": 750.0,
-      "centerY": 200.0,
+      "centerY": 75.0,
       "startAngle": 180.0,
       "direction": "CLOCKWISE"
     },
@@ -95,6 +95,20 @@
       "name": "Metabolism of proteins",
       "centerX": 1000.0,
       "centerY": 575.0,
+      "startAngle": 180.0,
+      "direction": "ANTICLOCKWISE"
+    },
+    "8953854": {
+      "name": "Metabolism of RNA",
+      "centerX": 580.0,
+      "centerY": 100.0,
+      "startAngle": 180.0,
+      "direction": "ANTICLOCKWISE"
+    },
+    "8963743": {
+      "name": "Digestion and absorption",
+      "centerX": 1030.0,
+      "centerY": 300.0,
       "startAngle": 180.0,
       "direction": "ANTICLOCKWISE"
     },
@@ -107,17 +121,17 @@
     },
     "74160": {
       "name": "Gene Expression",
-      "centerX": 800.0,
-      "centerY": 600.0,
+      "centerX": 825.0,
+      "centerY": 590.0,
       "startAngle": 70.0,
       "direction": "CLOCKWISE"
     },
     "109582": {
       "name": "Hemostasis",
-      "centerX": 115.0,
-      "centerY": 475.0,
-      "startAngle": 155.0,
-      "direction": "ANTICLOCKWISE"
+      "centerX": 100.0,
+      "centerY": 325.0,
+      "startAngle": 70.0,
+      "direction": "CLOCKWISE"
     },
     "112316": {
       "name": "Neuronal System",
@@ -128,23 +142,23 @@
     },
     "162582": {
       "name": "Signal Transduction",
-      "centerX": 425.0,
+      "centerX": 375.0,
       "centerY": 350.0,
-      "startAngle": -80.0,
-      "direction": "ANTICLOCKWISE"
+      "startAngle": 25.0,
+      "direction": "CLOCKWISE"
     },
     "1266738": {
       "name": "Developmental Biology",
       "centerX": 100.0,
-      "centerY": 325.0,
+      "centerY": 500.0,
       "startAngle": 55.0,
       "direction": "ANTICLOCKWISE"
     },
     "168256": {
       "name": "Immune System",
-      "centerX": 375.0,
+      "centerX": 365.0,
       "centerY": 100.0,
-      "startAngle": 145.0,
+      "startAngle": 180.0,
       "direction": "CLOCKWISE"
     },
     "1852241": {
@@ -156,8 +170,8 @@
     },
     "1643685": {
       "name": "Disease",
-      "centerX": 500.0,
-      "centerY": 575.0,
+      "centerX": 490.0,
+      "centerY": 610.0,
       "startAngle": 90.0,
       "direction": "CLOCKWISE"
     },

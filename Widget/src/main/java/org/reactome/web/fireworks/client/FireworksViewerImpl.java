@@ -250,6 +250,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void onAnalysisReset() {
+        this.token = this.resource = null;
         this.data.resetPathwaysAnalysisResult();
         this.forceFireworksDraw = true;
     }
@@ -651,16 +652,15 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         }
     }
 
-    private void setFlaggedElements(String term, Set<Node> nodesToFlag, Set<Edge> edgesToFlag){
+    private void setFlaggedElements(String term, Set<Node> nodesToFlag, Set<Edge> edgesToFlag) {
         if (nodesToFlag == null || nodesToFlag.isEmpty()) {
-            this.nodesToFlag = null;
-            this.edgesToFlag = null;
-            this.eventBus.fireEventFromSource(new NodeFlaggedResetEvent(), this);
+            this.nodesToFlag = new HashSet<>();
+            this.edgesToFlag = new HashSet<>();
         } else {
             this.nodesToFlag = new HashSet<>(nodesToFlag);
             this.edgesToFlag = new HashSet<>(edgesToFlag);
-            this.eventBus.fireEventFromSource(new NodeFlaggedEvent(term, this.nodesToFlag), this);
         }
+        this.eventBus.fireEventFromSource(new NodeFlaggedEvent(term, this.nodesToFlag), this);
         forceFireworksDraw = true;
     }
 }

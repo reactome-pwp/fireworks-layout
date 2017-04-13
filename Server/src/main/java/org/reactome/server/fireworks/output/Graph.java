@@ -2,7 +2,8 @@ package org.reactome.server.fireworks.output;
 
 import org.reactome.server.fireworks.model.GraphNode;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -12,15 +13,15 @@ public class Graph {
     Long speciesId;
     String speciesName;
 
-    List<Node> nodes;
-    List<Edge> edges;
+    Collection<Node> nodes;
+    Collection<Edge> edges;
 
     public Graph(GraphNode graph){
         this.speciesId = graph.getDbId();
         this.speciesName = graph.getName();
 
-        this.nodes = graph.getNodes();
-        this.edges = graph.getEdges();
+        this.nodes = new HashSet<>(graph.getNodes());
+        this.edges = new HashSet<>(graph.getEdges());
     }
 
     public Long getSpeciesId() {
@@ -31,11 +32,11 @@ public class Graph {
         return speciesName;
     }
 
-    public List<Node> getNodes() {
+    public Collection<Node> getNodes() {
         return nodes;
     }
 
-    public List<Edge> getEdges() {
+    public Collection<Edge> getEdges() {
         return edges;
     }
 

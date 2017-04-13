@@ -4,7 +4,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.shaded.org.objenesis.strategy.StdInstantiatorStrategy;
-import org.reactome.server.fireworks.model.GraphNode;
 import org.reactome.server.fireworks.model.Graphs;
 
 import java.io.*;
@@ -18,13 +17,6 @@ public abstract class GraphUtils {
         InputStream file = new FileInputStream(fileName);
         return (Graphs) GraphUtils.read(file);
     }
-
-//    public static <T> T kryoCopy(T object){
-//        Kryo kryo = new Kryo();
-//        kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
-//        T rtn = kryo.copy(object);
-//        return rtn;
-//    }
 
     public static void save(Graphs graphs, String fileName){
         try {

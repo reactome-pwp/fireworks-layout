@@ -4,7 +4,10 @@ import org.reactome.server.analysis.core.model.PathwayNode;
 import org.reactome.server.fireworks.output.Edge;
 import org.reactome.server.fireworks.output.Node;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -26,21 +29,21 @@ public class GraphNode implements Comparable<GraphNode> {
     private double minAngle;
     private double maxAngle;
 
-    public Set<GraphNode> children;
-    private Set<GraphNode> parents;
+    public List<GraphNode> children;
+    private List<GraphNode> parents;
 
     public GraphNode(Long speciesId, String name) {
         this.dbId = speciesId;
         this.stId = "TLP";
         this.ratio = 0.5;
         this.name = name;
-        this.children = new HashSet<GraphNode>();
-        this.parents = new HashSet<GraphNode>();
+        this.children = new ArrayList<>();
+        this.parents = new ArrayList<>();
     }
 
     public GraphNode(PathwayNode node) {
-        this.children = new HashSet<GraphNode>();
-        this.parents = new HashSet<GraphNode>();
+        this.children = new ArrayList<>();
+        this.parents = new ArrayList<>();
         this.dbId = node.getPathwayId();
         this.stId = node.getStId();
         this.ratio = node.getPathwayNodeData().getEntitiesRatio();
@@ -102,7 +105,7 @@ public class GraphNode implements Comparable<GraphNode> {
     }
 
     public List<GraphNode> getChildren() {
-        List<GraphNode> rtn = new LinkedList<GraphNode>();
+        List<GraphNode> rtn = new LinkedList<>();
         for (GraphNode child : this.children) {
             rtn.add(child);
         }
@@ -111,7 +114,7 @@ public class GraphNode implements Comparable<GraphNode> {
     }
 
     public List<Edge> getEdges(){
-        List<Edge> rtn = new LinkedList<Edge>();
+        List<Edge> rtn = new LinkedList<>();
         for (GraphNode child : this.getChildren()) {
             if(!this.dbId.equals(-1L) && this.layoutData) {
                 rtn.add(new Edge(this.getDbId(), child.getDbId()));
@@ -122,7 +125,7 @@ public class GraphNode implements Comparable<GraphNode> {
     }
 
     public List<Node> getNodes(){
-        List<Node> rtn = new LinkedList<Node>();
+        List<Node> rtn = new LinkedList<>();
         if(!this.dbId.equals(-1L) && this.layoutData) {
             rtn.add(new Node(this));
         }
@@ -134,7 +137,7 @@ public class GraphNode implements Comparable<GraphNode> {
 
     @SuppressWarnings("UnusedDeclaration")
     public List<GraphNode> getParents() {
-        List<GraphNode> rtn = new LinkedList<GraphNode>();
+        List<GraphNode> rtn = new LinkedList<>();
         for (GraphNode parent : this.parents) {
             rtn.add(parent);
         }
