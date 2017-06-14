@@ -1,6 +1,7 @@
 package org.reactome.web.fireworks.controls.common;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -14,20 +15,29 @@ import java.util.Set;
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class ExpandibleContainer extends AbsolutePanel {
+public class ExpandibleContainer extends AbsolutePanel implements ClickHandler, MouseOverHandler, MouseOutHandler {
     private SimplePanel primaryButton;
     private Set<Button> buttons;
+    private boolean isExpanded = false;
 
     public ExpandibleContainer(String tooltip, String style) {
         setStyleName(RESOURCES.getCSS().container());
         this.primaryButton = new SimplePanel();
         this.primaryButton.setTitle(tooltip);
-        this.primaryButton.addStyleName(style);
+        this.primaryButton.setStyleName(style);
         this.primaryButton.addStyleName(RESOURCES.getCSS().baseButtons());
         this.primaryButton.addStyleName(RESOURCES.getCSS().primaryButton());
         this.add(primaryButton);
 
         buttons = new HashSet<>();
+
+        primaryButton.addDomHandler(this, ClickEvent.getType());
+        primaryButton.addDomHandler(event -> {                  // This is required because some mobile browsers fire the
+            event.preventDefault(); event.stopPropagation();    // OnMouseOver event if before the Click event is fired
+        }, MouseOverEvent.getType());
+
+        addDomHandler(this, MouseOverEvent.getType());
+        addDomHandler(this, MouseOutEvent.getType());
     }
 
     public void addButton(Button button) {
@@ -35,6 +45,39 @@ public class ExpandibleContainer extends AbsolutePanel {
         button.addStyleName(RESOURCES.getCSS().optionButtons());
         buttons.add(button);
         add(button);
+    }
+
+    public void collapse() {
+        if (isExpanded) {
+            removeStyleName(RESOURCES.getCSS().expandedContainer());
+            isExpanded = false;
+        }
+    }
+
+    public void expand() {
+        if (!isExpanded) {
+            addStyleName(RESOURCES.getCSS().expandedContainer());
+            isExpanded = true;
+        }
+    }
+
+    @Override
+    public void onClick(ClickEvent event) {
+        if (!isExpanded) {
+            expand();
+        } else {
+            collapse();
+        }
+    }
+
+    @Override
+    public void onMouseOver(MouseOverEvent event) {
+        expand();
+    }
+
+    @Override
+    public void onMouseOut(MouseOutEvent event) {
+        collapse();
     }
 
     public static Resources RESOURCES;
@@ -53,6 +96,8 @@ public class ExpandibleContainer extends AbsolutePanel {
         String CSS = "org/reactome/web/fireworks/controls/common/ExpandibleContainer.css";
 
         String container();
+
+        String expandedContainer();
 
         String baseButtons();
 
