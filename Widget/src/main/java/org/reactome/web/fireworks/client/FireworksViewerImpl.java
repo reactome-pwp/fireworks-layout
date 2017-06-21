@@ -278,14 +278,16 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     @Override
     public void onClick(ClickEvent event) {
         event.stopPropagation(); event.preventDefault();
-        if(this.hovered!=null){
+        Node clickedNode = this.manager.getHoveredNode(mouseCurrent);
+
+        if(clickedNode!=null){
             //After a usability testing it was seen people hardly double
             //clicked the nodes, so when the already selected node is
             //clicked again, it automatically expands the node
-            if(this.hovered==this.selected){
+            if(clickedNode.equals(this.selected)){
                 this.manager.expandNode(this.selected);
             } else{
-                this.selectNode(hovered, false);
+                this.selectNode(clickedNode, false);
             }
         }else{
             if(!this.fireworksMoved && this.selected!=null){
