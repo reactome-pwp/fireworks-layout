@@ -4,6 +4,7 @@ import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -46,6 +47,7 @@ import java.util.Set;
  */
 class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOutHandler, MouseWheelHandler,
+        TouchStartHandler, TouchEndHandler, TouchMoveHandler, TouchCancelHandler,
         FireworksVisibleAreaChangedHandler, FireworksZoomHandler, ClickHandler, /*DoubleClickHandler,*/
         AnalysisResetHandler, ExpressionColumnChangedHandler,
         ControlActionHandler, ProfileChangedHandler,
@@ -76,6 +78,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     private Coordinate mouseDown = null;
     private boolean fireworksMoved = false;
+    private Double fingerDistance;
 
     private Node hovered = null;
     private Node selected = null;
@@ -439,6 +442,84 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
     }
 
     @Override
+    public void onTouchCancel(TouchCancelEvent event) {
+        event.stopPropagation(); event.preventDefault();
+        mouseDown = null;
+        fireworksMoved = false;
+        fingerDistance = null;
+    }
+
+    @Override
+    public void onTouchEnd(TouchEndEvent event) {
+        event.stopPropagation(); event.preventDefault();
+        if (!fireworksMoved) {
+            setMousePosition(getTouchCoordinate(event.getRelativeElement(), event.getChangedTouches().get(0)));
+            Node clickedNode = this.manager.getHoveredNode(mouseCurrent);
+
+            if (clickedNode != null) {
+                if( clickedNode.equals(selected)) {
+                    this.manager.expandNode(selected);
+                } else {
+                    this.selectNode(clickedNode, false);
+                }
+            } else {
+                if (this.selected != null) {
+                    this.selectNode(null, false);
+                }
+            }
+        }
+        mouseDown = null;
+        fireworksMoved = false;
+        fingerDistance = null;
+    }
+
+    @Override
+    public void onTouchMove(TouchMoveEvent event) {
+        event.stopPropagation(); event.preventDefault();
+        int numberOfTouches =  event.getTouches().length();
+        if (numberOfTouches == 1) {
+            Coordinate finger = getTouchCoordinate(event.getRelativeElement(), event.getTouches().get(0)); // Get the first touch
+            if (mouseDown == null) {
+                setMouseDownPosition(finger);
+            } else {
+                Coordinate delta = finger.minus(this.mouseDown);
+                // On mouse move is sometimes called for delta 0 (we cannot control that, but only consider it)
+                if (isDeltaValid(delta)) {
+                    this.manager.translate(delta.getX(), delta.getY());
+                    forceFireworksDraw = true;
+                    setMouseDownPosition(finger);
+                    this.fireworksMoved = true;                               //Selection is denied in case of panning
+                }
+            }
+        } else if (numberOfTouches == 2){
+            Coordinate finger1 = getTouchCoordinate(event.getRelativeElement(), event.getTouches().get(0));
+            Coordinate finger2 = getTouchCoordinate(event.getRelativeElement(), event.getTouches().get(1));
+            Coordinate delta = finger2.minus(finger1);
+            Double newFingerDistance = Math.sqrt(delta.getX() * delta.getX() + delta.getY() * delta.getY());
+            int deltaFactor = (int) ((fingerDistance - newFingerDistance) * 0.25);
+            this.manager.onMouseScrolled(deltaFactor, finger1.add(delta.divide(2)));
+
+            this.fingerDistance = newFingerDistance;
+            this.fireworksMoved = true;                       //Selection is denied in case of zooming
+        }
+    }
+
+    @Override
+    public void onTouchStart(TouchStartEvent event) {
+        event.stopPropagation(); event.preventDefault();
+        int numberOfTouches =  event.getTouches().length();
+        if (numberOfTouches == 1) {
+            Coordinate finger = getTouchCoordinate(event.getRelativeElement(), event.getTouches().get(0)); // Get the first touch
+            setMouseDownPosition(finger);
+            this.fireworksMoved = false;                                                  //Selection is denied in case of zooming
+        } else if (numberOfTouches == 2){
+            Coordinate finger1 = getTouchCoordinate(event.getRelativeElement(), event.getTouches().get(0));
+            Coordinate finger2 = getTouchCoordinate(event.getRelativeElement(), event.getTouches().get(1));
+            Coordinate delta = finger2.minus(finger1);
+            fingerDistance = Math.sqrt(delta.getX() * delta.getX() + delta.getY() * delta.getY());
+        }
+    }
+    @Override
     public void resetHighlight() {
         this.setHoveredNode(null);
     }
@@ -549,6 +630,10 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.canvases.flagElements(this.nodesToFlag, this.edgesToFlag);
     }
 
+    private Coordinate getTouchCoordinate(Element element, Touch touch) {
+        return new Coordinate(touch.getRelativeX(element), touch.getRelativeY(element));
+    }
+
     @Override
     protected void initWidget(Widget widget) {
         super.initWidget(widget);
@@ -582,6 +667,12 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.canvases.addMouseUpHandler(this);
         this.canvases.addMouseWheelHandler(this);
 
+        //Registration of touch events
+        this.canvases.addTouchStartHandler(this);
+        this.canvases.addTouchMoveHandler(this);
+        this.canvases.addTouchEndHandler(this);
+        this.canvases.addTouchCancelHandler(this);
+
         this.eventBus.addHandler(ControlActionEvent.TYPE, this);
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
         this.eventBus.addHandler(ExpressionColumnChangedEvent.TYPE, this);
@@ -600,6 +691,10 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.eventBus.addHandler(GraphEntrySelectedEvent.TYPE, this);
     }
 
+    private boolean isDeltaValid(Coordinate delta) {
+        return delta.getX() >= 4  || delta.getX() <= -4  || delta.getY() >= 4 || delta.getY() <= -4;
+    }
+
     private void openNode(Node node){
         if(node!=null){
             this.manager.expandNode(node);
@@ -610,8 +705,16 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         this.mouseDown = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
     }
 
+    private void setMouseDownPosition(Coordinate coordinate) {
+        this.mouseDown = coordinate;
+    }
+
     private void setMousePosition(Element element, MouseEvent event) {
         this.mouseCurrent = new Coordinate(event.getRelativeX(element), event.getRelativeY(element));
+    }
+
+    private void setMousePosition(Coordinate coordinate) {
+        this.mouseCurrent = coordinate;
     }
 
     private void translateGraphObjects(Element element, MouseEvent event){

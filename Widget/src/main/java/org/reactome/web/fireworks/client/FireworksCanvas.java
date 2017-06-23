@@ -193,6 +193,23 @@ class FireworksCanvas extends AbsolutePanel implements HasHandlers, RequiresResi
         return getTopCanvas().addMouseWheelHandler(handler);
     }
 
+    // Touch events registration
+    public HandlerRegistration addTouchStartHandler(TouchStartHandler handler) {
+        return getTopCanvas().addTouchStartHandler(handler);
+    }
+
+    public HandlerRegistration addTouchEndHandler(TouchEndHandler handler) {
+        return getTopCanvas().addTouchEndHandler(handler);
+    }
+
+    public HandlerRegistration addTouchMoveHandler(TouchMoveHandler handler) {
+        return getTopCanvas().addTouchMoveHandler(handler);
+    }
+
+    public HandlerRegistration addTouchCancelHandler(TouchCancelHandler handler) {
+        return getTopCanvas().addTouchCancelHandler(handler);
+    }
+
     void drawElements(Set<QuadTreeBox> items) {
         this.cleanMainCanvas();
 
