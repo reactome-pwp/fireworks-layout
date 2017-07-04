@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import org.reactome.web.fireworks.controls.common.IconButton;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
 import org.reactome.web.pwp.model.images.DatabaseObjectImages;
 
@@ -32,17 +33,23 @@ public class GraphEntryListPanel extends FlowPanel {
             listItem.setStyleName(css.listItem());
 
             Image icon = new Image(DatabaseObjectImages.INSTANCE.pathway());
-            icon.setHeight("12px");
-            icon.setWidth("12px");
+            icon.setStyleName(css.listItemIcon());
             listItem.add(icon);
 
             Anchor listItemLink = new Anchor(object.getDisplayName());
             listItemLink.setStyleName(css.listItemLink());
             listItemLink.setTitle(object.getDisplayName());
             listItemLink.addClickHandler(InfoActionsHelper.getLinkClickHandler(object, eventBus, this));
+            listItemLink.addDoubleClickHandler(InfoActionsHelper.getLinkDoubleClickHandler(object, eventBus, this));
             listItemLink.addMouseOverHandler(InfoActionsHelper.getLinkMouseOver(object, eventBus, this));
             listItemLink.addMouseOutHandler(InfoActionsHelper.getLinkMouseOut(eventBus, this));
             listItem.add(listItemLink);
+
+            IconButton listItemButton = new IconButton("", DetailsInfoPanel.RESOURCES.openDiagram());
+            listItemButton.setStyleName(css.listItemButton());
+            listItemButton.setTitle("Go to " + object.getDisplayName());
+            listItemButton.addClickHandler(InfoActionsHelper.getIconClickHandler(object, eventBus,this));
+            listItem.add(listItemButton);
 
             listPanel.add(listItem);
         }

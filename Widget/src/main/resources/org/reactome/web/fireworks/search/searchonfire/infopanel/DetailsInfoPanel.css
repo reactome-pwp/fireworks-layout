@@ -53,11 +53,58 @@
 
 .listItem {
     height: 20px;
+}
+
+.listItemIcon {
+    height: 12px;
+    width: 12px;
+    float: left;
+}
+
+.listItemLink {
+    margin-left: 3px;
+    float: left;
+    max-width: 242px;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
 }
 
-.listItemLink {
-    margin-left: 3px;
+.listItemButton {
+    float: right;
+    margin-right: 12px;
+    background-color: transparent;
+    border: none;
+    border-radius: 9px;
+    color: white;
+    padding: 2px 0 0 0;
+    outline: none;
+    opacity: 0.7;
+}
+
+.listItemButton span {
+    vertical-align: middle !important;
+    display: inline-block;
+}
+
+.listItemButton img {
+    height: 12px;
+    width: auto;
+
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.listItemButton:hover {
+    cursor: pointer !important;
+    opacity: 0.9;
+}
+
+.listItemButton:active:hover {
+    cursor: pointer !important;
+    opacity: 1;
 }

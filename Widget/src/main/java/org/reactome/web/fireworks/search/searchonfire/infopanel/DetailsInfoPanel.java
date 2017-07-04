@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.events.GraphEntrySelectedEvent;
@@ -79,6 +80,9 @@ public class DetailsInfoPanel extends Composite {
     public interface Resources extends ClientBundle {
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
+
+        @Source("../../images/open_diagram.png")
+        ImageResource openDiagram();
     }
 
     @CssResource.ImportedWithPrefix("fireworks-DetailsInfoPanel")
@@ -104,6 +108,10 @@ public class DetailsInfoPanel extends Composite {
 
         String listItem();
 
+        String listItemIcon();
+
         String listItemLink();
+
+        String listItemButton();
     }
 }
