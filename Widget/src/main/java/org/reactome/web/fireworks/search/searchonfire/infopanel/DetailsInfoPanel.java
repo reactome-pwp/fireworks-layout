@@ -104,6 +104,8 @@ public class DetailsInfoPanel extends Composite {
 
         String databaseObjectListTitle();
 
+        String databaseObjectListContainer();
+
         String databaseObjectList();
 
         String listItem();

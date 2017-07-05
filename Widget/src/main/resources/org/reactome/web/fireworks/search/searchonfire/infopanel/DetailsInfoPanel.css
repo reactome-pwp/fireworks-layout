@@ -45,14 +45,22 @@
     background-color: rgba(165, 226, 249, 0.8);
 }
 
-.databaseObjectList {
+.databaseObjectListContainer {  /* Used to hide the scrollbars */
     margin-left: 5px;
     max-height: 75px;
-    overflow: auto;
+    overflow: hidden;
+}
+
+.databaseObjectList {
+    width: 100%;
+    max-height: 75px;
+    overflow-y: scroll;
+    padding-right: 18px;        /* Used to hide the scrollbars */
 }
 
 .listItem {
     height: 20px;
+    width: 290px;
 }
 
 .listItemIcon {
@@ -64,15 +72,15 @@
 .listItemLink {
     margin-left: 3px;
     float: left;
-    max-width: 242px;
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow:ellipsis;
+    max-width: 245px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .listItemButton {
     float: right;
-    margin-right: 12px;
+    margin-right: 2px;
     background-color: transparent;
     border: none;
     border-radius: 9px;

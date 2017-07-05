@@ -25,8 +25,10 @@ public class GraphEntryListPanel extends FlowPanel {
         titleLabel.setStyleName(css.databaseObjectListTitle());
         this.add(titleLabel);
 
-        FlowPanel listPanel = new FlowPanel();
+        FlowPanel listContainer = new FlowPanel();                          // This is used to hide the scrollbars
+        listContainer.setStyleName(css.databaseObjectListContainer());
 
+        FlowPanel listPanel = new FlowPanel();
         listPanel.setStyleName(css.databaseObjectList());
         for (GraphEntry object : objects) {
             FlowPanel listItem = new FlowPanel();
@@ -53,6 +55,7 @@ public class GraphEntryListPanel extends FlowPanel {
 
             listPanel.add(listItem);
         }
-        this.add(listPanel);
+        listContainer.add(listPanel);
+        this.add(listContainer);
     }
 }
