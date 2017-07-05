@@ -71,6 +71,10 @@
     color: #FFFFFF;
 }
 
+.inputActive::-webkit-input-placeholder {
+    color: #bcbcbc;
+}
+
 .clearBtn {
     position: absolute;
     background-color: transparent;
