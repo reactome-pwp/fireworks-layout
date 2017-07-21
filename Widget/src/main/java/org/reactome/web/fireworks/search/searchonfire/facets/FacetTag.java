@@ -10,6 +10,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import org.reactome.web.fireworks.util.SearchResultImageMapper;
 
+import static org.reactome.web.fireworks.util.SearchResultImageMapper.ImageContainer;
+
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
@@ -52,7 +54,9 @@ public class FacetTag extends FocusPanel {
         setStyleName(RESOURCES.getCSS().base());
         NumberFormat nf = NumberFormat.getDecimalFormat();
 
-        Image image = new Image(SearchResultImageMapper.getImage(name));
+        ImageContainer imgContainer = SearchResultImageMapper.getImage(name);
+        Image image = new Image(imgContainer.getImageResource());
+        image.setTitle(imgContainer.getTooltip());
         Label title = new Label(name + " (" + nf.format(count) + ")");
         title.setStyleName(RESOURCES.getCSS().tagText());
 

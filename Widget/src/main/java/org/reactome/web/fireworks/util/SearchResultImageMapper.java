@@ -2,14 +2,48 @@ package org.reactome.web.fireworks.util;
 
 import com.google.gwt.resources.client.ImageResource;
 import org.reactome.web.fireworks.search.searchonfire.suggester.SolrSuggestionPanel;
-import org.reactome.web.pwp.model.images.DatabaseObjectImages;
+
+import static org.reactome.web.pwp.model.images.DatabaseObjectImages.INSTANCE;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public abstract class SearchResultImageMapper {
 
-    public static ImageResource getImage(String type) {
+    private final static ImageContainer reaction = new ImageContainer(INSTANCE.reaction(), "Reaction");
+    private final static ImageContainer genomeEncodeEntity = new ImageContainer(INSTANCE.genomeEncodeEntity(), "Genome Encoded Entity");
+    private final static ImageContainer protein = new ImageContainer(INSTANCE.entityWithAccessionedSequence(), "Protein");
+    private final static ImageContainer complex = new ImageContainer(INSTANCE.complex(), "Complex");
+    private final static ImageContainer set = new ImageContainer(INSTANCE.entitySet(), "Set");
+    private final static ImageContainer interactor = new ImageContainer(SolrSuggestionPanel.RESOURCES.interactor(), "Interactor");
+    private final static ImageContainer pathway = new ImageContainer(INSTANCE.pathway(), "Pathway");
+    private final static ImageContainer dnaSequence = new ImageContainer(INSTANCE.referenceDNASequence(), "DNA sequence");
+    private final static ImageContainer polymer = new ImageContainer(INSTANCE.polymer(), "Polymer");
+    private final static ImageContainer rnaSequence = new ImageContainer(INSTANCE.referenceRNASequence(), "RNA sequence");
+    private final static ImageContainer regulation = new ImageContainer(INSTANCE.regulator(), "Regulation");
+    private final static ImageContainer simpleEntity = new ImageContainer(INSTANCE.simpleEntity(), "Chemical compound");
+    private final static ImageContainer otherEntity = new ImageContainer(INSTANCE.otherEntity(), "Other Entity");
+    private final static ImageContainer exclamation = new ImageContainer(INSTANCE.exclamation(), "");
+
+    public static class ImageContainer {
+        private ImageResource imageResource;
+        private String tooltip;
+
+        public ImageContainer(ImageResource imageResource, String tooltip) {
+            this.imageResource = imageResource;
+            this.tooltip = tooltip;
+        }
+
+        public ImageResource getImageResource() {
+            return imageResource;
+        }
+
+        public String getTooltip() {
+            return tooltip;
+        }
+    }
+
+    public static ImageContainer getImage(String type) {
         if (type != null) {
             switch (type.toLowerCase()) {
                 case "reaction":
@@ -17,49 +51,49 @@ public abstract class SearchResultImageMapper {
                 case "blackboxevent":
                 case "polymerisation":
                 case "depolimerisation":
-                    return DatabaseObjectImages.INSTANCE.reaction();
+                    return reaction;
                 case "genomeencodedentity":
-                    return DatabaseObjectImages.INSTANCE.genomeEncodeEntity();
+                    return genomeEncodeEntity;
                 case "protein":
                 case "referencegeneproduct":
-                    return DatabaseObjectImages.INSTANCE.entityWithAccessionedSequence();
+                    return protein;
                 case "complex":
-                    return DatabaseObjectImages.INSTANCE.complex();
+                    return complex;
                 case "set":
                 case "candidateset":
                 case "definedset":
                 case "openset":
-                    return DatabaseObjectImages.INSTANCE.entitySet();
+                    return set;
                 case "interactor":
-                    return SolrSuggestionPanel.RESOURCES.interactor();
+                    return interactor;
                 case "pathway":
                 case "toplevelpathway":
-                    return DatabaseObjectImages.INSTANCE.pathway();
+                    return pathway;
                 case "genes and transcripts":
-                    return DatabaseObjectImages.INSTANCE.genomeEncodeEntity();
+                    return genomeEncodeEntity;
                 case "dna sequence":
                 case "referencednasequence":
-                    return DatabaseObjectImages.INSTANCE.referenceDNASequence();
+                    return dnaSequence;
                 case "polymer":
-                    return DatabaseObjectImages.INSTANCE.polymer();
+                    return polymer;
                 case "rna sequence":
                 case "referencernasequence":
-                    return DatabaseObjectImages.INSTANCE.referenceRNASequence();
+                    return rnaSequence;
                 case "regulation":
                 case "requirement":
                 case "positiveregulation":
                 case "negativeregulation":
-                    return DatabaseObjectImages.INSTANCE.regulator();
+                    return regulation;
                 case "chemical compound":
                 case "referencemolecule":
-                    return DatabaseObjectImages.INSTANCE.simpleEntity();
+                    return simpleEntity;
                 case "otherentity":
-                    return DatabaseObjectImages.INSTANCE.otherEntity();
+                    return otherEntity;
                 default:
-                    return DatabaseObjectImages.INSTANCE.exclamation();
+                    return exclamation;
             }
         } else {
-            return DatabaseObjectImages.INSTANCE.exclamation();
+            return exclamation;
         }
     }
 }

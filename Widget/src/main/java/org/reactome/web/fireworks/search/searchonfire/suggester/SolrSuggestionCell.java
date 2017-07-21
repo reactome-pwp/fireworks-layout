@@ -12,6 +12,8 @@ import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
 import org.reactome.web.fireworks.util.SearchResultImageMapper;
 
+import static org.reactome.web.fireworks.util.SearchResultImageMapper.ImageContainer;
+
 /**
  * A custom {@link Cell} used to render the suggestion for a {@link Node}
  *
@@ -40,18 +42,18 @@ public class SolrSuggestionCell extends AbstractCell<Entry> {
         SafeHtml minCell(SafeHtml image, SafeHtml value, String tooltip);
 
         @SafeHtmlTemplates.Template("" +
-                "<div title=\"{3}\" style=\"overflow:hidden; width:100%;\">" +
-                    "<div style=\"float:left;margin: 7px 0 0 5px\">{0}</div>" +
-                    "<div style=\"float:left;margin-left:10px; max-width:260px\">" +
+                "<div style=\"overflow:hidden; width:100%;\">" +
+                    "<div title=\"{1}\" style=\"float:left;margin: 7px 0 0 5px\">{0}</div>" +
+                    "<div title=\"{4}\" style=\"float:left;margin-left:10px; max-width:260px\">" +
                         "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:small\">" +
-                            "{1}" +
+                            "{2}" +
                         "</div>" +
                         "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:-2px; font-size:x-small;\">" +
-                            "{2}" +
+                            "{3}" +
                         "</div>" +
                     "</div>" +
                 "</div>")
-        SafeHtml cell(SafeHtml image, SafeHtml primary, SafeHtml secondary,  String tooltip);
+        SafeHtml cell(SafeHtml image, String imgTooltip, SafeHtml primary, SafeHtml secondary, String tooltip);
     }
 
     /**
@@ -71,16 +73,17 @@ public class SolrSuggestionCell extends AbstractCell<Entry> {
             return;
         }
 
-        Image image = new Image(SearchResultImageMapper.getImage(value.getExactType()));
-        SafeHtml safeImage = SafeHtmlUtils.fromTrustedString(image.toString());
+        ImageContainer imageContainer = SearchResultImageMapper.getImage(value.getExactType());
 
+        Image image = new Image(imageContainer.getImageResource());
+        SafeHtml safeImage = SafeHtmlUtils.fromTrustedString(image.toString());
         SafeHtml primary = SafeHtmlUtils.fromTrustedString(value.getName());
 
-        if(value.getStId()==null || value.getStId().isEmpty()) {
-            sb.append(templates.minCell(safeImage, primary, value.getName()));
-        }else{
+        if (value.getStId()==null || value.getStId().isEmpty()) {
+            sb.append(templates.minCell(safeImage, primary, imageContainer.getTooltip()));
+        } else {
             SafeHtml secondary = SafeHtmlUtils.fromTrustedString(value.getStId());
-            sb.append(templates.cell(safeImage, primary, secondary, value.getName()));
+            sb.append(templates.cell(safeImage, imageContainer.getTooltip(), primary, secondary, value.getName()));
         }
     }
 }
