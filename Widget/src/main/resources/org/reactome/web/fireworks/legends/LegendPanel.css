@@ -203,14 +203,20 @@
 }
 
 .flaggedItemsControl span {
-    margin: 6px 0 0 20px;
+    margin: 6px 0 0 14px;
     float: left;
     font-size: 12px;
 }
 
 .flaggedItemsLabel {
-    width: 197px !important;
+    width: 180px !important;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
+}
+
+.flaggedItemsLoadingIcon {
+    float: left;
+    margin-left: 5px;
+    margin-top: 6px;
 }

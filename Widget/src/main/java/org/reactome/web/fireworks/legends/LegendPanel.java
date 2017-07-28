@@ -99,6 +99,9 @@ public abstract class LegendPanel extends AbsolutePanel {
 
         @Source("images/speed_normal.png")
         ImageResource speedNormal();
+
+        @Source("images/loader.gif")
+        ImageResource loader();
     }
 
     /**
@@ -140,6 +143,8 @@ public abstract class LegendPanel extends AbsolutePanel {
         String flaggedItemsControl();
 
         String flaggedItemsLabel();
+
+        String flaggedItemsLoadingIcon();
     }
 
     protected EventBus eventBus;

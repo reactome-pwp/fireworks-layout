@@ -173,6 +173,8 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
         if (identifier == null || identifier.isEmpty()) {
             resetFlaggedItems();
         } else {
+            eventBus.fireEventFromSource(new NodeFlagRequestedEvent(identifier), this);
+
             Flagger.findPathwaysToFlag(identifier, data.getSpeciesId(), new Flagger.PathwaysToFlagHandler() {
                 @Override
                 public void onPathwaysToFlag(List<Pathway> result) {
@@ -201,6 +203,7 @@ class FireworksViewerImpl extends ResizeComposite implements FireworksViewer,
 
     @Override
     public void flagNodes(String term, String... stIds) {
+        eventBus.fireEventFromSource(new NodeFlagRequestedEvent(term), this);
         Set<Node> toFlag = new HashSet<>();
         for (String stId : stIds) {
             Node node = data.getNode(stId);
