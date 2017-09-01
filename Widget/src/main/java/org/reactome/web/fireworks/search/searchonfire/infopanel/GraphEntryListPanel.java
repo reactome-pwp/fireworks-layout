@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import org.reactome.web.fireworks.controls.common.IconButton;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
-import org.reactome.web.pwp.model.images.DatabaseObjectImages;
+import org.reactome.web.pwp.model.client.factory.DatabaseObjectImages;
 
 import java.util.Collection;
 

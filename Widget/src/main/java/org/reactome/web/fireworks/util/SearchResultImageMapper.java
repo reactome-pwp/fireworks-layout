@@ -2,14 +2,15 @@ package org.reactome.web.fireworks.util;
 
 import com.google.gwt.resources.client.ImageResource;
 import org.reactome.web.fireworks.search.searchonfire.suggester.SolrSuggestionPanel;
+import org.reactome.web.pwp.model.client.factory.DatabaseObjectImages;
 
-import static org.reactome.web.pwp.model.images.DatabaseObjectImages.INSTANCE;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public abstract class SearchResultImageMapper {
 
+    private final static DatabaseObjectImages INSTANCE = DatabaseObjectImages.INSTANCE;
     private final static ImageContainer reaction = new ImageContainer(INSTANCE.reaction(), "Reaction");
     private final static ImageContainer genomeEncodeEntity = new ImageContainer(INSTANCE.genomeEncodeEntity(), "Genome Encoded Entity");
     private final static ImageContainer protein = new ImageContainer(INSTANCE.entityWithAccessionedSequence(), "Protein");

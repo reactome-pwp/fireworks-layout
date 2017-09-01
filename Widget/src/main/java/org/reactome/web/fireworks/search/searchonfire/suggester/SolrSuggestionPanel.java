@@ -32,9 +32,10 @@ import org.reactome.web.fireworks.search.searchonfire.pager.PageChangedHandler;
 import org.reactome.web.fireworks.search.searchonfire.pager.Pager;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.Entry;
 import org.reactome.web.fireworks.search.searchonfire.solr.model.SolrSearchResult;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,15 +170,20 @@ public class SolrSuggestionPanel extends AbstractAccordionPanel implements SolrS
     public void onSelectionChange(SelectionChangeEvent event) {
         Entry selection = selectionModel.getSelectedObject();
         if(selection!=null && !selection.getExactType().equalsIgnoreCase("Interactor")) { //To be removed when interactors are addressed
-            DatabaseObjectFactory.get(selection.getId(), new DatabaseObjectCreatedHandler() {
+            ContentClient.query(selection.getId(), new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
-                    optionsPanel.setEnable(!(databaseObject instanceof org.reactome.web.pwp.model.classes.Event));
+                public void onObjectLoaded(DatabaseObject databaseObject) {
+                    optionsPanel.setEnable(!(databaseObject instanceof org.reactome.web.pwp.model.client.classes.Event));
                     fireEvent(new SolrSuggestionSelectedEvent(databaseObject));
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable throwable) {
+                public void onContentClientException(Type type, String message) {
+                    //TODO
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     //TODO
                 }
             });

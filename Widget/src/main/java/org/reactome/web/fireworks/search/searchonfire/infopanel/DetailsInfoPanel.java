@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.events.GraphEntrySelectedEvent;
 import org.reactome.web.fireworks.events.SearchFilterEvent;
 import org.reactome.web.fireworks.search.searchonfire.graph.model.GraphEntry;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 import java.util.Arrays;
 
@@ -41,11 +41,11 @@ public class DetailsInfoPanel extends Composite {
         Label identifierLb = new Label("Identifier: ");
         identifierLb.setStyleName(RESOURCES.getCSS().identifierLabel());
 
-        Anchor identifierLink = new Anchor(selectedSuggestion.getIdentifier());
+        Anchor identifierLink = new Anchor(selectedSuggestion.getReactomeIdentifier());
         identifierLink.setStyleName(RESOURCES.getCSS().identifierLink());
         identifierLink.setTitle("Click to find out more");
         identifierLink.addClickHandler(event -> {
-            String url = "http://www.reactome.org/content/detail/" + selectedSuggestion.getIdentifier();
+            String url = "http://www.reactome.org/content/detail/" + selectedSuggestion.getReactomeIdentifier();
             Window.open(url, "_blank", "");
         });
 

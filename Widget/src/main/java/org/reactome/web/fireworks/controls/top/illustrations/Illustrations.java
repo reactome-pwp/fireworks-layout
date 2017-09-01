@@ -18,12 +18,12 @@ import org.reactome.web.fireworks.handlers.NodeSelectedHandler;
 import org.reactome.web.fireworks.handlers.NodeSelectedResetHandler;
 import org.reactome.web.fireworks.model.Node;
 import org.reactome.web.fireworks.util.Console;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Figure;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Figure;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -73,9 +73,9 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
         Label loadingLbl = new Label("Loading...");
         loadingLbl.setStyleName(RESOURCES.getCSS().loading());
         add(loadingLbl);
-        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+        ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 if (databaseObject instanceof Pathway) {
                     clear();
                     final Pathway pathway = (Pathway) databaseObject;
@@ -83,16 +83,21 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
                         add(getIllustration(pathway, null));
                     } else {
                         for (Figure figure : pathway.getFigure()) {
-                            figure.load(new DatabaseObjectLoadedHandler() {
+                            figure.load(new ObjectLoaded() {
                                 @Override
-                                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                                public void onObjectLoaded(DatabaseObject databaseObject) {
                                     Figure figure = (Figure) databaseObject;
                                     add(getIllustration(pathway, FireworksFactory.ILLUSTRATION_SERVER + figure.getUrl()));
                                 }
 
                                 @Override
-                                public void onDatabaseObjectError(Throwable throwable) {
-                                    Console.error(throwable.getMessage());
+                                public void onContentClientException(Type type, String message) {
+                                    Console.error(message);
+                                }
+
+                                @Override
+                                public void onContentClientError(ContentClientError error) {
+                                    Console.error(error.getReason());
                                 }
                             });
                         }
@@ -101,7 +106,13 @@ public class Illustrations extends AbstractMenuDialog implements NodeOpenedHandl
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
+            public void onContentClientException(Type type, String message) {
+                clear();
+                add(getErrorMsg("There was an error retrieving data for the loaded diagram..."));
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 clear();
                 add(getErrorMsg("There was an error retrieving data for the loaded diagram..."));
             }

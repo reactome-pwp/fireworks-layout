@@ -2,7 +2,7 @@ package org.reactome.web.fireworks.search.searchonfire.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.fireworks.search.searchonfire.handlers.SolrSuggestionSelectedHandler;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
