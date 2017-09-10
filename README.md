@@ -95,4 +95,5 @@ folder. So for example, the file for "Homo Sapiens" is
 
 ### Miscellaneous
 
-Fireworks version 2 exclusively uses the graph-database to generate the layout. You might remember this project exists
+Fireworks version 2 exclusively uses the graph-database to generate the layout. You might remember this project existed
+using the analysis intermediate data, but this is not longer the case. That approach has been deprecated and unmaintained.
