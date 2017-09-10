@@ -1,16 +1,98 @@
 <img src=https://cloud.githubusercontent.com/assets/6883670/22938783/bbef4474-f2d4-11e6-92a5-07c1a6964491.png width=220 height=100 />
 
-# Fireworks
-A genome-wide, hierarchical visualisation of Reactome pathways in a space-filling graph.
+# Reactome Pathways Overview Layout Generator
 
-The aim of this project is to offer users an intuitive overview of dataset analysis results in the context of the Reactome hierarchical pathway structure, allowing both a quick “first glance” and rapid zooming in on interesting results. 
+## What is the Reactome Pathways Overview?
 
-## Server
-The Server folder contains a Java project which contains the layout algorithm and the intermediate graph file creator tools.
+The pathways overview (AKA Fireworks) is meant to be a genome-wide, hierarchical visualisation of [Reactome](https://reactome.org) 
+pathways in a space-filling graph. To do so the nodes and their layout are set up in a off-line process.
 
-More info [here](Server).
 
-## Widget
-The Widget folder contains a web widget implemented in GWT which offers an interactive view of Fireworks.
+## Why an offline layout generator?
 
-More info [here](Widget).
+The pathways overview layout generator needs to access Reactome graph database to retrieve pathways information in order to
+create the overview content json files. It assigns a size and a position in the plane for each node in Fireworks (which 
+represents a Reactome pathway).
+
+The generated json files remain immutable for a given Reactome data release, what means they can be generated once and
+stored for later widget consumption. This strategy ensures the layout generation is not a handicap for the future
+visualisation.
+
+## How to use it?
+
+It is possible that some tweaking is needed to the top level pathways configuration after a certain release. If that is
+the case in the [Fireworks bursts configuration folder](config) there are different files where the top level pathways
+initial point in the map are defined. Edit them in order to change the position, start angle or burst direction.
+
+The configuration file for [Homo sapiens](config/Homo_sapiens_bursts.json) contains the data related to the Reactome main
+species so it is the one with more top level pathways.
+
+To run the layout algorithm, please follow the following steps:
+
+1. First package this project to generate the fireworks.jar file:
+
+
+```console
+$mvn clean package
+```
+
+
+2. Generate the json files for Homo Sapiens and then decide whether some tweaking is needed
+
+* Only Homo Sapiens:
+
+
+```console
+$java -jar fireworks.jar \
+      -h host \
+      -k port \
+      -u user \
+      -p password \
+      -s Homo_sapiens \
+      -f /path/to/config \
+      -o /path/to/output \
+      --verbose
+```
+
+
+ * Main species and a given "Other species" (being species_name its name):
+
+
+```console
+$java -jar fireworks.jar \
+      -h host \
+      -k port \
+      -u user \
+      -p password \
+      -s Species_name \
+      -f /path/to/config \
+      -o /path/to/output \
+      --verbose
+```
+
+4. Generate the json files for all species in Reactome:
+
+```console
+$java -jar fireworks.jar \
+      -h host \
+      -k port \
+      -u user \
+      -p password \
+      -f /path/to/config \
+      -o /path/to/output \
+      --verbose
+```
+
+### To take into account
+
+The generated pathway overview json files are meant to be consumed by the Widget, so they will need to be available from 
+the web clients, so please specify a reachable ```/path/to/output```.
+
+In Reactome the files for the current release are available under the
+[http://www.reactome.org/download/current/fireworks](http://www.reactome.org/download/current/fireworks/)
+folder. So for example, the file for "Homo Sapiens" is
+[Homo_sapiens.json](http://www.reactome.org/download/current/fireworks/Homo_sapiens.json).
+
+### Miscellaneous
+
+Fireworks version 2 exclusively uses the graph-database to generate the layout. You might remember this project exists
