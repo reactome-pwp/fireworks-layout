@@ -45,9 +45,9 @@
     "69306": {
       "name": "DNA Replication",
       "centerX": 900.0,
-      "centerY": 100.0,
-      "startAngle": 0.0,
-      "direction": "ANTICLOCKWISE"
+      "centerY": 125.0,
+      "startAngle": 45.0,
+      "direction": "CLOCKWISE"
     },
     "1500931": {
       "name": "Cell-Cell communication",
@@ -59,7 +59,7 @@
     "397014": {
       "name": "Muscle contraction",
       "centerX": 950.0,
-      "centerY": 250.0,
+      "centerY": 275,
       "startAngle": 0.0,
       "direction": "ANTICLOCKWISE"
     },
@@ -95,7 +95,7 @@
       "name": "Metabolism of proteins",
       "centerX": 1000.0,
       "centerY": 575.0,
-      "startAngle": 180.0,
+      "startAngle": 100.0,
       "direction": "ANTICLOCKWISE"
     },
     "8953854": {
@@ -123,7 +123,7 @@
       "name": "Gene Expression",
       "centerX": 500.0,
       "centerY": 610.0,
-      "startAngle": 100.0,
+      "startAngle": 120.0,
       "direction": "CLOCKWISE"
     },
     "109582": {
@@ -136,15 +136,15 @@
     "112316": {
       "name": "Neuronal System",
       "centerX": 100.0,
-      "centerY": 525.0,
-      "startAngle": 150.0,
+      "centerY": 550.0,
+      "startAngle": 175.0,
       "direction": "ANTICLOCKWISE"
     },
     "162582": {
       "name": "Signal Transduction",
-      "centerX": 350.0,
-      "centerY": 375.0,
-      "startAngle": 25.0,
+      "centerX": 360.0,
+      "centerY": 350.0,
+      "startAngle": 50.0,
       "direction": "CLOCKWISE"
     },
     "1266738": {
