@@ -58,8 +58,8 @@
     },
     "397014": {
       "name": "Muscle contraction",
-      "centerX": 950.0,
-      "centerY": 275,
+      "centerX": 975.0,
+      "centerY": 295,
       "startAngle": 0.0,
       "direction": "ANTICLOCKWISE"
     },
@@ -128,10 +128,10 @@
     },
     "109582": {
       "name": "Hemostasis",
-      "centerX": 250.0,
+      "centerX": 275.0,
       "centerY": 600.0,
-      "startAngle": 70.0,
-      "direction": "CLOCKWISE"
+      "startAngle": 225.0,
+      "direction": "ANTICLOCKWISE"
     },
     "112316": {
       "name": "Neuronal System",
@@ -163,8 +163,8 @@
     },
     "1852241": {
       "name": "Organelle biogenesis and maintenance",
-      "centerX": 1050.0,
-      "centerY": 375.0,
+      "centerX": 1075.0,
+      "centerY": 395.0,
       "startAngle": 280.0,
       "direction": "ANTICLOCKWISE"
     },
