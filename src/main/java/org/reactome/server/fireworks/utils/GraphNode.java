@@ -45,10 +45,10 @@ public class GraphNode implements Comparable<GraphNode> {
                 "RETURN COUNT(DISTINCT re) AS size";
         Map<String, Object> parametersMap = new HashMap<>();
         parametersMap.put("speciesDbId", speciesId);
-        Number size = null;
+        Long size = null;
         try {
             System.out.print("Calculating background size for " + name + "...");
-            size = aux.customNumbernQueryResult(query, parametersMap);
+            size = aux.getCustomQueryResult(Long.class, query, parametersMap);
             System.out.println(" Done. [" + size.intValue() + " entities]");
         } catch (CustomQueryException e) {
             System.err.println("A problem has been found calculating the background for the species " + name);
@@ -69,9 +69,9 @@ public class GraphNode implements Comparable<GraphNode> {
                 "RETURN COUNT(DISTINCT re) AS size";
         Map<String, Object> parametersMap = new HashMap<>();
         parametersMap.put("dbId", dbId);
-        Number size = null;
+        Long size = null;
         try {
-            size = aux.customNumbernQueryResult(query, parametersMap);
+            size = aux.getCustomQueryResult(Long.class, query, parametersMap);
         } catch (CustomQueryException e) {
             System.err.println("A problem has been found calculating the size for the pathway " + node);
             System.exit(0);
