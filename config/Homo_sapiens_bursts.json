@@ -16,7 +16,7 @@
     },
     "382551": {
       "name": "Transmembrane transport of small molecules",
-      "centerX": 875.0,
+      "centerX": 850.0,
       "centerY": 350.0,
       "startAngle": 30.0,
       "direction": "ANTICLOCKWISE"
@@ -65,10 +65,18 @@
     },
     "5205647" : {
       "name": "Mitophagy",
-      "centerX": 1175.0,
+      "centerX": 1125.0,
       "centerY": 450.0,
       "startAngle": 0.0,
       "direction": "CLOCKWISE"
+    },
+    "9609507" : {
+      "name": "Protein localization",
+      "centerX": 1225.0,
+      "centerY": 450.0,
+      "startAngle": 30.0,
+      "direction": "CLOCKWISE"
+
     },
     "1474244": {
       "name": "Extracellular matrix organization",
@@ -163,7 +171,7 @@
     },
     "1852241": {
       "name": "Organelle biogenesis and maintenance",
-      "centerX": 1075.0,
+      "centerX": 1025.0,
       "centerY": 395.0,
       "startAngle": 280.0,
       "direction": "ANTICLOCKWISE"
