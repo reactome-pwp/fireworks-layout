@@ -18,6 +18,7 @@ public class GraphNode implements Comparable<GraphNode> {
     private Long dbId;
     private String stId;
     private String name;
+    private Boolean disease;
     private Double size;
     private Double angle;
 
@@ -62,6 +63,7 @@ public class GraphNode implements Comparable<GraphNode> {
         this.parents = new ArrayList<>();
         this.dbId = node.getDbId();
         this.stId = node.getStId();
+        this.disease = node.getIsInDisease();
         this.name = node.getDisplayName();
 
         AdvancedDatabaseObjectService aux = ReactomeGraphCore.getService(AdvancedDatabaseObjectService.class);
@@ -243,5 +245,9 @@ public class GraphNode implements Comparable<GraphNode> {
                 ", x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    public Boolean getDisease() {
+        return this.disease;
     }
 }

@@ -16,11 +16,13 @@ public class Node {
     private Double x;
     private Double y;
     private Double angle;
+    private Boolean disease;
 
     public Node(GraphNode node){
         this.dbId = node.getDbId();
         this.stId = node.getStId();
         this.name = node.getName();
+        this.disease = node.getDisease();
         this.ratio = MathUtils.round(node.getRatio(), 2);
         this.x = MathUtils.round(node.getX(), 2);
         this.y = MathUtils.round(node.getY(), 2);
@@ -55,6 +57,10 @@ public class Node {
 
     public Double getY() {
         return y;
+    }
+
+    public Boolean getDisease() {
+        return disease;
     }
 
     @Override
