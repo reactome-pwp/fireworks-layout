@@ -20,12 +20,9 @@ visualisation.
 
 ## How to use it?
 
-It is possible that some tweaking is needed to the top level pathways configuration after a certain release. If that is
-the case in the [Fireworks bursts configuration folder](config) there are different files where the top level pathways
-initial point in the map are defined. Edit them in order to change the position, start angle or burst direction.
+**IMPORTANT**: It is possible that some tweaking is needed to the top level pathways configuration after a certain release. If that is the case in the [Fireworks bursts configuration folder](config) there are different files where the top level pathways initial point in the map are defined. Edit them in order to change the position, start angle or burst direction.
 
-The configuration file for [Homo sapiens](config/Homo_sapiens_bursts.json) contains the data related to the Reactome main
-species so it is the one with more top level pathways.
+The configuration file for [Homo sapiens](config/Homo_sapiens_bursts.json) contains the data related to the Reactome main species so it is the one with more top level pathways.
 
 To run the layout algorithm, please follow the following steps:
 
