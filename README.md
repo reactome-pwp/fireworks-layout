@@ -85,10 +85,10 @@ $java -jar fireworks.jar \
 The generated pathway overview json files are meant to be consumed by the Widget, so they will need to be available from 
 the web clients, so please specify a reachable ```/path/to/output```.
 
-In Reactome the files for the current release are available under the
-[http://www.reactome.org/download/current/fireworks](http://www.reactome.org/download/current/fireworks/)
+In Reactome, the files for the current release are available under the
+[https://reactome.org/download/current/fireworks](https://reactome.org/download/current/fireworks/)
 folder. So for example, the file for "Homo Sapiens" is
-[Homo_sapiens.json](http://www.reactome.org/download/current/fireworks/Homo_sapiens.json).
+[Homo_sapiens.json](https://reactome.org/download/current/fireworks/Homo_sapiens.json).
 
 ### Miscellaneous
 
