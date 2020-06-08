@@ -39,7 +39,7 @@ pipeline{
 				script{
 					sh "mkdir ${fireworksFolder}"
 					withCredentials([usernamePassword(credentialsId: 'neo4jUsernamePassword', passwordVariable: 'pass', usernameVariable: 'user')]){
-						sh "java -jar target/fireworks-jar-with-dependencies.jar --user $user --password $pass --output ./${fireworksFolder}"
+						sh "java -jar target/fireworks-jar-with-dependencies.jar --user $user --password $pass --folder ./config --output ./${fireworksFolder}"
 					}
 				}
 			}
