@@ -13,7 +13,7 @@ pipeline{
 				script{
 					currentRelease = (pwd() =~ /Releases\/(\d+)\//)[0][1];
 					// This queries the Jenkins API to confirm that the most recent build of DiagramConverter was successful.
-					def diagramUrl = httpRequest authentication: 'jenkinsKey', validResponseCodes: "${env.VALID_RESPONSE_CODES}", url: "${env.JENKINS_JOB_URL}/job/File-Generation/job/DiagramConverter/lastBuild/api/json"
+					def diagramUrl = httpRequest authentication: 'jenkinsKey', validResponseCodes: "${env.VALID_RESPONSE_CODES}", url: "${env.JENKINS_JOB_URL}/job/${currentRelease}/job/File-Generation/job/DiagramConverter/lastBuild/api/json"
 					if (diagramUrlUrl.getStatus() == 404) {
 						error("DiagramConverter has not yet been run. Please complete a successful build.")
 					} else {
