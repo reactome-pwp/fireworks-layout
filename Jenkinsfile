@@ -37,7 +37,7 @@ pipeline{
 		stage('Main: Run Fireworks-Layout'){
 			steps{
 				script{
-					sh "mkdir -p ${fireworksFolder}"
+					sh "mkdir -p ${folder}"
 					withCredentials([usernamePassword(credentialsId: 'neo4jUsernamePassword', passwordVariable: 'pass', usernameVariable: 'user')]){
 						sh "java -jar target/fireworks-jar-with-dependencies.jar --user $user --password $pass --folder ./config --output ./${folder}"
 					}
