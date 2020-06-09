@@ -24,7 +24,7 @@ pipeline{
 					}
 				}
 			}
-		}/*
+		}
 		// This stage builds the jar file using maven.
 		stage('Setup: Build jar file'){
 			steps{
@@ -44,7 +44,6 @@ pipeline{
 				}
 			}
 		}
-		*/
 		// Archive everything on S3, and move the 'diagram' folder to the download/vXX folder.
 		stage('Post: Archive Outputs'){
 			steps{
