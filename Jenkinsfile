@@ -2,7 +2,7 @@ import groovy.json.JsonSlurper
 // This Jenkinsfile is used by Jenkins to run the FireworksLayout step of Reactome's release.
 // It requires that the DiagramConverter step has been run successfully before it can be run.
 def currentRelease
-def fireworksFolder = "fireworks"
+def folder = "fireworks"
 pipeline{
 	agent any
 
@@ -24,7 +24,7 @@ pipeline{
 					}
 				}
 			}
-		}
+		}/*
 		// This stage builds the jar file using maven.
 		stage('Setup: Build jar file'){
 			steps{
@@ -39,27 +39,24 @@ pipeline{
 				script{
 					sh "mkdir -p ${fireworksFolder}"
 					withCredentials([usernamePassword(credentialsId: 'neo4jUsernamePassword', passwordVariable: 'pass', usernameVariable: 'user')]){
-						sh "java -jar target/fireworks-jar-with-dependencies.jar --user $user --password $pass --folder ./config --output ./${fireworksFolder}"
+						sh "java -jar target/fireworks-jar-with-dependencies.jar --user $user --password $pass --folder ./config --output ./${folder}"
 					}
 				}
 			}
 		}
-		/*
+		*/
 		// Archive everything on S3, and move the 'diagram' folder to the download/vXX folder.
 		stage('Post: Archive Outputs'){
 			steps{
 				script{
-					def s3Path = "${env.S3_RELEASE_DIRECTORY_URL}/${currentRelease}/diagram_converter"
-					def diagramArchive = "diagrams-v${currentRelease}.tgz"
-					sh "tar -zcvf ${diagramArchive} ${diagramFolder}"
-					sh "mv ${diagramFolder} ${env.ABS_DOWNLOAD_PATH}/${currentRelease}/" 
-					sh "gzip reports/*"
-					sh "aws s3 --no-progress cp ${diagramArchive} $s3Path/"
-					sh "aws s3 --no-progress --recursive cp reports/ $s3Path/reports/"
-					sh "rm -r ${diagramArchive} reports"
+					def s3Path = "${env.S3_RELEASE_DIRECTORY_URL}/${currentRelease}/fireworks"
+					def archive = "fireworks-v${currentRelease}.tgz"
+					sh "tar -zcvf ${archive} ${folder}"
+					sh "mv ${folder} ${env.ABS_DOWNLOAD_PATH}/${currentRelease}/" 
+					sh "aws s3 --no-progress cp ${archive} $s3Path/"
+					sh "rm ${archive}"
 				}
 			}
 		}
-		*/
 	}
 }
