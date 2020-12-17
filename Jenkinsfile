@@ -1,5 +1,5 @@
-// This Jenkinsfile is used by Jenkins to run the FireworksLayout step of Reactome's release.
-// It requires that the DiagramConverter step has been run successfully before it can be run.
+// This Jenkinsfile is used by Jenkins to run the 'FireworksLayout' step of Reactome's release.
+// It requires that the 'DiagramConverter' step has been run successfully before it can be run.
 
 import org.reactome.release.jenkins.utilities.Utilities
 
@@ -8,12 +8,13 @@ def utils = new Utilities()
 
 pipeline{
 	agent any
+	// Set output folder that will contain files created by step.
 	environment {
-        OUTPUT_FOLDER = "fireworks"
-    }
+        	OUTPUT_FOLDER = "fireworks"
+    	}
 
 	stages{
-		// This stage checks that upstream project DiagramConverter was run successfully.
+		// This stage checks that upstream project 'DiagramConverter' was run successfully.
 		stage('Check DiagramConverter build succeeded'){
 			steps{
 				script{
@@ -37,35 +38,39 @@ pipeline{
 					sh "mkdir -p ${env.OUTPUT_FOLDER}"
 					withCredentials([usernamePassword(credentialsId: 'neo4jUsernamePassword', passwordVariable: 'pass', usernameVariable: 'user')]){
 						sh "java -jar target/fireworks-jar-with-dependencies.jar --user $user --password $pass --folder ./config --output ./${env.OUTPUT_FOLDER}"
+						// Create archive that will be stored on S3.
 						sh "tar -zcf fireworks-v${releaseVersion}.tgz ${env.OUTPUT_FOLDER}/"
 					}
 				}
 			}
 		}
+		// Lists all JSON fireworks file sizes between current and previous releases for comparison.
 		stage('Post: Compare file sizes with previous release') {
 		    steps{
 		        script{
-		            def releaseVersion = utils.getReleaseVersion()
-		            def previousReleaseVersion = utils.getPreviousReleaseVersion()
-		            def previousFireworksArchive = "fireworks-v${previousReleaseVersion}.tgz"
-		            sh "mkdir -p ${previousReleaseVersion}"
-		            sh "aws s3 --no-progress cp s3://reactome/private/releases/${previousReleaseVersion}/fireworks/${previousFireworksArchive} ${previousReleaseVersion}/"
-		            dir("${previousReleaseVersion}"){
-		                sh "tar -xf ${previousFireworksArchive}"
-		            }
-		  
-		            def currentDiagramsFileCount = findFiles(glob: "${env.OUTPUT_FOLDER}/*").size()
-		            def previousDiagramsFileCount = findFiles(glob: "${previousReleaseVersion}/${env.OUTPUT_FOLDER}/*").size()
-		            echo("Fireworks file sizes for v${releaseVersion}: ${currentDiagramsFileCount}")
-		            sh "ls -lrt ${env.OUTPUT_FOLDER}"
-		            echo("Fireworks file sizes for v${previousReleaseVersion}: ${previousDiagramsFileCount}")
-		            sh "ls -lrt ${previousReleaseVersion}/${env.OUTPUT_FOLDER}/"
-		            
-		            sh "rm -r ${previousReleaseVersion}*"
+				def releaseVersion = utils.getReleaseVersion()
+				def previousReleaseVersion = utils.getPreviousReleaseVersion()
+				def previousFireworksArchive = "fireworks-v${previousReleaseVersion}.tgz"
+				sh "mkdir -p ${previousReleaseVersion}"
+				// Downloads previous release fireworks archive from S3.
+				sh "aws s3 --no-progress cp s3://reactome/private/releases/${previousReleaseVersion}/fireworks/${previousFireworksArchive} ${previousReleaseVersion}/"
+				dir("${previousReleaseVersion}"){
+					sh "tar -xf ${previousFireworksArchive}"
+				}
+				// Output files between releases.
+				def currentDiagramsFileCount = findFiles(glob: "${env.OUTPUT_FOLDER}/*").size()
+				def previousDiagramsFileCount = findFiles(glob: "${previousReleaseVersion}/${env.OUTPUT_FOLDER}/*").size()
+				echo("Fireworks file sizes for v${releaseVersion}: ${currentDiagramsFileCount}")
+				sh "ls -lrt ${env.OUTPUT_FOLDER}"
+				echo("Fireworks file sizes for v${previousReleaseVersion}: ${previousDiagramsFileCount}")
+				sh "ls -lrt ${previousReleaseVersion}/${env.OUTPUT_FOLDER}/"
+
+				sh "rm -r ${previousReleaseVersion}*"
 		        }
 		    }
 		}
-		stage('Post: Move fireworks to download folder') {
+		// Move fireworks folder to download folder.
+		stage('Post: Move fireworks folder to download folder') {
 		    steps{
 		        script{
 		            def releaseVersion = utils.getReleaseVersion()
