@@ -45,6 +45,9 @@
     <!-- Setting up neo4j and spring logging to ERROR -->
     <logger name="org.neo4j" level="ERROR" />
     <logger name="org.springframework" level="ERROR" />
+    <!-- Below packages log a lot of unnecessary information if not adjusted (jcook 2020) -->
+    <logger name="org.apache" level="ERROR" />
+    <logger name="httpclient" level="ERROR" /> 
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

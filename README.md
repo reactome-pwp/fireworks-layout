@@ -20,12 +20,9 @@ visualisation.
 
 ## How to use it?
 
-It is possible that some tweaking is needed to the top level pathways configuration after a certain release. If that is
-the case in the [Fireworks bursts configuration folder](config) there are different files where the top level pathways
-initial point in the map are defined. Edit them in order to change the position, start angle or burst direction.
+**IMPORTANT**: It is possible that some tweaking is needed to the top level pathways configuration after a certain release. If that is the case in the [Fireworks bursts configuration folder](config) there are different files where the top level pathways initial point in the map are defined. Edit them in order to change the position, start angle or burst direction.
 
-The configuration file for [Homo sapiens](config/Homo_sapiens_bursts.json) contains the data related to the Reactome main
-species so it is the one with more top level pathways.
+The configuration file for [Homo sapiens](config/Homo_sapiens_bursts.json) contains the data related to the Reactome main species so it is the one with more top level pathways.
 
 To run the layout algorithm, please follow the following steps:
 
@@ -88,10 +85,10 @@ $java -jar fireworks.jar \
 The generated pathway overview json files are meant to be consumed by the Widget, so they will need to be available from 
 the web clients, so please specify a reachable ```/path/to/output```.
 
-In Reactome the files for the current release are available under the
-[http://www.reactome.org/download/current/fireworks](http://www.reactome.org/download/current/fireworks/)
+In Reactome, the files for the current release are available under the
+[https://reactome.org/download/current/fireworks](https://reactome.org/download/current/fireworks/)
 folder. So for example, the file for "Homo Sapiens" is
-[Homo_sapiens.json](http://www.reactome.org/download/current/fireworks/Homo_sapiens.json).
+[Homo_sapiens.json](https://reactome.org/download/current/fireworks/Homo_sapiens.json).
 
 ### Miscellaneous
 
