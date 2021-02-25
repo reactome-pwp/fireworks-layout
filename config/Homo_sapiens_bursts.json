@@ -15,9 +15,9 @@
       "direction": "ANTICLOCKWISE"
     },
     "382551": {
-      "name": "Transmembrane transport of small molecules",
-      "centerX": 850.0,
-      "centerY": 350.0,
+      "name": "Transport of small molecules",
+      "centerX": 955.0,
+      "centerY": 275,
       "startAngle": 30.0,
       "direction": "ANTICLOCKWISE"
     },
@@ -58,15 +58,15 @@
     },
     "397014": {
       "name": "Muscle contraction",
-      "centerX": 975.0,
-      "centerY": 295,
+      "centerX": 110.0,
+      "centerY": 115.0,
       "startAngle": 0.0,
       "direction": "ANTICLOCKWISE"
     },
     "9609507" : {
       "name": "Protein localization",
-      "centerX": 1150.0,
-      "centerY": 450.0,
+      "centerX": 1200.0,
+      "centerY": 460.0,
       "startAngle": 30.0,
       "direction": "CLOCKWISE"
     },
@@ -79,7 +79,7 @@
     },
     "1474244": {
       "name": "Extracellular matrix organization",
-      "centerX": 1375.0,
+      "centerX": 1415.0,
       "centerY": 475.0,
       "startAngle": 0.0,
       "direction": "ANTICLOCKWISE"
@@ -114,8 +114,8 @@
     },
     "8963743": {
       "name": "Digestion and absorption",
-      "centerX": 110.0,
-      "centerY": 175.0,
+      "centerX": 90.0,
+      "centerY": 200.0,
       "startAngle": 180.0,
       "direction": "CLOCKWISE"
     },
@@ -157,7 +157,7 @@
     "1266738": {
       "name": "Developmental Biology",
       "centerX": 100.0,
-      "centerY": 325.0,
+      "centerY": 375.0,
       "startAngle": 55.0,
       "direction": "ANTICLOCKWISE"
     },
@@ -170,7 +170,7 @@
     },
     "1852241": {
       "name": "Organelle biogenesis and maintenance",
-      "centerX": 1025.0,
+      "centerX": 1090.0,
       "centerY": 395.0,
       "startAngle": 280.0,
       "direction": "ANTICLOCKWISE"
@@ -187,6 +187,13 @@
       "centerX": 1400.0,
       "centerY": 125.0,
       "startAngle": 30.0,
+      "direction": "CLOCKWISE"
+    },
+    "9709957": {
+      "name": "Sensory Perception",
+      "centerX": 850.0,
+      "centerY": 430.0,
+      "startAngle": 200.0,
       "direction": "CLOCKWISE"
     }
   }
