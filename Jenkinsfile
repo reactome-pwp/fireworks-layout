@@ -53,7 +53,7 @@ pipeline{
 				def previousFireworksArchive = "fireworks-v${previousReleaseVersion}.tgz"
 				sh "mkdir -p ${previousReleaseVersion}"
 				// Downloads previous release fireworks archive from S3.
-				sh "aws s3 --no-progress cp s3://reactome/private/releases/${previousReleaseVersion}/fireworks/${previousFireworksArchive} ${previousReleaseVersion}/"
+				sh "aws s3 --no-progress cp s3://reactome/private/releases/${previousReleaseVersion}/fireworks/data/${previousFireworksArchive} ${previousReleaseVersion}/"
 				dir("${previousReleaseVersion}"){
 					sh "tar -xf ${previousFireworksArchive}"
 				}
