@@ -37,7 +37,7 @@ pipeline{
 					def releaseVersion = utils.getReleaseVersion()
 					sh "mkdir -p ${env.OUTPUT_FOLDER}"
 					withCredentials([usernamePassword(credentialsId: 'neo4jUsernamePassword', passwordVariable: 'pass', usernameVariable: 'user')]){
-						sh "java -jar target/fireworks-jar-with-dependencies.jar --user $user --password $pass --folder ./config --output ./${env.OUTPUT_FOLDER}"
+						sh "java -Dlogback.configurationFile=/path/to/config.xml myProject.jar -jar target/fireworks-jar-with-dependencies.jar --user $user --password $pass --folder ./config --output ./${env.OUTPUT_FOLDER}"
 						// Create archive that will be stored on S3.
 						sh "tar -zcf fireworks-v${releaseVersion}.tgz ${env.OUTPUT_FOLDER}/"
 					}
