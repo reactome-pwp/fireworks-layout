@@ -11,13 +11,13 @@ import java.util.HashSet;
 @SuppressWarnings("unused")
 public class Graph {
 
-    private Long speciesId;
-    private String speciesName;
+    private final Long speciesId;
+    private final String speciesName;
 
-    private Collection<Node> nodes;
-    private Collection<Edge> edges;
+    private final Collection<Node> nodes;
+    private final Collection<Edge> edges;
 
-    public Graph(GraphNode graph){
+    public Graph(GraphNode graph) {
         this.speciesId = graph.getDbId();
         this.speciesName = graph.getName();
 

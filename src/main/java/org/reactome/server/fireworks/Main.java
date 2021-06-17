@@ -1,4 +1,3 @@
-
 package org.reactome.server.fireworks;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -21,15 +20,14 @@ import java.util.List;
 
 public class Main {
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static void main(String[] args) throws JSAPException {
 
         // Program Arguments -h, -p, -u, -k
         SimpleJSAP jsap = new SimpleJSAP(Main.class.getName(), "Connect to Reactome Graph Database",
                 new Parameter[]{
-                        new FlaggedOption("host", JSAP.STRING_PARSER, "localhost", JSAP.NOT_REQUIRED, 'h', "host", "The neo4j host")
-                        , new FlaggedOption("port", JSAP.STRING_PARSER, "7474", JSAP.NOT_REQUIRED, 'p', "port", "The neo4j port")
+                        new FlaggedOption("host", JSAP.STRING_PARSER, "bolt://localhost:7687", JSAP.NOT_REQUIRED, 'h', "host", "The neo4j host")
                         , new FlaggedOption("user", JSAP.STRING_PARSER, "neo4j", JSAP.NOT_REQUIRED, 'u', "user", "The neo4j user")
                         , new FlaggedOption("password", JSAP.STRING_PARSER, "neo4j", JSAP.REQUIRED, 'k', "password", "The neo4j password")
                         , new FlaggedOption("folder", JSAP.STRING_PARSER, JSAP.NO_DEFAULT, JSAP.REQUIRED, 'f', "folder", "The folder where the configuration file are stored.")
@@ -44,7 +42,6 @@ public class Main {
 
         //Initialising ReactomeCore Neo4j configuration
         ReactomeGraphCore.initialise(config.getString("host"),
-                config.getString("port"),
                 config.getString("user"),
                 config.getString("password"),
                 ReactomeNeo4jConfig.class);
@@ -79,7 +76,7 @@ public class Main {
 
         boolean speciesSpecified = !config.getString("species").equals("ALL");
         for (Species species : speciesList) {
-            if(speciesSpecified) {
+            if (speciesSpecified) {
                 String aux = species.getDisplayName().replaceAll(" ", "_").toLowerCase();
                 if (!aux.equals(config.getString("species").toLowerCase())) continue;
             }
@@ -87,13 +84,13 @@ public class Main {
             graphNodeFactory = new ReactomeGraphNodeFactory(species);
             GraphNode node = graphNodeFactory.getGraphNode();
 
-            if(speciesSpecified) {
+            if (speciesSpecified) {
                 String aux = node.getName().replaceAll(" ", "_").toLowerCase();
                 if (!aux.equals(config.getString("species").toLowerCase())) continue;
             }
 
             bursts = getBurstsConfiguration(directory, node.getName());
-            if(bursts!=null){
+            if (bursts != null) {
                 layout = new FireworksLayout(bursts, node);
                 layout.doLayout();
             }

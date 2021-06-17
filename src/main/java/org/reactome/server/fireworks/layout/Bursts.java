@@ -21,29 +21,28 @@ public class Bursts {
     @JsonProperty("bursts")
     private Map<Long, Burst> bursts = new HashMap<Long, Burst>();
 
-    public Bursts() {}
+    public Bursts() {
+    }
 
     public Bursts(@JsonProperty("bursts") Map<Long, Burst> bursts) {
         this.bursts = bursts;
     }
 
-    public Burst addBurst(Burst burst){
-        if(burst.getDbId().equals(1643685L)) return null; //No Disease
+    public Burst addBurst(Burst burst) {
+        if (burst.getDbId().equals(1643685L)) return null; //No Disease
         return this.bursts.put(burst.getDbId(), burst);
     }
 
-    public Burst getBurst(Long dbId){
+    public Burst getBurst(Long dbId) {
         Burst burst = this.bursts.get(dbId);
-        if(burst!=null) {
+        if (burst != null) {
             burst.setDbId(dbId);
         }
         return burst;
     }
 
     /**
-     *
-     * @return
-     * The burstList
+     * @return The burstList
      */
     @JsonProperty("bursts")
     public Map<Long, Burst> getBursts() {
@@ -51,9 +50,7 @@ public class Bursts {
     }
 
     /**
-     *
-     * @param burstList
-     * The burstList
+     * @param burstList The burstList
      */
     @JsonProperty("bursts")
     public void setBurstList(Map<Long, Burst> bursts) {

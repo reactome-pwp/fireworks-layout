@@ -8,9 +8,9 @@ enum Direction {
     CLOCKWISE,
     ANTICLOCKWISE;
 
-    public static Direction getDirection(String direction){
+    public static Direction getDirection(String direction) {
         for (Direction d : values()) {
-            if(d.toString().toLowerCase().equals(direction.toLowerCase())){
+            if (d.toString().toLowerCase().equals(direction.toLowerCase())) {
                 return d;
             }
         }

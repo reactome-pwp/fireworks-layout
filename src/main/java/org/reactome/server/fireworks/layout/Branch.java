@@ -1,6 +1,6 @@
 package org.reactome.server.fireworks.layout;
 
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 import org.reactome.server.fireworks.utils.GraphNode;
 
 import java.util.Collections;
@@ -30,39 +30,39 @@ class Branch {
         this.maxAngle = maxAngle;
         this.angle = Math.abs(maxAngle - minAngle);
         this.nodes = nodes;
-        if(burst.getDirection().equals(Direction.ANTICLOCKWISE)){
+        if (burst.getDirection().equals(Direction.ANTICLOCKWISE)) {
             Collections.reverse(this.nodes);
         }
         this.setLength();
         this.setRadius();
     }
 
-    double getRadius(){
+    double getRadius() {
         return this.radius;
     }
 
-    void setNodesPosition(){
+    void setNodesPosition() {
         double lAvailable = angle * this.radius;                    // first we calculate the space we have
         double angle = minAngle;
         for (GraphNode node : nodes) {
-            if(!node.hasLayoutData() || node.getRadius() > this.radius){
+            if (!node.hasLayoutData() || node.getRadius() > this.radius) {
                 double p = length / node.getSize();                 // p is the proportion factor
                 double size = lAvailable / p;                       // a normalised size depending on the factor
                 double minAngle = angle;
-                double nodeAngle = angle + (size/2d) / this.radius; // the angle where the node has to be drawn
+                double nodeAngle = angle + (size / 2d) / this.radius; // the angle where the node has to be drawn
                 double x = this.burst.getCenterX() + this.radius * Math.cos(nodeAngle);
                 double y = this.burst.getCenterY() + this.radius * Math.sin(nodeAngle);
-                angle += size/this.radius;
+                angle += size / this.radius;
 
                 node.setLayoutParameters(x, y, this.radius, nodeAngle, minAngle, angle);
             }
         }
     }
 
-    private void setLength(){
+    private void setLength() {
         length = 0;
         for (GraphNode node : nodes) {
-            length += MathUtils.round(node.getSize(), 2);
+            length += Precision.round(node.getSize(), 2);
         }
     }
 
@@ -86,7 +86,7 @@ class Branch {
         }
     }
 
-    private double getEuclidean(double a1, double a2){
+    private double getEuclidean(double a1, double a2) {
         double x1 = this.burst.getCenterX() + this.radius * Math.cos(a1);
         double y1 = this.burst.getCenterY() + this.radius * Math.sin(a1);
 
