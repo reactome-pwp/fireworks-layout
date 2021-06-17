@@ -94,3 +94,13 @@ folder. So for example, the file for "Homo Sapiens" is
 
 Fireworks version 2 exclusively uses the graph-database to generate the layout. You might remember this project existed
 using the analysis intermediate data, but this is not longer the case. That approach has been deprecated and unmaintained.
+
+
+### Logging
+
+When running in the console, Spring Boot Logging will be included and DEBUG logging will be printed. In order to force the fireworks.jar
+to use project's logback.xml add: `-Dlogback.configurationFile=src/main/resources/logback.xml`
+
+```console
+java -Dlogback.configurationFile=src/main/resources/logback.xml -jar target/fireworks.jar ....
+```
