@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.reactome.server</groupId>
@@ -7,35 +9,68 @@
     <version>2.1.0</version>
     <packaging>jar</packaging>
 
-    <name>Fireworks Layout</name>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Sets up fireworks nodes and their layout in an off-line process</description>
+    <url>https://github.com/reactome-pwp/fireworks-layout</url>
 
     <organization>
-        <name>The European Bioinformatics Institute</name>
-        <url>http://www.ebi.ac.uk/</url>
+        <name>Reactome</name>
+        <url>https://reactome.org</url>
     </organization>
 
     <developers>
         <developer>
             <id>gviteri</id>
             <name>Guilherme Viteri</name>
-            <organization>http://www.ebi.ac.uk/</organization>
+            <email>gviteri@ebi.ac.uk</email>
+            <organization>The European Bioinformatics Institute</organization>
+            <organizationUrl>https://www.ebi.ac.uk/</organizationUrl>
         </developer>
+
         <developer>
             <id>amundo</id>
+            <name>Antonio Fabregat</name>
+            <roles>
+                <role>alumni</role>
+            </roles>
+        </developer>
+
+        <developer>
+            <id>ksidiro</id>
+            <name>Kostas Sidiropoulos</name>
+            <roles>
+                <role>alumni</role>
+            </roles>
         </developer>
     </developers>
 
+    <scm>
+        <connection>scm:git:git://github.com/reactome-pwp/fireworks-layout.git</connection>
+        <developerConnection>scm:git:ssh://github.com:reactome-pwp/fireworks-layout.git</developerConnection>
+        <url>https://github.com/reactome-pwp/fireworks-layout/tree/master</url>
+    </scm>
+
     <properties>
+        <!-- dependencies -->
+        <commons.math.version>2.0</commons.math.version>
+        <jsap.version>2.1</jsap.version>
+        <junit.version>4.12</junit.version>
+        <reactome.graph.core>1.1.22</reactome.graph.core>
+
+        <!-- build -->
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <reactome.graph.core>1.1.22</reactome.graph.core>
-
-        <jasp.version>2.1</jasp.version>
+        <!-- maven build and plugins -->
+        <maven.assembly.version>2.6</maven.assembly.version>
         <maven.compiler.version>3.5.1</maven.compiler.version>
+        <maven.gpg.version>1.5</maven.gpg.version>
         <maven.jar.version>2.6</maven.jar.version>
-        <jdk.version>1.8</jdk.version>
-        <junit.version>4.12</junit.version>
+        <maven.javadoc.version>2.10.3</maven.javadoc.version>
+        <maven.release.version>2.5.3</maven.release.version>
+        <maven.resources.version>3.0.1</maven.resources.version>
+        <maven.source.version>2.4</maven.source.version>
+        <nexus-staging-maven-plugin>1.6.7</nexus-staging-maven-plugin>
     </properties>
 
     <dependencies>
@@ -46,11 +81,11 @@
             <version>${reactome.graph.core}</version>
         </dependency>
 
-        <!--JSAP console reader-->
+        <!-- JSAP console reader -->
         <dependency>
             <groupId>com.martiansoftware</groupId>
             <artifactId>jsap</artifactId>
-            <version>${jasp.version}</version>
+            <version>${jsap.version}</version>
         </dependency>
 
         <!-- JUnit -->
@@ -64,31 +99,34 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math</artifactId>
-            <version>2.0</version>
+            <version>${commons.math.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>fireworks</finalName>
+        <finalName>${project.artifactId}</finalName>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
+
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
             </testResource>
         </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>${maven.resources.version}</version>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -114,7 +152,7 @@
             <!-- Generate jar with dependencies -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
+                <version>${maven.assembly.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -135,6 +173,78 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Nexus staging plugin for Sonatype deployment -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging-maven-plugin}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <!-- Generate source jar file -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Generate JavaDoc jar file -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Signs deployed jar, source jar, and JavaDoc jar with GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven.gpg.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Allows "release" mvn goal to deploy a SNAPSHOT or version release to Sonatype -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven.release.version}</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -150,6 +260,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+
         <!-- EBI SNAPSHOT repo -->
         <repository>
             <id>nexus-ebi-snapshot-repo</id>
@@ -163,21 +274,20 @@
         </repository>
     </repositories>
 
-    <!--Configures the distribution to nexus repository. mvn:deploy -->
+    <!-- Configures the distribution to nexus repository -->
     <distributionManagement>
-        <!-- EBI repo -->
+        <!-- Sonatype Release repo -->
         <repository>
-            <id>pst-release</id>
-            <name>EBI Nexus Repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-release</url>
+            <id>ossrh</id>
+            <name>Sonatype Release Repository</name>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
-        <!-- EBI SNAPSHOT repo -->
+
+        <!-- Sonatype SNAPSHOT repo -->
         <snapshotRepository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>pst-snapshots</id>
-            <name>EBI Nexus Snapshots Repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-snapshots</url>
+            <id>ossrh</id>
+            <name>Sonatype Snapshot Repository</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-
 </project>
