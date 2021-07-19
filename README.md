@@ -40,7 +40,7 @@ $mvn clean package
 
 
 ```console
-$java -jar fireworks.jar \
+$java -jar fireworks-exec.jar \
       -h host \
       -k port \
       -u user \
@@ -56,7 +56,7 @@ $java -jar fireworks.jar \
 
 
 ```console
-$java -jar fireworks.jar \
+$java -jar fireworks-exec.jar \
       -h host \
       -k port \
       -u user \
@@ -70,7 +70,7 @@ $java -jar fireworks.jar \
 4. Generate the json files for all species in Reactome:
 
 ```console
-$java -jar fireworks.jar \
+$java -jar fireworks-exec.jar \
       -h host \
       -k port \
       -u user \
@@ -102,5 +102,5 @@ When running in the console, Spring Boot Logging will be included and DEBUG logg
 to use project's logback.xml add: `-Dlogback.configurationFile=src/main/resources/logback.xml`
 
 ```console
-java -Dlogback.configurationFile=src/main/resources/logback.xml -jar target/fireworks.jar ....
+java -Dlogback.configurationFile=src/main/resources/logback.xml -jar target/fireworks-exec.jar ....
 ```
