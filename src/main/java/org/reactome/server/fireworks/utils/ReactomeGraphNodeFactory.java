@@ -14,9 +14,9 @@ import java.util.Map;
  */
 public class ReactomeGraphNodeFactory {
 
-    private Map<Long, GraphNode> map = new HashMap<>();
+    private final Map<Long, GraphNode> map = new HashMap<>();
 
-    private GraphNode graph;
+    private final GraphNode graph;
 
     public ReactomeGraphNodeFactory(Species species) {
         TopLevelPathwayService tlpService = ReactomeGraphCore.getService(TopLevelPathwayService.class);
@@ -35,7 +35,7 @@ public class ReactomeGraphNodeFactory {
 
     private void buildBranch(Pathway pathwayNode, GraphNode graphNode) {
         for (Event event : pathwayNode.getHasEvent()) {
-            if(event instanceof Pathway) {
+            if (event instanceof Pathway) {
                 Pathway pNode = (Pathway) event;
                 GraphNode gNode = getOrCreateGraphNode(pNode);
                 graphNode.addChild(gNode);

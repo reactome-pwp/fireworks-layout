@@ -15,14 +15,14 @@ import java.util.Map;
  */
 public class OrthologyGraphFactory {
 
-    private Long mainSpecies;
-    private GraphNode speciesGraph;
+    private final Long mainSpecies;
+    private final GraphNode speciesGraph;
 
-    private Map<Long, GraphNode> dbId2MainSpeciesNode = new HashMap<>();
-    private Map<Long, GraphNode> dbId2SpeciesNode = new HashMap<>();
+    private final Map<Long, GraphNode> dbId2MainSpeciesNode = new HashMap<>();
+    private final Map<Long, GraphNode> dbId2SpeciesNode = new HashMap<>();
 
 
-    private DatabaseObjectService objectService = ReactomeGraphCore.getService(DatabaseObjectService.class);
+    private final DatabaseObjectService objectService = ReactomeGraphCore.getService(DatabaseObjectService.class);
 
     public OrthologyGraphFactory(GraphNode mainSpeciesGraph, GraphNode speciesGraph) {
         this.mainSpecies = mainSpeciesGraph.getDbId();

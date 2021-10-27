@@ -7,20 +7,20 @@ import org.reactome.server.fireworks.utils.GraphNode;
  */
 public class FireworksLayout {
 
-    private static double MIN_RADIUS_STEP = Branch.RADIUS_DELTA;
-    private GraphNode graph;
-    private Bursts bursts;
+    private static final double MIN_RADIUS_STEP = Branch.RADIUS_DELTA;
+    private final GraphNode graph;
+    private final Bursts bursts;
 
     public FireworksLayout(Bursts bursts, GraphNode graph) {
         this.bursts = bursts;
         this.graph = graph;
     }
 
-    public void doLayout(){
+    public void doLayout() {
         long start = System.currentTimeMillis();
         for (GraphNode node : this.graph.getChildren()) {
             Burst burst = this.bursts.getBurst(node.getDbId());
-            if(burst!=null) {
+            if (burst != null) {
                 node.setLayoutParameters(burst.getCenterX(), burst.getCenterY(), 0, MIN_RADIUS_STEP, 0, 2 * Math.PI);
                 double startAngle = Math.toRadians(burst.getStartAngle());
                 double endAngle = Math.toRadians(burst.getEndAngle());
@@ -39,7 +39,7 @@ public class FireworksLayout {
         System.out.println("Layout execution time: " + (System.currentTimeMillis() - start) + " ms");
     }
 
-    private void fillBranch(Burst burst, double minRadius, GraphNode node){
+    private void fillBranch(Burst burst, double minRadius, GraphNode node) {
         Branch branch = new Branch(burst, minRadius, node.getMinAngle(), node.getMaxAngle(), node.getChildren());
         branch.setNodesPosition();
         double radius = branch.getRadius() + MIN_RADIUS_STEP;

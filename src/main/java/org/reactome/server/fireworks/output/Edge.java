@@ -6,8 +6,8 @@ package org.reactome.server.fireworks.output;
 @SuppressWarnings("unused")
 public class Edge {
 
-    private Long from;
-    private Long to;
+    private final Long from;
+    private final Long to;
 
     public Edge(Long from, Long to) {
         this.from = from;
