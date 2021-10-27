@@ -15,11 +15,11 @@ import java.util.*;
  */
 public class GraphNode implements Comparable<GraphNode> {
 
-    private Long dbId;
-    private String stId;
-    private String name;
+    private final Long dbId;
+    private final String stId;
+    private final String name;
     private Boolean disease;
-    private Double size;
+    private final Double size;
     private Double angle;
 
     private boolean layoutData = false;
@@ -31,8 +31,8 @@ public class GraphNode implements Comparable<GraphNode> {
     private double minAngle;
     private double maxAngle;
 
-    private List<GraphNode> children;
-    private List<GraphNode> parents;
+    private final List<GraphNode> children;
+    private final List<GraphNode> parents;
 
     GraphNode(Long speciesId, String name) {
         this.dbId = speciesId;
@@ -42,7 +42,7 @@ public class GraphNode implements Comparable<GraphNode> {
         this.parents = new ArrayList<>();
 
         AdvancedDatabaseObjectService aux = ReactomeGraphCore.getService(AdvancedDatabaseObjectService.class);
-        String query = "MATCH (:Species{dbId:{speciesDbId}})<-[:species]-(:Pathway)-[:hasEvent|input|output|catalystActivity|physicalEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity*]->(re:ReferenceEntity) " +
+        String query = "MATCH (:Species{dbId:$speciesDbId})<-[:species]-(:Pathway)-[:hasEvent|input|output|catalystActivity|physicalEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity*]->(re:ReferenceEntity) " +
                 "RETURN COUNT(DISTINCT re) AS size";
         Map<String, Object> parametersMap = new HashMap<>();
         parametersMap.put("speciesDbId", speciesId);
@@ -67,7 +67,7 @@ public class GraphNode implements Comparable<GraphNode> {
         this.name = node.getDisplayName();
 
         AdvancedDatabaseObjectService aux = ReactomeGraphCore.getService(AdvancedDatabaseObjectService.class);
-        String query = "MATCH (:Pathway{dbId:{dbId}})-[:hasEvent|input|output|catalystActivity|physicalEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity*]->(re:ReferenceEntity) " +
+        String query = "MATCH (:Pathway{dbId:$dbId})-[:hasEvent|input|output|catalystActivity|physicalEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity*]->(re:ReferenceEntity) " +
                 "RETURN COUNT(DISTINCT re) AS size";
         Map<String, Object> parametersMap = new HashMap<>();
         parametersMap.put("dbId", dbId);

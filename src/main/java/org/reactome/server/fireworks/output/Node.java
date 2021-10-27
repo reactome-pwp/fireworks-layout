@@ -1,6 +1,6 @@
 package org.reactome.server.fireworks.output;
 
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 import org.reactome.server.fireworks.utils.GraphNode;
 
 /**
@@ -9,26 +9,26 @@ import org.reactome.server.fireworks.utils.GraphNode;
 @SuppressWarnings("unused")
 public class Node {
 
-    private Long dbId;
-    private String stId;
-    private String name;
-    private Double ratio;
-    private Double x;
-    private Double y;
-    private Double angle;
-    private Boolean disease;
+    private final Long dbId;
+    private final String stId;
+    private final String name;
+    private final Double ratio;
+    private final Double x;
+    private final Double y;
+    private final Double angle;
+    private final Boolean disease;
 
-    public Node(GraphNode node){
+    public Node(GraphNode node) {
         this.dbId = node.getDbId();
         this.stId = node.getStId();
         this.name = node.getName();
         this.disease = node.getDisease();
-        this.ratio = MathUtils.round(node.getRatio(), 2);
-        this.x = MathUtils.round(node.getX(), 2);
-        this.y = MathUtils.round(node.getY(), 2);
-        if(node.getAngle()==null) System.err.println(node.getDbId() + " - " + node.getName());
+        this.ratio = Precision.round(node.getRatio(), 2);
+        this.x = Precision.round(node.getX(), 2);
+        this.y = Precision.round(node.getY(), 2);
+        if (node.getAngle() == null) System.err.println(node.getDbId() + " - " + node.getName());
         double angle = node.getAngle() % (2 * Math.PI); //Normalisation [0 - 2 PI]
-        this.angle = MathUtils.round(angle, 2);
+        this.angle = Precision.round(angle, 2);
     }
 
     public Long getDbId() {
