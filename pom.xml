@@ -27,7 +27,7 @@
     </developers>
 
     <properties>
-        <reactome.graph.core>2.0.0-SNAPSHOT</reactome.graph.core>
+        <reactome.graph.core>2.0.0</reactome.graph.core>
 
         <jasp.version>2.1</jasp.version>
         <commons-math3.version>3.6.1</commons-math3.version>
