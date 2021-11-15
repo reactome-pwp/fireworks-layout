@@ -195,6 +195,13 @@
       "centerY": 430.0,
       "startAngle": 200.0,
       "direction": "CLOCKWISE"
+    },
+    "9748784": {
+      "name": "Drug Absorption, Distribution, Metabolism and Excretion (ADME)",
+      "centerX": 800.0,
+      "centerY": 330.0,
+      "startAngle": 100.0,
+      "direction": "CLOCKWISE"
     }
   }
 }
