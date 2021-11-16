@@ -41,8 +41,7 @@ $mvn clean package
 
 ```console
 $java -jar fireworks-exec.jar \
-      -h host \
-      -k port \
+      -h bolt_url\
       -u user \
       -p password \
       -s Homo_sapiens \
@@ -57,8 +56,7 @@ $java -jar fireworks-exec.jar \
 
 ```console
 $java -jar fireworks-exec.jar \
-      -h host \
-      -k port \
+      -h bolt_url \
       -u user \
       -p password \
       -s Species_name \
@@ -71,8 +69,7 @@ $java -jar fireworks-exec.jar \
 
 ```console
 $java -jar fireworks-exec.jar \
-      -h host \
-      -k port \
+      -h bolt_url \
       -u user \
       -p password \
       -f /path/to/config \
