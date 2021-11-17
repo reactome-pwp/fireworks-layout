@@ -30,8 +30,8 @@
     },
     "73894": {
       "name": "DNA Repair",
-      "centerX": 730.0,
-      "centerY": 200.0,
+      "centerX": 780.0,
+      "centerY": 250.0,
       "startAngle": -90.0,
       "direction": "CLOCKWISE"
     },
@@ -93,7 +93,7 @@
     },
     "4839726": {
       "name": "Chromatin organization",
-      "centerX": 750.0,
+      "centerX": 580.0,
       "centerY": 75.0,
       "startAngle": 180.0,
       "direction": "CLOCKWISE"
@@ -107,8 +107,8 @@
     },
     "8953854": {
       "name": "Metabolism of RNA",
-      "centerX": 580.0,
-      "centerY": 100.0,
+      "centerX": 720.0,
+      "centerY": 85.0,
       "startAngle": 220.0,
       "direction": "ANTICLOCKWISE"
     },
@@ -198,10 +198,10 @@
     },
     "9748784": {
       "name": "Drug Absorption, Distribution, Metabolism and Excretion (ADME)",
-      "centerX": 800.0,
-      "centerY": 330.0,
-      "startAngle": 100.0,
-      "direction": "CLOCKWISE"
+      "centerX": 620.0,
+      "centerY": 180.0,
+      "startAngle": 200.0,
+      "direction": "ANTICLOCKWISE"
     }
   }
 }
