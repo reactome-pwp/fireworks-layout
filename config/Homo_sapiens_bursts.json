@@ -197,7 +197,7 @@
       "direction": "CLOCKWISE"
     },
     "9748784": {
-      "name": "Drug Absorption, Distribution, Metabolism and Excretion (ADME)",
+      "name": "Drug ADME",
       "centerX": 620.0,
       "centerY": 180.0,
       "startAngle": 200.0,
