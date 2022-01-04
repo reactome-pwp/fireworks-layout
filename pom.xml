@@ -29,16 +29,17 @@
     <properties>
         <reactome.graph.core>2.0.0</reactome.graph.core>
 
-        <jasp.version>2.1</jasp.version>
+        <jsap.version>2.1</jsap.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <jackson-databind.version>2.12.3</jackson-databind.version>
         <logging.version>1.3.0-alpha5</logging.version>
+        <log4j.version>2.17.1</log4j.version>
 
         <main.class>org.reactome.server.fireworks.Main</main.class>
         <jdk.version>11</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.boot.version>2.5.3</spring.boot.version>
+        <spring.boot.version>2.6.2</spring.boot.version>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.jar.version>3.2.0</maven.jar.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
@@ -50,14 +51,24 @@
         <dependency>
             <groupId>org.reactome.server.graph</groupId>
             <artifactId>graph-core</artifactId>
-            <version>${reactome.graph.core}</version>
+	    <version>${reactome.graph.core}</version>
+	    <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--JSAP console reader-->
         <dependency>
             <groupId>com.martiansoftware</groupId>
             <artifactId>jsap</artifactId>
-            <version>${jasp.version}</version>
+            <version>${jsap.version}</version>
         </dependency>
 
         <dependency>
@@ -79,6 +90,17 @@
             <version>${logging.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
