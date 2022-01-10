@@ -9,7 +9,7 @@
     },
     "1474165": {
       "name": "Reproduction",
-      "centerX": 1200.0,
+      "centerX": 1170.0,
       "centerY": 275.0,
       "startAngle": 0.0,
       "direction": "ANTICLOCKWISE"
@@ -72,7 +72,7 @@
     },
     "9612973": {
       "name": "Autophagy",
-      "centerX": 1250.0,
+      "centerX": 1220.0,
       "centerY": 375,
       "startAngle": 60.0,
       "direction": "CLOCKWISE"
@@ -86,7 +86,7 @@
     },
     "8953897": {
       "name": "Cellular responses to external stimuli",
-      "centerX": 1350.0,
+      "centerX": 1365.0,
       "centerY": 310.0,
       "startAngle": 300.0,
       "direction": "CLOCKWISE"
@@ -107,8 +107,8 @@
     },
     "8953854": {
       "name": "Metabolism of RNA",
-      "centerX": 720.0,
-      "centerY": 85.0,
+      "centerX": 710.0,
+      "centerY": 80.0,
       "startAngle": 220.0,
       "direction": "ANTICLOCKWISE"
     },
@@ -198,8 +198,8 @@
     },
     "9748784": {
       "name": "Drug ADME",
-      "centerX": 620.0,
-      "centerY": 180.0,
+      "centerX": 600.0,
+      "centerY": 150.0,
       "startAngle": 200.0,
       "direction": "ANTICLOCKWISE"
     }
