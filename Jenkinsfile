@@ -75,6 +75,7 @@ pipeline{
 		        script{
 		            def releaseVersion = utils.getReleaseVersion()
 		            def downloadPath = "${env.ABS_DOWNLOAD_PATH}/${releaseVersion}"
+			    sh "rm -rf ${downloadPath}/fireworks"
 		            sh "mv ${env.OUTPUT_FOLDER} ${downloadPath}/ "
 		        }
 		    }
