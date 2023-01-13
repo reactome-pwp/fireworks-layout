@@ -91,6 +91,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
+                    <attach>false</attach>
                     <fork>true</fork>
                     <mainClass>${main.class}</mainClass>
                     <classifier>exec</classifier>
