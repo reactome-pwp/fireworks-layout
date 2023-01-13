@@ -5,21 +5,27 @@
 
     <groupId>org.reactome.server</groupId>
     <artifactId>fireworks-layout</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3</version>
     <packaging>jar</packaging>
 
     <name>Fireworks Layout</name>
 
+    <parent>
+        <groupId>org.reactome.server</groupId>
+        <artifactId>reactome-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
     <organization>
         <name>The European Bioinformatics Institute</name>
-        <url>http://www.ebi.ac.uk/</url>
+        <url>https://www.ebi.ac.uk/</url>
     </organization>
 
     <developers>
         <developer>
             <id>gviteri</id>
             <name>Guilherme Viteri</name>
-            <organization>http://www.ebi.ac.uk/</organization>
+            <organization>https://www.ebi.ac.uk/</organization>
         </developer>
         <developer>
             <id>amundo</id>
@@ -27,21 +33,9 @@
     </developers>
 
     <properties>
-        <reactome.graph.core>2.0.4</reactome.graph.core>
-
-        <jasp.version>2.1</jasp.version>
-        <commons-math3.version>3.6.1</commons-math3.version>
-        <jackson-databind.version>2.13.3</jackson-databind.version>
-        <logging.version>1.3.0-alpha16</logging.version>
 
         <main.class>org.reactome.server.fireworks.Main</main.class>
-        <jdk.version>11</jdk.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.boot.version>2.7.1</spring.boot.version>
-        <maven.compiler.version>3.8.1</maven.compiler.version>
-        <maven.jar.version>3.2.0</maven.jar.version>
-        <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
     </properties>
 
     <dependencies>
@@ -49,33 +43,28 @@
         <dependency>
             <groupId>org.reactome.server.graph</groupId>
             <artifactId>graph-core</artifactId>
-            <version>${reactome.graph.core}</version>
         </dependency>
 
         <!--JSAP console reader-->
         <dependency>
             <groupId>com.martiansoftware</groupId>
             <artifactId>jsap</artifactId>
-            <version>${jasp.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>${commons-math3.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
         </dependency>
 
         <!-- Logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${logging.version}</version>
         </dependency>
 
     </dependencies>
@@ -100,7 +89,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
+                <version>${spring-boot.version}</version>
                 <configuration>
                     <fork>true</fork>
                     <mainClass>${main.class}</mainClass>
@@ -124,8 +113,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
 
@@ -184,22 +173,5 @@
             </snapshots>
         </repository>
     </repositories>
-
-    <!--Configures the distribution to nexus repository. mvn:deploy -->
-    <distributionManagement>
-        <!-- EBI repo -->
-        <repository>
-            <id>pst-release</id>
-            <name>EBI Nexus Repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-release</url>
-        </repository>
-        <!-- EBI SNAPSHOT repo -->
-        <snapshotRepository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>pst-snapshots</id>
-            <name>EBI Nexus Snapshots Repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
