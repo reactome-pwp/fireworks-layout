@@ -42,7 +42,7 @@ public class GraphNode implements Comparable<GraphNode> {
         this.parents = new ArrayList<>();
 
         AdvancedDatabaseObjectService aux = ReactomeGraphCore.getService(AdvancedDatabaseObjectService.class);
-        String query = "MATCH (:Species{dbId:$speciesDbId})<-[:species]-(:Pathway)-[:hasEvent|input|output|catalystActivity|physicalEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity*]->(re:ReferenceEntity) " +
+        String query = "MATCH (:Species{dbId:$speciesDbId})<-[:species]-(:Pathway)-[:hasEvent|input|output|catalystActivity|physicalEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity|proteinMarker|RNAMarker*]->(re:ReferenceEntity) " +
                 "RETURN COUNT(DISTINCT re) AS size";
         Map<String, Object> parametersMap = new HashMap<>();
         parametersMap.put("speciesDbId", speciesId);
@@ -67,7 +67,7 @@ public class GraphNode implements Comparable<GraphNode> {
         this.name = node.getDisplayName();
 
         AdvancedDatabaseObjectService aux = ReactomeGraphCore.getService(AdvancedDatabaseObjectService.class);
-        String query = "MATCH (:Pathway{dbId:$dbId})-[:hasEvent|input|output|catalystActivity|physicalEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity*]->(re:ReferenceEntity) " +
+        String query = "MATCH (:Pathway{dbId:$dbId})-[:hasEvent|input|output|catalystActivity|physicalEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity|proteinMarker|RNAMarker*]->(re:ReferenceEntity) " +
                 "RETURN COUNT(DISTINCT re) AS size";
         Map<String, Object> parametersMap = new HashMap<>();
         parametersMap.put("dbId", dbId);
