@@ -40,4 +40,4 @@ COPY --from=build-jar ${REPO_DIR}/${JAR_FILE} ./target/
 
 COPY --from=build-jar ${REPO_DIR}/config/ ./config/
 
-COPY --from=build-jar ${REPO_DIR}/src/main/resources/ ./src/main/resources/
+COPY --from=build-jar ${REPO_DIR}/src/main/resources/ ./resources/
